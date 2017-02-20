@@ -1,15 +1,15 @@
 ﻿using System;
 using BizwebSharp.Infrastructure;
+using FluentAssertions;
 using RestSharp.Portable;
 using Xunit;
-using FluentAssertions;
 
-namespace BizwebSharp.Tests
+namespace BizwebSharp.Tests.xUnit
 {
     public class RequestEngineTests : IDisposable
     {
-        private readonly IRestResponse ErrorResponse;
-        private readonly IRestResponse ApiRateLimitResponse;
+        private readonly IRestResponse _errorResponse;
+        private readonly IRestResponse _apiRateLimitResponse;
 
         //Setup
         public RequestEngineTests()
@@ -18,13 +18,13 @@ namespace BizwebSharp.Tests
             req.Setup(r => r.StatusCode).Returns(System.Net.HttpStatusCode.InternalServerError);
             req.Setup(r => r.RawBytes).Returns(null as byte[]);
             req.Setup(r => r.StatusDescription).Returns("Internal Server Error");
-            ErrorResponse = req.Object;
+            _errorResponse = req.Object;
 
             var req1 = new Moq.Mock<IRestResponse>();
             req1.Setup(r => r.StatusCode).Returns((System.Net.HttpStatusCode)429);
             req1.Setup(r => r.RawBytes).Returns(null as byte[]);
             req1.Setup(r => r.StatusDescription).Returns("Too Many Requests");
-            ApiRateLimitResponse = req1.Object;
+            _apiRateLimitResponse = req1.Object;
         }
 
         //Teardown
@@ -36,7 +36,7 @@ namespace BizwebSharp.Tests
         [Fact(DisplayName = "When checking a null response for exceptions, it should return a message about the statuscode")]
         public void CheckNullResponse()
         {
-            var exception = Record.Exception(() => RequestEngine.CheckResponseExceptions(ErrorResponse));
+            var exception = Record.Exception(() => RequestEngine.CheckResponseExceptions(_errorResponse));
             Assert.NotNull(exception);
             Assert.IsType<CustomApiException>(exception);
 
@@ -48,7 +48,7 @@ namespace BizwebSharp.Tests
         [Fact(DisplayName = "When having a api rate limit response, it should return an ApiRateLimitException")]
         public void CheckApiRateLimit()
         {
-            var exception = Record.Exception(() => RequestEngine.CheckResponseExceptions(ApiRateLimitResponse));
+            var exception = Record.Exception(() => RequestEngine.CheckResponseExceptions(_apiRateLimitResponse));
             Assert.NotNull(exception);
             Assert.IsType<ApiRateLimitException>(exception);
 

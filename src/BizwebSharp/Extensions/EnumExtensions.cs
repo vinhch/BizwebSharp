@@ -19,7 +19,9 @@ namespace BizwebSharp.Extensions
         public static string ToSerializedString(this Enum input)
         {
             var name = input.ToString();
-            var info = input.GetType().GetTypeInfo().GetMember(name);
+            //var info = input.GetType().GetTypeInfo().GetMember(name);
+            var info = input.GetType().GetMember(name);
+
 
             if (info.Length > 0)
             {
