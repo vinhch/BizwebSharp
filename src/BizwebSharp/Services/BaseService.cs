@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
+using BizwebSharp.Infrastructure.RequestPolicies;
 using RestSharp.Portable;
 
 namespace BizwebSharp.Services
@@ -14,6 +15,8 @@ namespace BizwebSharp.Services
         }
 
         protected BizwebAuthorizationState _AuthState { get; }
+
+        public IRequestExecutionPolicy ExecutionPolicy { get; set; } = new LimitRetryExecutionPolicy();
 
         private static ICustomRestRequest CreateRestRequest(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null)
@@ -51,7 +54,7 @@ namespace BizwebSharp.Services
             var req = CreateRestRequest(path, httpMethod, rootElement, payload);
             using (var client = RequestEngine.CreateClient(_AuthState))
             {
-                return await RequestEngine.ExecuteRequestAsync<T>(client, req);
+                return await RequestEngine.ExecuteRequestAsync<T>(client, req, ExecutionPolicy);
             }
         }
 
@@ -61,7 +64,7 @@ namespace BizwebSharp.Services
             var req = CreateRestRequest(path, httpMethod, rootElement, payload);
             using (var client = RequestEngine.CreateClient(_AuthState))
             {
-                await RequestEngine.ExecuteRequestAsync(client, req);
+                await RequestEngine.ExecuteRequestAsync(client, req, ExecutionPolicy);
             }
         }
 

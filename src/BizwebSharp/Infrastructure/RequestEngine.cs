@@ -14,13 +14,6 @@ namespace BizwebSharp.Infrastructure
 {
     public static class RequestEngine
     {
-        private static IRequestExecutionPolicy _executionPolicy = new LimitRetryExecutionPolicy();
-
-        public static void SetExecutionPolicy(IRequestExecutionPolicy executionPolicy)
-        {
-            _executionPolicy = executionPolicy;
-        }
-
         public static Uri BuildUri(string myApiUrl, bool usingHttps = true)
         {
             //var protocolScheme = usingHttps ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
@@ -188,9 +181,10 @@ namespace BizwebSharp.Infrastructure
             return errors;
         }
 
-        public static async Task<string> ExecuteRequestToStringAsync(IRestClient baseClient, ICustomRestRequest request)
+        public static async Task<string> ExecuteRequestToStringAsync(IRestClient baseClient, ICustomRestRequest request,
+            IRequestExecutionPolicy execPolicy)
         {
-            return await _executionPolicy.Run(baseClient, request, async (client) =>
+            return await execPolicy.Run(baseClient, request, async (client) =>
             {
                 //Make request
                 var response = await client.Execute(request);
@@ -202,16 +196,18 @@ namespace BizwebSharp.Infrastructure
             });
         }
 
-        public static async Task<JToken> ExecuteRequestAsync(IRestClient baseClient, ICustomRestRequest request)
+        public static async Task<JToken> ExecuteRequestAsync(IRestClient baseClient, ICustomRestRequest request,
+            IRequestExecutionPolicy execPolicy)
         {
-            var responseStr = await ExecuteRequestToStringAsync(baseClient, request);
+            var responseStr = await ExecuteRequestToStringAsync(baseClient, request, execPolicy);
             return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
         }
 
-        public static async Task<T> ExecuteRequestAsync<T>(IRestClient baseClient, ICustomRestRequest request)
+        public static async Task<T> ExecuteRequestAsync<T>(IRestClient baseClient, ICustomRestRequest request,
+            IRequestExecutionPolicy execPolicy)
             where T : new()
         {
-            return await _executionPolicy.Run(baseClient, request, async (client) =>
+            return await execPolicy.Run(baseClient, request, async (client) =>
             {
                 //Make request
                 var response = await client.Execute(request);

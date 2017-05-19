@@ -16,7 +16,7 @@ namespace BizwebSharp.Services
             var req = RequestEngine.CreateRequest(apiPath, Method.GET);
             using (var client = RequestEngine.CreateClient(_AuthState))
             {
-                return await RequestEngine.ExecuteRequestToStringAsync(client, req);
+                return await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
             }
         }
 
@@ -38,7 +38,7 @@ namespace BizwebSharp.Services
 
             using (var client = RequestEngine.CreateClient(_AuthState))
             {
-                return await RequestEngine.ExecuteRequestToStringAsync(client, req);
+                return await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
             }
         }
 
@@ -57,7 +57,7 @@ namespace BizwebSharp.Services
             var req = RequestEngine.CreateRequest(apiPath, Method.DELETE);
             using (var client = RequestEngine.CreateClient(_AuthState))
             {
-                await RequestEngine.ExecuteRequestToStringAsync(client, req);
+                await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
             }
         }
     }

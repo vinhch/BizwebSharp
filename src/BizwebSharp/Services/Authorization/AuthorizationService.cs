@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
+using BizwebSharp.Infrastructure.RequestPolicies;
 using Microsoft.Extensions.Primitives;
 using RestSharp.Portable;
 
@@ -217,7 +218,7 @@ namespace BizwebSharp.Services.Authorization
             //Build request body
             req.AddJsonBody(new {client_id = apiKey, client_secret = apiSecretKey, code});
 
-            var response = await RequestEngine.ExecuteRequestAsync(client, req);
+            var response = await RequestEngine.ExecuteRequestAsync(client, req, new DefaultRequestExecutionPolicy());
 
             return response.Value<string>("access_token");
         }
