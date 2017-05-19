@@ -17,7 +17,7 @@ namespace BizwebSharp.Infrastructure.RequestPolicies
             Start:
             try
             {
-                return (await executeRequestAsync()).Result;
+                return (await executeRequestAsync(client)).Result;
             }
             catch (ApiRateLimitException)
             {

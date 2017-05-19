@@ -3,7 +3,7 @@ using RestSharp.Portable;
 
 namespace BizwebSharp.Infrastructure.RequestPolicies
 {
-    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>();
+    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(IRestClient client);
 
     /// <summary>
     ///     Used to specify centralized logic that should run when executing shopify requests.
@@ -11,6 +11,6 @@ namespace BizwebSharp.Infrastructure.RequestPolicies
     /// </summary>
     public interface IRequestExecutionPolicy
     {
-        Task<T> Run<T>(IRestClient client, ICustomRestRequest request, ExecuteRequestAsync<T> executeRequestAsync);
+        Task<T> Run<T>(IRestClient baseClient, ICustomRestRequest request, ExecuteRequestAsync<T> executeRequestAsync);
     }
 }

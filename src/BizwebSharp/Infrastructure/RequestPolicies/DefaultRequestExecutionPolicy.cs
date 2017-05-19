@@ -8,7 +8,7 @@ namespace BizwebSharp.Infrastructure.RequestPolicies
         public async Task<T> Run<T>(IRestClient client, ICustomRestRequest request,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
-            return (await executeRequestAsync()).Result;
+            return (await executeRequestAsync(client)).Result;
         }
     }
 }

@@ -10,15 +10,15 @@ namespace BizwebSharp.Services
     {
         public BaseService(BizwebAuthorizationState authState)
         {
-            _RestClient = RequestEngine.CreateClient(authState);
+            _AuthState = authState;
         }
 
-        protected IRestClient _RestClient { get; }
+        protected BizwebAuthorizationState _AuthState { get; }
 
         private static ICustomRestRequest CreateRestRequest(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null)
         {
-            var method = GetMethod(httpMethod);
+            var method = HttpMethodToRestSharpMethod(httpMethod);
             var req = RequestEngine.CreateRequest(path, method, rootElement);
 
             if (payload == null) return req;
@@ -49,39 +49,33 @@ namespace BizwebSharp.Services
             object payload = null) where T : new()
         {
             var req = CreateRestRequest(path, httpMethod, rootElement, payload);
-            return await RequestEngine.ExecuteRequestAsync<T>(_RestClient, req);
+            using (var client = RequestEngine.CreateClient(_AuthState))
+            {
+                return await RequestEngine.ExecuteRequestAsync<T>(client, req);
+            }
         }
 
         protected async Task MakeRequest(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null)
         {
             var req = CreateRestRequest(path, httpMethod, rootElement, payload);
-            await RequestEngine.ExecuteRequestAsync(_RestClient, req);
+            using (var client = RequestEngine.CreateClient(_AuthState))
+            {
+                await RequestEngine.ExecuteRequestAsync(client, req);
+            }
         }
 
-        private static Method GetMethod(HttpMethod method)
+        private static Method HttpMethodToRestSharpMethod(HttpMethod method)
         {
-            switch (method)
+            var methodName = Enum.GetName(typeof(HttpMethod), method);
+
+            Method result;
+            if (!Enum.TryParse(methodName, out result))
             {
-                case HttpMethod.GET:
-                    return Method.GET;
-                case HttpMethod.POST:
-                    return Method.POST;
-                case HttpMethod.PUT:
-                    return Method.PUT;
-                case HttpMethod.DELETE:
-                    return Method.DELETE;
-                case HttpMethod.HEAD:
-                    return Method.HEAD;
-                case HttpMethod.OPTIONS:
-                    return Method.OPTIONS;
-                case HttpMethod.PATCH:
-                    return Method.PATCH;
-                case HttpMethod.MERGE:
-                    return Method.MERGE;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(method), method, null);
+                throw new ArgumentOutOfRangeException(nameof(method), method, null);
             }
+
+            return result;
         }
     }
 }

@@ -14,7 +14,10 @@ namespace BizwebSharp.Services
         public async Task<string> GetAsync(string apiPath)
         {
             var req = RequestEngine.CreateRequest(apiPath, Method.GET);
-            return await RequestEngine.ExecuteRequestToStringAsync(_RestClient, req);
+            using (var client = RequestEngine.CreateClient(_AuthState))
+            {
+                return await RequestEngine.ExecuteRequestToStringAsync(client, req);
+            }
         }
 
         private async Task<object> PostOrPutAsync(Method method, string apiPath, object data, string rootElement = null)
@@ -32,7 +35,11 @@ namespace BizwebSharp.Services
                 };
                 req.AddJsonBody(body);
             }
-            return await RequestEngine.ExecuteRequestToStringAsync(_RestClient, req);
+
+            using (var client = RequestEngine.CreateClient(_AuthState))
+            {
+                return await RequestEngine.ExecuteRequestToStringAsync(client, req);
+            }
         }
 
         public async Task<object> PostAsync(string apiPath, object data, string rootElement = null)
@@ -48,7 +55,10 @@ namespace BizwebSharp.Services
         public async Task DeleteAsync(string apiPath)
         {
             var req = RequestEngine.CreateRequest(apiPath, Method.DELETE);
-            await RequestEngine.ExecuteRequestToStringAsync(_RestClient, req);
+            using (var client = RequestEngine.CreateClient(_AuthState))
+            {
+                await RequestEngine.ExecuteRequestToStringAsync(client, req);
+            }
         }
     }
 }

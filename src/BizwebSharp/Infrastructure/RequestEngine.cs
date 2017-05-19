@@ -62,7 +62,7 @@ namespace BizwebSharp.Infrastructure
             if (!string.IsNullOrEmpty(authState.AccessToken))
             {
                 client.AddDefaultParameter(ApiConst.HeaderKeyAccessToken, authState.AccessToken,
-                                ParameterType.HttpHeader);
+                    ParameterType.HttpHeader);
             }
 
             return client;
@@ -188,9 +188,9 @@ namespace BizwebSharp.Infrastructure
             return errors;
         }
 
-        public static async Task<string> ExecuteRequestToStringAsync(IRestClient client, ICustomRestRequest request)
+        public static async Task<string> ExecuteRequestToStringAsync(IRestClient baseClient, ICustomRestRequest request)
         {
-            return await _executionPolicy.Run(client, request, async () =>
+            return await _executionPolicy.Run(baseClient, request, async (client) =>
             {
                 //Make request
                 var response = await client.Execute(request);
@@ -202,16 +202,16 @@ namespace BizwebSharp.Infrastructure
             });
         }
 
-        public static async Task<JToken> ExecuteRequestAsync(IRestClient client, ICustomRestRequest request)
+        public static async Task<JToken> ExecuteRequestAsync(IRestClient baseClient, ICustomRestRequest request)
         {
-            var responseStr = await ExecuteRequestToStringAsync(client, request);
+            var responseStr = await ExecuteRequestToStringAsync(baseClient, request);
             return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
         }
 
-        public static async Task<T> ExecuteRequestAsync<T>(IRestClient client, ICustomRestRequest request)
+        public static async Task<T> ExecuteRequestAsync<T>(IRestClient baseClient, ICustomRestRequest request)
             where T : new()
         {
-            return await _executionPolicy.Run(client, request, async () =>
+            return await _executionPolicy.Run(baseClient, request, async (client) =>
             {
                 //Make request
                 var response = await client.Execute(request);
