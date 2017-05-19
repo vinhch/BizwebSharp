@@ -74,8 +74,8 @@ namespace BizwebSharp.Infrastructure
         {
             if ((response.StatusCode != HttpStatusCode.OK) && (response.StatusCode != HttpStatusCode.Created))
             {
-                var json = response.Content;
-                var errors = ParseErrorJson(json);
+                var rawResponse = response.Content;
+                var errors = ParseErrorJson(rawResponse);
                 var requestInfo = new RequestSimpleInfo(response);
 
                 var code = response.StatusCode;
@@ -100,9 +100,9 @@ namespace BizwebSharp.Infrastructure
 
                 // If the error was caused by reaching the API rate limit, throw a rate limit exception.
                 if ((int) code == 429 /* Too many requests */)
-                    throw new ApiRateLimitException(code, errors, message, json, requestInfo);
+                    throw new ApiRateLimitException(code, errors, message, rawResponse, requestInfo);
 
-                throw new BizwebSharpException(code, errors, message, json, requestInfo);
+                throw new BizwebSharpException(code, errors, message, rawResponse, requestInfo);
             }
 
             //if (response.ErrorException != null)
