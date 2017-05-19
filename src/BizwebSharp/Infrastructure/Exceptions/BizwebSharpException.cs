@@ -15,11 +15,11 @@ namespace BizwebSharp.Infrastructure
         }
 
         public BizwebSharpException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors,
-            string message, string jsonError, RequestSimpleInfo requestInfo = null) : base(message)
+            string message, string rawBody, RequestSimpleInfo requestInfo = null) : base(message)
         {
             HttpStatusCode = httpStatusCode;
             Errors = errors;
-            JsonError = jsonError;
+            RawBody = rawBody;
             RequestInfo = requestInfo;
         }
 
@@ -28,7 +28,7 @@ namespace BizwebSharp.Infrastructure
         public Dictionary<string, IEnumerable<string>> Errors { get; set; } =
             new Dictionary<string, IEnumerable<string>>();
 
-        public string JsonError { get; set; }
+        public string RawBody { get; set; }
 
         public RequestSimpleInfo RequestInfo { get; set; }
     }
