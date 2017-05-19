@@ -136,7 +136,7 @@ namespace BizwebSharp.Entities
         ///     The weight of the product variant in the unit system specified with weight_unit.
         /// </summary>
         [JsonProperty("weight")]
-        public double Weight { get; set; }
+        public decimal Weight { get; set; }
 
         /// <summary>
         ///     The unit system that the product variant's weight is measure in. The weight_unit can be either "g", "kg, "oz", or
