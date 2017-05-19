@@ -4,7 +4,7 @@ using System.Net;
 
 namespace BizwebSharp.Infrastructure
 {
-    public class ApiRateLimitException : CustomApiException
+    public class ApiRateLimitException : BizwebSharpException
     {
         public ApiRateLimitException(string message) : base(message)
         {

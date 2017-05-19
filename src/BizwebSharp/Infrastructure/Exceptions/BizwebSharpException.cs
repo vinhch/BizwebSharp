@@ -4,17 +4,17 @@ using System.Net;
 
 namespace BizwebSharp.Infrastructure
 {
-    public class CustomApiException : Exception
+    public class BizwebSharpException : Exception
     {
-        public CustomApiException(string message) : base(message)
+        public BizwebSharpException(string message) : base(message)
         {
         }
 
-        public CustomApiException(string message, Exception innerException) : base(message, innerException)
+        public BizwebSharpException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        public CustomApiException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors,
+        public BizwebSharpException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors,
             string message, string jsonError, RequestSimpleInfo requestInfo = null) : base(message)
         {
             HttpStatusCode = httpStatusCode;

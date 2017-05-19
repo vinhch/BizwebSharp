@@ -31,8 +31,11 @@ namespace BizwebSharp.Infrastructure
             {
                 if (Uri.IsWellFormedUriString(protocolScheme + schemeDelimiter + myApiUrl, UriKind.Absolute) ==
                     false)
-                    throw new CustomApiException(
+                {
+                    throw new BizwebSharpException(
                         $"The given {nameof(myApiUrl)} cannot be converted into a well-formed URI.");
+                }
+
                 myApiUrl = protocolScheme + schemeDelimiter + myApiUrl;
             }
 
@@ -57,8 +60,10 @@ namespace BizwebSharp.Infrastructure
             //client.ContentHandlers.Add("text/json", deserializer);
 
             if (!string.IsNullOrEmpty(authState.AccessToken))
+            {
                 client.AddDefaultParameter(ApiConst.HeaderKeyAccessToken, authState.AccessToken,
-                    ParameterType.HttpHeader);
+                                ParameterType.HttpHeader);
+            }
 
             return client;
         }
@@ -104,7 +109,7 @@ namespace BizwebSharp.Infrastructure
                 if ((int) code == 429 /* Too many requests */)
                     throw new ApiRateLimitException(code, errors, message, json, requestInfo);
 
-                throw new CustomApiException(code, errors, message, json, requestInfo);
+                throw new BizwebSharpException(code, errors, message, json, requestInfo);
             }
 
             //if (response.ErrorException != null)

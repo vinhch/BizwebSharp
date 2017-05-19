@@ -38,9 +38,9 @@ namespace BizwebSharp.Tests.xUnit
         {
             var exception = Record.Exception(() => RequestEngine.CheckResponseExceptions(_errorResponse));
             Assert.NotNull(exception);
-            Assert.IsType<CustomApiException>(exception);
+            Assert.IsType<BizwebSharpException>(exception);
 
-            var ex = (CustomApiException) exception;
+            var ex = (BizwebSharpException) exception;
             ex.HttpStatusCode.Should().Be(System.Net.HttpStatusCode.InternalServerError);
             ex.Message.Should().Contain("Response did not indicate success. Status: 500");
         }

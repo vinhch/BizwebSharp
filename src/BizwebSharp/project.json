@@ -4,10 +4,10 @@
   "description": "BizwebSharp is a C# and .NET client library for Bizweb.vn API",
 
   "dependencies": {
-    "FubarCoder.RestSharp.Portable.HttpClient": "4.0.7",
+    "FubarCoder.RestSharp.Portable.HttpClient": "4.0.8",
     "Microsoft.Extensions.Primitives": "1.0.1",
     "NETStandard.Library": "1.6.0",
-    "Newtonsoft.Json": "9.0.1",
+    "Newtonsoft.Json": "10.0.1",
     "System.Collections.Specialized": "4.3.0",
     "System.Reflection.TypeExtensions": "4.3.0",
     "System.Security.Cryptography.Algorithms": "4.3.0"
