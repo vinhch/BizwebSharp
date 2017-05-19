@@ -42,7 +42,8 @@ namespace BizwebSharp.Services
             IEnumerable<MetaField> metafields = null)
         {
             var body = article.ToDictionary();
-            if (metafields != null)
+
+            if (metafields != null && metafields.Any())
             {
                 body.Add("metafields", metafields);
             }
