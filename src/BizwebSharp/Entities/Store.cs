@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
 {
-    public class Store : BaseEntity
+    public class Store : BaseEntityWithTimeline
     {
         [JsonProperty("address")]
         public string Address { get; set; }
@@ -22,9 +21,6 @@ namespace BizwebSharp.Entities
 
         //[JsonProperty("country_name")]
         //public string CountryName { get; set; }
-
-        [JsonProperty("created_on")]
-        public DateTime? CreatedOn { get; set; }
 
         [JsonProperty("customer_email")]
         public string CustomerEmail { get; set; }
