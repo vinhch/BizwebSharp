@@ -13,12 +13,12 @@ namespace BizwebSharp.Services
         {
         }
 
-        public virtual async Task<int> CountAsync(ProductOptions options = null)
+        public virtual async Task<int> CountAsync(Options.ProductOption options = null)
         {
             return await MakeRequest<int>("products/count.json", HttpMethod.GET, "count", options);
         }
 
-        public virtual async Task<IEnumerable<Product>> ListAsync(ProductOptions options = null)
+        public virtual async Task<IEnumerable<Product>> ListAsync(Options.ProductOption options = null)
         {
             return await MakeRequest<List<Product>>("products.json", HttpMethod.GET, "products", options);
         }

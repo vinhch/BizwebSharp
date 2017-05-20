@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class ArticleOptions : PublishableListOptions
+    public class ArticleOption : PublishableListOptions
     {
         [JsonProperty("alias")]
         public string Alias { get; set; }

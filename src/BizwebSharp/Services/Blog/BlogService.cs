@@ -15,12 +15,12 @@ namespace BizwebSharp.Services
         {
         }
 
-        public virtual async Task<int> CountAsync(BlogOptions options = null)
+        public virtual async Task<int> CountAsync(BlogOption options = null)
         {
             return await MakeRequest<int>("blogs/count.json", HttpMethod.GET, "count", options);
         }
 
-        public virtual async Task<IEnumerable<Blog>> ListAsync(BlogOptions options = null)
+        public virtual async Task<IEnumerable<Blog>> ListAsync(BlogOption options = null)
         {
             return await MakeRequest<List<Blog>>("blogs.json", HttpMethod.GET, "blogs", options);
         }

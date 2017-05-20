@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class PageOptions : PublishableListOptions
+    public class PageOption : PublishableListOptions
     {
         [JsonProperty("title")]
         public string Title { get; set; }
