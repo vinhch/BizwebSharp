@@ -1,9 +1,8 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
 {
-    public class CustomCollection : BaseEntityWithTimeline
+    public class CustomCollection : BaseEntityCanPublishable
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -13,10 +12,6 @@ namespace BizwebSharp.Entities
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
-             NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
 
         [JsonProperty("meta_title")]
         public string MetaTitle { get; set; }

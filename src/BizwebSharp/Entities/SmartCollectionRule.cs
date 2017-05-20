@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Entities
 {
-    public class SmartCollectionRules : BaseEntity
+    public class SmartCollectionRule : BaseEntity
     {
         /// <summary>
         ///     The relationship between the column choice, and the condition.

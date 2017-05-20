@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using BizwebSharp.Enums;
 using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
 {
-    public class Collection : BaseEntityWithTimeline
+    public class Collection : BaseEntityCanPublishable
     {
         [JsonProperty("type")]
         public CollectionTypes Type { get; set; }
@@ -18,10 +17,6 @@ namespace BizwebSharp.Entities
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
-             NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
 
         [JsonProperty("meta_title")]
         public string MetaTitle { get; set; }
@@ -42,9 +37,9 @@ namespace BizwebSharp.Entities
         public bool ProductsCount { get; set; }
 
         [JsonProperty("image")]
-        public SmartCollectionImage Image { get; set; }
+        public Image Image { get; set; }
 
         [JsonProperty("rules")]
-        public IList<SmartCollectionRules> Rules { get; set; }
+        public IEnumerable<SmartCollectionRule> Rules { get; set; }
     }
 }
