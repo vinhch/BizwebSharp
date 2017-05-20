@@ -3,13 +3,14 @@ using System.Reflection;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Infrastructure.RequestPolicies;
+using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
 
 namespace BizwebSharp.Services
 {
     public abstract class BaseService
     {
-        public BaseService(BizwebAuthorizationState authState)
+        protected BaseService(BizwebAuthorizationState authState)
         {
             _AuthState = authState;
         }
@@ -39,9 +40,15 @@ namespace BizwebSharp.Services
             }
             else
             {
-                foreach (var propertyInfo in payload.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                //foreach (var propertyInfo in payload.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+                //{
+                //    req.AddParameter(propertyInfo.Name, propertyInfo.GetValue(payload));
+                //}
+
+                var token = JToken.FromObject(payload);
+                foreach (JProperty item in token)
                 {
-                    req.AddParameter(propertyInfo.Name, propertyInfo.GetValue(payload));
+                    req.AddParameter(item.Name, item.Value);
                 }
             }
 
