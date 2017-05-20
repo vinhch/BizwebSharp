@@ -1,14 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
 {
-    public class Page : BaseEntityWithTimeline
+    public class Page : BaseEntityCanPublishable
     {
-        [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
-             NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
-
         [JsonProperty("title")]
         public string Title { get; set; }
 

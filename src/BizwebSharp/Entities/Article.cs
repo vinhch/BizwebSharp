@@ -1,14 +1,9 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
 {
-    public class Article : BaseEntityWithTimeline
+    public class Article : BaseEntityCanPublishable
     {
-        [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
-             NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
-
         [JsonProperty("blog_id")]
         public long? BlogId { get; set; }
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace BizwebSharp.Entities
@@ -7,7 +6,7 @@ namespace BizwebSharp.Entities
     /// <summary>
     ///     An entity representing a Shopify product.
     /// </summary>
-    public class Product : BaseEntityWithTimeline
+    public class Product : BaseEntityCanPublishable
     {
         /// <summary>
         ///     The name of the product. In a shop's catalog, clicking on a product's title takes you to that product's page.
@@ -21,14 +20,6 @@ namespace BizwebSharp.Entities
         /// </summary>
         [JsonProperty("content")]
         public string Content { get; set; }
-
-        /// <summary>
-        ///     The date and time when the product was published. The API returns this value in ISO 8601 format.
-        ///     Set to NULL to unpublish a product
-        /// </summary>
-        [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
-             NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
 
         /// <summary>
         ///     The name of the vendor of the product.
