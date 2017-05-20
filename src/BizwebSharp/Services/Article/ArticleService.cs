@@ -27,15 +27,26 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Article> GetAsync(long articleId, string fields = null)
         {
-            return await MakeRequest<Article>($"articles/{articleId}.json", HttpMethod.GET, "article", new {fields});
+            dynamic option = null;
+            if (!string.IsNullOrEmpty(fields))
+            {
+                option = new { fields };
+            }
+
+            return await MakeRequest<Article>($"articles/{articleId}.json", HttpMethod.GET, "article", option);
         }
 
         public virtual async Task<Article> GetAsync(long blogId, long articleId, string fields = null)
         {
+            dynamic option = null;
+            if (!string.IsNullOrEmpty(fields))
+            {
+                option = new { fields };
+            }
+
             return
                 await
-                    MakeRequest<Article>($"blogs/{blogId}/articles/{articleId}.json", HttpMethod.GET, "article",
-                        new {fields});
+                    MakeRequest<Article>($"blogs/{blogId}/articles/{articleId}.json", HttpMethod.GET, "article", option);
         }
 
         public virtual async Task<Article> CreateAsync(long blogId, Article article,

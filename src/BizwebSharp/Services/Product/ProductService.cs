@@ -25,7 +25,13 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Product> GetAsync(long productId, string fields = null)
         {
-            return await MakeRequest<Product>($"products/{productId}.json", HttpMethod.GET, "product", new { fields });
+            dynamic option = null;
+            if (!string.IsNullOrEmpty(fields))
+            {
+                option = new {fields};
+            }
+
+            return await MakeRequest<Product>($"products/{productId}.json", HttpMethod.GET, "product", option);
         }
 
         public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null)

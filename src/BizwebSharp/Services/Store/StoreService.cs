@@ -12,7 +12,13 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Store> GetAsync(string fields = null)
         {
-            return await MakeRequest<Store>("store.json", HttpMethod.GET, "store", new { fields });
+            dynamic option = null;
+            if (fields != null)
+            {
+                option = new { fields };
+            }
+
+            return await MakeRequest<Store>("store.json", HttpMethod.GET, "store", option);
         }
 
         public virtual async Task UninstallAppAsync()

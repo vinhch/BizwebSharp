@@ -27,7 +27,13 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Blog> GetAsync(long id, string fields = null)
         {
-            return await MakeRequest<Blog>($"blogs/{id}.json", HttpMethod.GET, "blog", new { fields });
+            dynamic option = null;
+            if (!string.IsNullOrEmpty(fields))
+            {
+                option = new { fields };
+            }
+
+            return await MakeRequest<Blog>($"blogs/{id}.json", HttpMethod.GET, "blog", option);
         }
 
         public virtual async Task<Blog> CreateAsync(Blog blog, IEnumerable<MetaField> metafields = null)
