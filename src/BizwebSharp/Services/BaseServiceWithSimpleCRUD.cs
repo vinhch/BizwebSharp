@@ -17,7 +17,7 @@ namespace BizwebSharp.Services
 
         protected BaseServiceWithSimpleCRUD(BizwebAuthorizationState authState) : base(authState)
         {
-            ApiClassPath = nameof(T).ToSnakeCase();
+            ApiClassPath = typeof(T).Name.ToSnakeCase();
             ApiClassPathInPlural = ApiClassPath + "s";
         }
 
