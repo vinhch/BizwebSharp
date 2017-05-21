@@ -17,10 +17,8 @@ namespace BizwebSharp.Services
     public abstract class CollectionService<T> : BaseServiceWithSimpleCRUD<T, CollectionOption>
         where T : BaseEntityWithTimeline, new()
     {
-        protected CollectionService(BizwebAuthorizationState authState)
-            : base(authState, nameof(Collection).ToSnakeCase(), nameof(Collection).ToSnakeCase() + "s")
+        protected CollectionService(BizwebAuthorizationState authState) : base(authState)
         {
-
         }
     }
 }
