@@ -147,7 +147,7 @@ namespace BizwebSharp.Services.Authorization
             return string.Equals(calculatedSignature, signature, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public static async Task<bool> IsAuthenticWebhook(NameValueCollection requestHeaders, Stream inputStream,
+        public static async Task<bool> IsAuthenticWebhookAsync(NameValueCollection requestHeaders, Stream inputStream,
             string apiSecretKey)
         {
             //Input stream may have already been read when a controller determines parameters to
@@ -209,7 +209,7 @@ namespace BizwebSharp.Services.Authorization
             return builder.Uri;
         }
 
-        public static async Task<string> Authorize(string code, string myApiUrl, string apiKey,
+        public static async Task<string> AuthorizeAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
             var client = RequestEngine.CreateClient(new BizwebAuthorizationState {ApiUrl = myApiUrl});
