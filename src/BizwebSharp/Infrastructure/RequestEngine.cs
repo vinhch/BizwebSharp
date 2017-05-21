@@ -54,7 +54,7 @@ namespace BizwebSharp.Infrastructure
 
             if (!string.IsNullOrEmpty(authState.AccessToken))
             {
-                client.AddDefaultParameter(ApiConst.HeaderKeyAccessToken, authState.AccessToken,
+                client.AddDefaultParameter(ApiConst.HEADER_KEY_ACCESS_TOKEN, authState.AccessToken,
                     ParameterType.HttpHeader);
             }
 
@@ -196,11 +196,21 @@ namespace BizwebSharp.Infrastructure
             });
         }
 
+        public static async Task<string> ExecuteRequestToStringAsync(IRestClient baseClient, ICustomRestRequest request)
+        {
+            return await ExecuteRequestToStringAsync(baseClient, request, DefaultRequestExecutionPolicy.Default);
+        }
+
         public static async Task<JToken> ExecuteRequestAsync(IRestClient baseClient, ICustomRestRequest request,
             IRequestExecutionPolicy execPolicy)
         {
             var responseStr = await ExecuteRequestToStringAsync(baseClient, request, execPolicy);
             return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
+        }
+
+        public static async Task<JToken> ExecuteRequestAsync(IRestClient baseClient, ICustomRestRequest request)
+        {
+            return await ExecuteRequestAsync(baseClient, request, DefaultRequestExecutionPolicy.Default);
         }
 
         public static async Task<T> ExecuteRequestAsync<T>(IRestClient baseClient, ICustomRestRequest request,
@@ -223,6 +233,12 @@ namespace BizwebSharp.Infrastructure
 
                 return new RequestResult<T>(response, result);
             });
+        }
+
+        public static async Task<T> ExecuteRequestAsync<T>(IRestClient baseClient, ICustomRestRequest request)
+            where T : new()
+        {
+            return await ExecuteRequestAsync<T>(baseClient, request, DefaultRequestExecutionPolicy.Default);
         }
     }
 }

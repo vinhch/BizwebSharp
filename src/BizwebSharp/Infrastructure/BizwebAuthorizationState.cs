@@ -11,7 +11,7 @@ namespace BizwebSharp.Infrastructure
         public string Alias
         {
             get { return GetBizwebAliasFromApiUrl(ApiUrl); }
-            set { ApiUrl = value == null ? null : value + ApiConst.BizwebApiDomain; }
+            set { ApiUrl = value == null ? null : value + ApiConst.BIZWEB_API_DOMAIN; }
         }
 
         public string ApiUrl
@@ -19,9 +19,9 @@ namespace BizwebSharp.Infrastructure
             get { return _apiUrl; }
             set
             {
-                if (!value.Contains(ApiConst.BizwebApiDomain))
-                    throw new FormatException($"{nameof(ApiUrl)} must have {ApiConst.BizwebApiDomain} domain path.");
-                _apiUrl = GetBizwebAliasFromApiUrl(value) + ApiConst.BizwebApiDomain;
+                if (!value.Contains(ApiConst.BIZWEB_API_DOMAIN))
+                    throw new FormatException($"{nameof(ApiUrl)} must have {ApiConst.BIZWEB_API_DOMAIN} domain path.");
+                _apiUrl = GetBizwebAliasFromApiUrl(value) + ApiConst.BIZWEB_API_DOMAIN;
             }
         }
 
