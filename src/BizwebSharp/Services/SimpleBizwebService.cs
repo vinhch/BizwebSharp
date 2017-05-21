@@ -20,7 +20,7 @@ namespace BizwebSharp.Services
             }
         }
 
-        private async Task<object> PostOrPutAsync(Method method, string apiPath, object data, string rootElement = null)
+        private async Task<string> PostOrPutAsync(Method method, string apiPath, object data, string rootElement = null)
         {
             var req = RequestEngine.CreateRequest(apiPath, method, rootElement);
             if (string.IsNullOrEmpty(rootElement))
@@ -42,12 +42,12 @@ namespace BizwebSharp.Services
             }
         }
 
-        public async Task<object> PostAsync(string apiPath, object data, string rootElement = null)
+        public async Task<string> PostAsync(string apiPath, object data, string rootElement = null)
         {
             return await PostOrPutAsync(Method.POST, apiPath, data, rootElement);
         }
 
-        public async Task<object> PutAsync(string apiPath, object data, string rootElement = null)
+        public async Task<string> PutAsync(string apiPath, object data, string rootElement = null)
         {
             return await PostOrPutAsync(Method.PUT, apiPath, data, rootElement);
         }
