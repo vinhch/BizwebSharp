@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using BizwebSharp.Entities;
 using BizwebSharp.Extensions;
-using BizwebSharp.Options;
 using BizwebSharp.Infrastructure;
 
 namespace BizwebSharp.Services
