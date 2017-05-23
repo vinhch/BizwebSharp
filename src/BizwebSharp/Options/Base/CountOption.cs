@@ -7,7 +7,7 @@ namespace BizwebSharp.Options
     /// <summary>
     ///     A generic class for filtering the results of a .CountAsync command.
     /// </summary>
-    public class CountOptions : Parameterizable
+    public class CountOption : Parameterizable
     {
         /// <summary>
         ///     Restricts results to those created after date (format: 2008-12-31 03:00).

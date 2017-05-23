@@ -9,7 +9,7 @@ namespace BizwebSharp.Services
 {
     public abstract class BaseServiceHavePublishedOption<T, TOption> : BaseServiceWithSimpleCRUD<T, TOption>
         where T : BaseEntityWithTimeline, new()
-        where TOption : CountOptions, new()
+        where TOption : CountOption, new()
     {
         protected BaseServiceHavePublishedOption(BizwebAuthorizationState authState) : base(authState)
         {

@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class ProductOption : PublishableListOptions
+    public class ProductOption : PublishableListOption
     {
         /// <summary>
         ///     Filter by product title.

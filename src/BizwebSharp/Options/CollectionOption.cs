@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class CollectionOption : PublishableListOptions
+    public class CollectionOption : PublishableListOption
     {
         /// <summary>
         ///     Show smart collections with given title

@@ -6,7 +6,7 @@ namespace BizwebSharp.Options
     /// <summary>
     ///     Generic options for filtering objects that can be published (e.g. those with a PublishedAt, Published status).
     /// </summary>
-    public class PublishableListOptions : ListOptions
+    public class PublishableListOption : ListOption
     {
         /// <summary>
         ///     Show objects published after date (format: 2008-12-31 03:00).

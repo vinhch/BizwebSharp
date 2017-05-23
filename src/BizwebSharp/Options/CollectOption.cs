@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class CollectOption : ListOptions
+    public class CollectOption : ListOption
     {
         /// <summary>
         /// An optional product id to retrieve.

@@ -9,7 +9,7 @@ namespace BizwebSharp.Services
 {
     public abstract class BaseServiceWithSimpleCRUD<T, TOption> : BaseService
         where T : BaseEntityWithTimeline, new()
-        where TOption : CountOptions, new()
+        where TOption : CountOption, new()
     {
         protected string ApiClassPath { get; }
 

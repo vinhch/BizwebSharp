@@ -7,7 +7,7 @@ using BizwebSharp.Options;
 
 namespace BizwebSharp.Services
 {
-    public class ThemeService : BaseServiceWithSimpleCRUD<Theme, ListOptions>
+    public class ThemeService : BaseServiceWithSimpleCRUD<Theme, ListOption>
     {
         public ThemeService(BizwebAuthorizationState authState) : base(authState)
         {

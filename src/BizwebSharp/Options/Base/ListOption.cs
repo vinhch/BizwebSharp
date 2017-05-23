@@ -8,7 +8,7 @@ namespace BizwebSharp.Options
     /// <summary>
     ///     A generic class for filtering the results of a .ListAsync command.
     /// </summary>
-    public class ListOptions : CountOptions
+    public class ListOption : CountOption
     {
         /// <summary>
         ///     An optional array of order ids to retrieve.

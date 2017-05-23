@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class ScriptTagOption : ListOptions
+    public class ScriptTagOption : ListOption
     {
         /// <summary>
         /// Returns only those <see cref="ScriptTag"/>s with the given <see cref="ScriptTag.Src"/> value.

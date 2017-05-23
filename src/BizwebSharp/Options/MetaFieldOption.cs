@@ -2,7 +2,7 @@
 
 namespace BizwebSharp.Options
 {
-    public class MetaFieldOption : ListOptions
+    public class MetaFieldOption : ListOption
     {
         /// <summary>
         /// Filter by namespace.

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp.Options
 {
-    public class BlogOption : ListOptions
+    public class BlogOption : ListOption
     {
         [JsonProperty("alias")]
         public string Alias { get; set; }

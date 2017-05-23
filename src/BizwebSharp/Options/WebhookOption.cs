@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp.Options
 {
-    public class WebhookOption : ListOptions
+    public class WebhookOption : ListOption
     {
         /// <summary>
         /// An optional filter for the address property. When used, the method will only return webhooks with the given address.
