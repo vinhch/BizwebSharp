@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp.Services
 {
-    public class ProductCreateOptions : Parameterizable
+    public class ProductCreateOption : Parameterizable
     {
         [JsonProperty("published")]
         public bool? Published { get; set; }

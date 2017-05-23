@@ -12,14 +12,14 @@ namespace BizwebSharp.Services
         {
         }
 
-        public virtual async Task<int> CountAsync(Options.ProductOption options = null)
+        public virtual async Task<int> CountAsync(Options.ProductOption option = null)
         {
-            return await MakeRequest<int>("products/count.json", HttpMethod.GET, "count", options);
+            return await MakeRequest<int>("products/count.json", HttpMethod.GET, "count", option);
         }
 
-        public virtual async Task<IEnumerable<Product>> ListAsync(Options.ProductOption options = null)
+        public virtual async Task<IEnumerable<Product>> ListAsync(Options.ProductOption option = null)
         {
-            return await MakeRequest<List<Product>>("products.json", HttpMethod.GET, "products", options);
+            return await MakeRequest<List<Product>>("products.json", HttpMethod.GET, "products", option);
         }
 
         public virtual async Task<Product> GetAsync(long productId, string fields = null)
@@ -33,15 +33,15 @@ namespace BizwebSharp.Services
             return await MakeRequest<Product>($"products/{productId}.json", HttpMethod.GET, "product", option);
         }
 
-        public virtual async Task<Product> CreateAsync(Product product, ProductCreateOptions options = null)
+        public virtual async Task<Product> CreateAsync(Product product, ProductCreateOption option = null)
         {
             //Build the request body as a dictionary. Necessary because the create options must be added to the
             //'product' property.
             var productBody = product.ToDictionary();
 
-            if (options != null)
+            if (option != null)
             {
-                foreach (var kvp in options.ToDictionary())
+                foreach (var kvp in option.ToDictionary())
                 {
                     productBody.Add(kvp);
                 }
