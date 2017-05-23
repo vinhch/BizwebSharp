@@ -8,7 +8,7 @@ namespace BizwebSharp.Options
         /// Filter by namespace.
         /// </summary>
         [JsonProperty("namespace")]
-        public string Namespace { get; set; };
+        public string Namespace { get; set; }
 
         /// <summary>
         /// Filter by key value.
