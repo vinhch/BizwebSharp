@@ -19,7 +19,7 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Asset> GetAsync(long themeId, string key, string fields = null)
         {
-            var options = new Dictionary<string, object>
+            var option = new Dictionary<string, object>
             {
                 {"key", key },
                 {"theme_id", themeId }
@@ -27,10 +27,10 @@ namespace BizwebSharp.Services
 
             if (!string.IsNullOrEmpty(fields))
             {
-                options.Add("fields", fields);
+                option.Add("fields", fields);
             }
 
-            return await MakeRequest<Asset>($"themes/{themeId}/assets.json", HttpMethod.GET, "asset", options);
+            return await MakeRequest<Asset>($"themes/{themeId}/assets.json", HttpMethod.GET, "asset", option);
         }
 
         public virtual async Task<Asset> CreateOrUpdateAsync(long themeId, Asset asset)
@@ -40,13 +40,13 @@ namespace BizwebSharp.Services
 
         public virtual async Task DeleteAsync(long themeId, string key)
         {
-            var options = new Dictionary<string, object>
+            var option = new Dictionary<string, object>
             {
                 {"key", key },
                 {"theme_id", themeId }
             };
 
-            await MakeRequest($"themes/{themeId}/assets.json", HttpMethod.DELETE, payload: options);
+            await MakeRequest($"themes/{themeId}/assets.json", HttpMethod.DELETE, payload: option);
         }
     }
 }
