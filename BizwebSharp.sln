@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{ED6F8E49-B
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BizwebSharp.Tests.xUnit", "test\BizwebSharp.Tests.xUnit\BizwebSharp.Tests.xUnit.xproj", "{6D67105D-9C20-4780-9178-E139B714BC16}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "BizwebSharp.ConsoleTests", "test\BizwebSharp.ConsoleTests\BizwebSharp.ConsoleTests.xproj", "{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{6D67105D-9C20-4780-9178-E139B714BC16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D67105D-9C20-4780-9178-E139B714BC16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D67105D-9C20-4780-9178-E139B714BC16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,5 +43,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{EEDC2EEE-661D-45E1-AC2A-481CAC21B62E} = {AA588B91-76DE-441C-822A-168270211EDE}
 		{6D67105D-9C20-4780-9178-E139B714BC16} = {ED6F8E49-B4A1-451E-900B-BC0D61375D6D}
+		{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B} = {ED6F8E49-B4A1-451E-900B-BC0D61375D6D}
 	EndGlobalSection
 EndGlobal
