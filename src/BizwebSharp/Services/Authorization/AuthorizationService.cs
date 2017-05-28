@@ -179,7 +179,11 @@ namespace BizwebSharp.Services.Authorization
 
             //We do not dispose the StreamReader because disposing it will also dispose the input stream,
             //and disposing a request's input stream can cause major headaches for the developer.
-            var requestBody = await new StreamReader(inputStream).ReadToEndAsync();
+            string requestBody;
+            using (var reader = new StreamReader(inputStream))
+            {
+                requestBody = await reader.ReadToEndAsync();
+            }
 
             return IsAuthenticWebhook(requestHeaders, requestBody, apiSecretKey);
         }
@@ -206,7 +210,11 @@ namespace BizwebSharp.Services.Authorization
 
             //We do not dispose the StreamReader because disposing it will also dispose the input stream,
             //and disposing a request's input stream can cause major headaches for the developer.
-            string requestBody = await new StreamReader(inputStream).ReadToEndAsync();
+            string requestBody;
+            using (var reader = new StreamReader(inputStream))
+            {
+                requestBody = await reader.ReadToEndAsync();
+            }
 
             return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
         }
