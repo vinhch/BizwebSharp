@@ -19,7 +19,7 @@ namespace BizwebSharp.ConsoleTests
             AppStartup.End();
         }
 
-        public static void RunProgram()
+        private static void RunProgram()
         {
             var bwSettings = new BizwebSettings();
             AppStartup.Configuration.GetSection("BizwebSettings").Bind(bwSettings);

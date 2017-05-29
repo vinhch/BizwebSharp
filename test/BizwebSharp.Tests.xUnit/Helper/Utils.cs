@@ -46,5 +46,21 @@ namespace BizwebSharp.Tests.xUnit
                 return _authState;
             }
         }
+
+        private static BizwebSetting _bizwebSetting;
+        public static BizwebSetting BwSetting
+        {
+            get
+            {
+                if (_bizwebSetting == null)
+                {
+                    _bizwebSetting = new BizwebSetting();
+                    Configuration.GetSection("BizwebSetting").Bind(_bizwebSetting);
+                }
+
+                return _bizwebSetting;
+            }
+        }
+
     }
 }
