@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace BizwebSharp.ConsoleTests
 {
-    public static class Hepler
+    public static class Utils
     {
         public static string GetDefaultBrowserPath()
         {
