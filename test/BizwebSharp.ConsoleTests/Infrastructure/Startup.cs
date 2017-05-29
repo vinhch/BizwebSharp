@@ -34,11 +34,15 @@ namespace BizwebSharp.ConsoleTests
                 sb.Append($"\nBizwebValidationModel = {json}\n");
 
                 var requestBody = ReadRequestBody(context.Request);
-                //prettify JSON
-                requestBody = JObject.Parse(requestBody).ToString();
+                if (!string.IsNullOrWhiteSpace(requestBody))
+                {
+                    //prettify JSON
+                    requestBody = JObject.Parse(requestBody).ToString();
+                }
                 sb.Append($"\nRequestBody = {requestBody}\n");
 
-                sb.Append($"\nAccessToken = {AuthorizeAnAccessToken(bizwebValidation)}\n");
+                var token = await AuthorizeAnAccessTokenAsync(bizwebValidation);
+                sb.Append($"\nAccessToken = {token}\n");
 
                 await context.Response.WriteAsync(sb.ToString());
             });
@@ -88,7 +92,7 @@ namespace BizwebSharp.ConsoleTests
             return requestBody;
         }
 
-        private static async Task<string> AuthorizeAnAccessToken(BizwebValidationModel model)
+        private static async Task<string> AuthorizeAnAccessTokenAsync(BizwebValidationModel model)
         {
             if (string.IsNullOrEmpty(model.Store))
             {
