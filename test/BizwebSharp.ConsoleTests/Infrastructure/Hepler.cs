@@ -13,37 +13,42 @@ namespace BizwebSharp.ConsoleTests
             try
             {
                 //Read default browser path from userChoiceLKey
-                var userChoiceKey = Registry.CurrentUser.OpenSubKey(urlAssociation + @"\UserChoice", false);
-
-                //If user choice was not found, try machine default
-                if (userChoiceKey == null)
+                using (var userChoiceKey = Registry.CurrentUser.OpenSubKey(urlAssociation + @"\UserChoice", false))
                 {
-                    //Read default browser path from Win XP registry key
-                    var browserKey = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false);
-
-                    //If browser path wasn’t found, try Win Vista (and newer) registry key
-                    if (browserKey == null)
+                    if (userChoiceKey == null)
                     {
-                        browserKey =
-                        Registry.CurrentUser.OpenSubKey(
-                        urlAssociation, false);
-                    }
-                    var path = CleanifyBrowserPath(browserKey.GetValue(null) as string);
-                    browserKey.Dispose();
-                    return path;
-                }
-                else
-                {
-                    // user defined browser choice was found
-                    var progId = (userChoiceKey.GetValue("ProgId").ToString());
-                    userChoiceKey.Dispose();
+                        //Read default browser path from Win XP registry key
+                        using (var browserKey = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false))
+                        {
+                            string path;
+                            if (browserKey == null)
+                            {
+                                using (var browserKey2 = Registry.CurrentUser.OpenSubKey(urlAssociation, false))
+                                {
+                                    path = browserKey2.GetValue(null) as string;
+                                }
+                            }
+                            else
+                            {
+                                path = browserKey.GetValue(null) as string;
+                            }
 
-                    // now look up the path of the executable
-                    var concreteBrowserKey = browserPathKey.Replace("$BROWSER$", progId);
-                    var kp = Registry.ClassesRoot.OpenSubKey(concreteBrowserKey, false);
-                    var browserPath = CleanifyBrowserPath(kp.GetValue(null) as string);
-                    kp.Dispose();
-                    return browserPath;
+                            return CleanifyBrowserPath(path);
+                        }
+                    }
+                    else
+                    {
+                        // user defined browser choice was found
+                        var progId = (userChoiceKey.GetValue("ProgId").ToString());
+                        userChoiceKey.Dispose();
+
+                        // now look up the path of the executable
+                        var concreteBrowserKey = browserPathKey.Replace("$BROWSER$", progId);
+                        using (var kp = Registry.ClassesRoot.OpenSubKey(concreteBrowserKey, false))
+                        {
+                            return CleanifyBrowserPath(kp.GetValue(null) as string);
+                        }
+                    }
                 }
             }
             catch (Exception)
