@@ -23,7 +23,7 @@ namespace BizwebSharp.ConsoleTests
             app.Run(async context =>
             {
                 var sb = new StringBuilder();
-                sb.Append("Hello world\n");
+                sb.Append("Get Bizweb AccessToken\n\n");
                 foreach (var item in context.Request.Query)
                 {
                     sb.Append($"{item.Key} = {item.Value}\n");

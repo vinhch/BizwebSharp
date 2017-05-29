@@ -13,7 +13,7 @@ namespace BizwebSharp.ConsoleTests
         {
             AppStartup.Run();
 
-            Process.Start(Hepler.GetDefaultBrowserPath(), AppStartup.HostUrl);
+            //Process.Start(Hepler.GetDefaultBrowserPath(), AppStartup.HostUrl);
             RunProgram();
 
             AppStartup.End();
@@ -27,7 +27,7 @@ namespace BizwebSharp.ConsoleTests
             var scopes = Enum.GetValues(typeof(AuthorizationScope)).Cast<AuthorizationScope>();
             var authorizationUrl = AuthorizationService.BuildAuthorizationUrl(scopes, bwSettings.Store,
                 bwSettings.ApiKey, AppStartup.HostUrl);
-            //Process.Start(Hepler.GetDefaultBrowserPath(), authorizationUrl.AbsoluteUri);
+            Process.Start(Hepler.GetDefaultBrowserPath(), authorizationUrl.AbsoluteUri);
 
             Console.WriteLine(authorizationUrl.AbsoluteUri);
         }
