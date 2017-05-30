@@ -6,6 +6,7 @@ using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
 {
+    [Trait("Category", "RequestEngine")]
     public class RequestEngineTests : IDisposable
     {
         private readonly IRestResponse _errorResponse;

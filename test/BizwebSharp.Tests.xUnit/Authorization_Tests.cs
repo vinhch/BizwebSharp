@@ -5,6 +5,7 @@ using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
 {
+    [Trait("Category", "Authorization")]
     public class Authorization_Tests
     {
         [Fact(DisplayName = "Builds Authorization Urls With Enums")]

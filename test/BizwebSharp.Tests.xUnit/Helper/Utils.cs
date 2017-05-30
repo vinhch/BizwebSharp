@@ -34,8 +34,9 @@ namespace BizwebSharp.Tests.xUnit
             {
                 if (_authState == null)
                 {
-                    _authState = new BizwebAuthorizationState();
-                    Configuration.GetSection("BizwebAuthorizationState").Bind(_authState);
+                    var authState = new BizwebAuthorizationState();
+                    Configuration.GetSection("BizwebAuthorizationState").Bind(authState);
+                    _authState = authState;
                 }
 
                 if (string.IsNullOrEmpty(_authState.AccessToken) || string.IsNullOrEmpty(_authState.ApiUrl))
