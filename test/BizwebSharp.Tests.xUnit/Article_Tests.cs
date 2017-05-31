@@ -70,6 +70,26 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Equal(article.Content, html);
         }
 
+        [Fact(DisplayName = "Delete Articles")]
+        public async Task Deletes_Articles()
+        {
+            var article = await Fixture.Create(true);
+            var threw = false;
+
+            try
+            {
+                await Fixture.Service.DeleteAsync(Fixture.BlogId.Value, article.Id.Value);
+            }
+            catch (BizwebSharpException ex)
+            {
+                Console.WriteLine($"{nameof(Deletes_Articles)} threw exception. {ex.Message}");
+
+                threw = true;
+            }
+
+            Assert.False(threw);
+        }
+
         [Fact(DisplayName = "List Authors")]
         public async Task List_Authors()
         {
