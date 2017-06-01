@@ -11,6 +11,6 @@ namespace BizwebSharp.Infrastructure.RequestPolicies
             return (await executeRequestAsync(client)).Result;
         }
 
-        public static IRequestExecutionPolicy Default { get; } = new DefaultRequestExecutionPolicy();
+        public static IRequestExecutionPolicy Default { get; set; } = new DefaultRequestExecutionPolicy();
     }
 }
