@@ -108,7 +108,7 @@ namespace BizwebSharp.Tests.xUnit
         }
 
         [Fact(DisplayName = "List Tags For Blog")]
-        public async Task Lists_Tags_For_Blog()
+        public async Task List_Tags_For_Blog()
         {
             var tags = await Fixture.Service.ListTagsForBlogAsync(Fixture.BlogId.Value);
 
