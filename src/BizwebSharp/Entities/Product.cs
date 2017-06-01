@@ -49,12 +49,6 @@ namespace BizwebSharp.Entities
         public string TemplateSuffix { get; set; }
 
         /// <summary>
-        ///     The sales channels in which the product is visible.
-        /// </summary>
-        [JsonProperty("published_scope")]
-        public string PublishedScope { get; set; }
-
-        /// <summary>
         ///     A categorization that a product can be tagged with, commonly used for filtering and searching.
         ///     Each comma-separated tag has a character limit of 255.
         /// </summary>
