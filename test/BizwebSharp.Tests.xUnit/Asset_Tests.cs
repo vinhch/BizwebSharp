@@ -23,7 +23,7 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Create Assets")]
         public async Task Creates_Assets()
         {
-            const string key = "templates/test.liquid";
+            const string key = "snippets/test.bwt";
             var created = await Fixture.Create(key);
 
             Assert.NotNull(created);
@@ -39,7 +39,7 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Update Assets")]
         public async Task Updates_Assets()
         {
-            const string key = "templates/update-test.liquid";
+            const string key = "snippets/update-test.bwt";
             const string newValue = "<h1>Hello, world! I've been updated!</h1>";
             var created = await Fixture.Create(key);
             created.Value = newValue;
@@ -66,8 +66,8 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Copie Assets")]
         public async Task Copies_Assets()
         {
-            const string key = "templates/copy-test.liquid";
-            var original = await Fixture.Create("templates/copy-original-test.liquid");
+            const string key = "snippets/copy-test.bwt";
+            var original = await Fixture.Create("snippets/copy-original-test.bwt");
             var asset = await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, new Asset()
             {
                 Key = key,
@@ -93,7 +93,7 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Deletes_Assets()
         {
             var threw = false;
-            const string key = "templates/delete-test.liquid";
+            const string key = "snippets/delete-test.bwt";
             var created = await Fixture.Create(key, true);
 
             try
@@ -149,7 +149,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public async Task<Asset> Create(string key, bool skipAddToCreatedList = false)
         {
-            var asset = await Service.CreateOrUpdateAsync(ThemeId, new Asset()
+            var asset = await Service.CreateOrUpdateAsync(ThemeId, new Asset
             {
                 ContentType = "text/x-liquid",
                 Value = AssetValue,
