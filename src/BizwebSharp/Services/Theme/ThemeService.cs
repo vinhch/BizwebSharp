@@ -18,7 +18,7 @@ namespace BizwebSharp.Services
             var body = theme.ToDictionary();
             if (!string.IsNullOrEmpty(sourceUrl))
             {
-                body.Add("src", sourceUrl);
+                body["src"] = sourceUrl;
             }
 
             var root = new Dictionary<string, object>

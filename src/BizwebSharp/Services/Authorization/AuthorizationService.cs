@@ -45,7 +45,7 @@ namespace BizwebSharp.Services.Authorization
 
                 if (!QueryKeyForHash.Contains(key)) continue;
 
-                queryDictionary.Add(EncodeQuery(key, true), EncodeQuery(value, false));
+                queryDictionary[EncodeQuery(key, true)] = EncodeQuery(value, false);
             }
             var kvps = queryDictionary.OrderBy(kvp => kvp.Key)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");
@@ -63,7 +63,7 @@ namespace BizwebSharp.Services.Authorization
 
                 if (!QueryKeyForHash.Contains(key)) continue;
 
-                queryDictionary.Add(EncodeQuery(key, true), EncodeQuery(value, false));
+                queryDictionary[EncodeQuery(key, true)] = EncodeQuery(value, false);
             }
             var kvps = queryDictionary.OrderBy(kvp => kvp.Key)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");

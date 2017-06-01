@@ -56,7 +56,7 @@ namespace BizwebSharp.Services
 
             if (metafields != null && metafields.Any())
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return
@@ -71,7 +71,7 @@ namespace BizwebSharp.Services
             var body = article.ToDictionary();
             if (metafields != null)
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return
@@ -108,12 +108,12 @@ namespace BizwebSharp.Services
 
             if (popular.HasValue)
             {
-                options.Add("popular", popular.Value);
+                options["popular"] = popular.Value;
             }
 
             if (limit.HasValue)
             {
-                options.Add("limit", limit.Value);
+                options["limit"] = limit.Value;
             }
 
             return options.Any() ? options : null;

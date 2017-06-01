@@ -22,14 +22,14 @@ namespace BizwebSharp.Services
 
             if (!string.IsNullOrEmpty(order))
             {
-                optionDictionary.Add("order", order);
+                optionDictionary["order"] = order;
             }
 
             if (option != null)
             {
                 foreach (var keyValuePair in option.ToDictionary())
                 {
-                    optionDictionary.Add(keyValuePair);
+                    optionDictionary[keyValuePair.Key] = keyValuePair.Value;
                 }
             }
 
@@ -44,7 +44,7 @@ namespace BizwebSharp.Services
 
             foreach (var keyValuePair in option.ToDictionary())
             {
-                body.Add(keyValuePair);
+                body[keyValuePair.Key] = keyValuePair.Value;
             }
 
             var root = new Dictionary<string, object>
@@ -61,7 +61,7 @@ namespace BizwebSharp.Services
 
             foreach (var keyValuePair in option.ToDictionary())
             {
-                body.Add(keyValuePair);
+                body[keyValuePair.Key] = keyValuePair.Value;
             }
 
             var root = new Dictionary<string, object>

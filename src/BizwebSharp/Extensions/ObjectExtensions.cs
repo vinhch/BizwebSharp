@@ -41,7 +41,7 @@ namespace BizwebSharp.Extensions
                 if (value.GetType().GetTypeInfo().IsEnum)
                     value = ((Enum) value).ToSerializedString();
 
-                output.Add(propName, value);
+                output[propName] = value;
             }
 
             return output;

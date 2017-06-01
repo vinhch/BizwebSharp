@@ -43,7 +43,7 @@ namespace BizwebSharp.Services
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment inputObject, bool notifyCustomer = false)
         {
             var body = inputObject.ToDictionary();
-            body.Add("notify_customer", notifyCustomer);
+            body["notify_customer"] = notifyCustomer;
 
             var root = new Dictionary<string, object>
             {

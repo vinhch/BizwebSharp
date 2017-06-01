@@ -30,9 +30,9 @@ namespace BizwebSharp.Services
             if (option != null)
             {
                 var body = inputObject.ToDictionary();
-                foreach (var item in option.ToDictionary())
+                foreach (var kvp in option.ToDictionary())
                 {
-                    body.Add(item);
+                    body[kvp.Key] = kvp.Value;
                 }
                 root[ApiClassPath] = body;
             }

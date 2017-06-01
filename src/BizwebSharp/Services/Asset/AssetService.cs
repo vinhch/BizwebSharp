@@ -27,7 +27,7 @@ namespace BizwebSharp.Services
 
             if (!string.IsNullOrEmpty(fields))
             {
-                option.Add("fields", fields);
+                option["fields"] = fields;
             }
 
             return await MakeRequest<Asset>($"themes/{themeId}/assets.json", HttpMethod.GET, "asset", option);

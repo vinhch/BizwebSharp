@@ -41,7 +41,7 @@ namespace BizwebSharp.Services
 
             if (metafields != null && metafields.Any())
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return await MakeRequest<Blog>($"blogs.json", HttpMethod.POST, "blog", new {blog = body});
@@ -53,7 +53,7 @@ namespace BizwebSharp.Services
 
             if (metafields != null && metafields.Any())
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return await MakeRequest<Blog>($"blogs/{blogId}.json", HttpMethod.PUT, "blog", new {blog = body});

@@ -43,7 +43,7 @@ namespace BizwebSharp.Services
             {
                 foreach (var kvp in option.ToDictionary())
                 {
-                    productBody.Add(kvp);
+                    productBody[kvp.Key] = kvp.Value;
                 }
             }
 
