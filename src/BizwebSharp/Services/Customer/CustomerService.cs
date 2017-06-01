@@ -40,6 +40,11 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Customer> CreateAsync(Customer inputObject, CustomerCreateOption option)
         {
+            if (option == null)
+            {
+                return await CreateAsync(inputObject);
+            }
+
             var body = inputObject.ToDictionary();
 
             foreach (var keyValuePair in option.ToDictionary())
@@ -57,6 +62,11 @@ namespace BizwebSharp.Services
 
         public virtual async Task<Customer> UpdateAsync(long id, Customer inputObject, CustomerUpdateOption option)
         {
+            if (option == null)
+            {
+                return await UpdateAsync(id, inputObject);
+            }
+
             var body = inputObject.ToDictionary();
 
             foreach (var keyValuePair in option.ToDictionary())
