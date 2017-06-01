@@ -17,8 +17,8 @@
       "type": "platform",
       "version": "1.0.1"
     },
-    "Moq": "4.7.10",
-    "NETStandard.Library": "1.6.0",
+    "Moq": "4.7.12",
+    "NETStandard.Library": "1.6.1",
     "xunit": "2.3.0-beta2-build3683"
   },
 
