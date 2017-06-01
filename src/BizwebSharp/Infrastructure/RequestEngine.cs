@@ -42,10 +42,13 @@ namespace BizwebSharp.Infrastructure
             return builder.Uri;
         }
 
-        public static IRestClient CreateClient(BizwebAuthorizationState authState)
+        public static IRestClient CreateClient(BizwebAuthorizationState authState, bool ignoreResponseStatusCode = true)
         {
             var uri = BuildUri(authState.ApiUrl);
-            var client = new RestClient(uri);
+            var client = new RestClient(uri)
+            {
+                IgnoreResponseStatusCode = ignoreResponseStatusCode
+            };
 
             //Set up the JSON.NET deserializer for the RestSharp client
             //var deserializer = new JsonNetSerializer();
