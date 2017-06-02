@@ -205,7 +205,7 @@ namespace BizwebSharp.Tests.xUnit
                 {
                     new ProductImage
                     {
-                        Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                        Base64 = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
                     }
                 },
             }, options);
