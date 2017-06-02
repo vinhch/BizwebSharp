@@ -1,4 +1,4 @@
 # BizwebSharp.ConsoleTests
-Console app to get a Bizweb API AccessToken.
+Console app to get a Bizweb API AccessToken, tested only in Windows.
 
-How to use: edit appsettings.json and run app.
+How to use: create appsettings.private.json base in appsettings.example.json and run app.
