@@ -103,9 +103,9 @@ namespace BizwebSharp.Tests.xUnit
     {
         public string BodyHtml => "<h1>Hello world!</h1>";
 
-        public string Alias => "ShopifySharp-Handle";
+        public string Alias => "BizwebSharp-Handle";
 
-        public string Name => "ShopifySharp Test Smart Collection";
+        public string Name => "BizwebSharp Test Smart Collection";
 
         public override async Task DisposeAsync()
         {

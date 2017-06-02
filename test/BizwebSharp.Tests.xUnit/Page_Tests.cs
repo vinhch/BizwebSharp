@@ -78,7 +78,7 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Update Pages")]
         public async Task Updates_Pages()
         {
-            const string html = "<h1>This string was updated while testing ShopifySharp!</h1>";
+            const string html = "<h1>This string was updated while testing BizwebSharp!</h1>";
             var created = await Fixture.Create();
             var id = created.Id.Value;
 

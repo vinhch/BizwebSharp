@@ -45,7 +45,7 @@ namespace BizwebSharp.Entities
         public string CartToken { get; set; }
 
         /// <summary>
-        /// A <see cref="ShopifySharp.ClientDetails"/> object containing information about the client.
+        /// A <see cref="ClientDetails"/> object containing information about the client.
         /// </summary>
         [JsonProperty("client_details")]
         public IEnumerable<ClientDetail> ClientDetails { get; set; }

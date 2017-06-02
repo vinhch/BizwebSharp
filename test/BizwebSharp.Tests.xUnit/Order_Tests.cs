@@ -94,7 +94,7 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Update Orders")]
         public async Task Updates_Orders()
         {
-            string note = "This note was updated while testing ShopifySharp!";
+            string note = "This note was updated while testing BizwebSharp!";
             var created = await Fixture.Create();
             long id = created.Id.Value;
 

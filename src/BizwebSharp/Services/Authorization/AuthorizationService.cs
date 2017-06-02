@@ -202,7 +202,7 @@ namespace BizwebSharp.Services.Authorization
         }
 
         public static async Task<bool> IsAuthenticWebhookAsync(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders,
-            Stream inputStream, string shopifySecretKey)
+            Stream inputStream, string apiSecretKey)
         {
             //Input stream may have already been read when a controller determines parameters to
             //pass to an action. Reset position to 0.
@@ -216,7 +216,7 @@ namespace BizwebSharp.Services.Authorization
                 requestBody = await reader.ReadToEndAsync();
             }
 
-            return IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey);
+            return IsAuthenticWebhook(requestHeaders, requestBody, apiSecretKey);
         }
 
         public static bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody,
