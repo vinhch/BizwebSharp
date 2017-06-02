@@ -102,7 +102,7 @@ namespace BizwebSharp.Entities
         /// </summary>
         /// <remarks>The Shopify API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
         [JsonProperty("total_spent")]
-        public decimal TotalSpent { get; set; }
+        public decimal? TotalSpent { get; set; }
 
         /// <summary>
         /// States whether or not the email address has been verified.

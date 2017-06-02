@@ -20,13 +20,13 @@ namespace BizwebSharp.Entities
         /// The amount refunded (it is negative and does not include tax).
         /// </summary>
         [JsonProperty("amount")]
-        public decimal Amount { get; set; }
+        public decimal? Amount { get; set; }
 
         /// <summary>
         /// The tax amount refunded (negative).
         /// </summary>
         [JsonProperty("tax_amount")]
-        public decimal TaxAmount { get; set; }
+        public decimal? TaxAmount { get; set; }
 
         /// <summary>
         /// The type of adjustment. Values include "refund_discrepancy", "shipping_refund"

@@ -216,7 +216,7 @@ namespace BizwebSharp.Entities
         /// Price of the order before shipping and taxes
         /// </summary>
         [JsonProperty("subtotal_price")]
-        public decimal SubtotalPrice { get; set; }
+        public decimal? SubtotalPrice { get; set; }
 
         /// <summary>
         /// An array of <see cref="TaxLine"/> objects, each of which details the total taxes applicable to the order.
@@ -240,25 +240,25 @@ namespace BizwebSharp.Entities
         /// The total amount of the discounts applied to the price of the order.
         /// </summary>
         [JsonProperty("total_discounts")]
-        public decimal TotalDiscounts { get; set; }
+        public decimal? TotalDiscounts { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order.
         /// </summary>
         [JsonProperty("total_line_items_price")]
-        public decimal TotalLineItemsPrice { get; set; }
+        public decimal? TotalLineItemsPrice { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price")]
-        public decimal TotalPrice { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         /// <summary>
         /// The sum of all the taxes applied to the order (must be positive).
         /// </summary>
         [JsonProperty("total_tax")]
-        public decimal TotalTax { get; set; }
+        public decimal? TotalTax { get; set; }
 
         /// <summary>
         /// The sum of all the weights of the line items in the order, in grams.
