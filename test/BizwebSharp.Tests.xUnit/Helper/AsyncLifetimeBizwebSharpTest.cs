@@ -15,7 +15,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public List<TEntity> Created { get; } = new List<TEntity>();
 
-        public async Task InitializeAsync()
+        public virtual async Task InitializeAsync()
         {
             // Create one for count, list, get, etc. orders.
             await Create();
