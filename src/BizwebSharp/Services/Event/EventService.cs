@@ -21,7 +21,7 @@ namespace BizwebSharp.Services
         {
             return
                 await
-                    MakeRequest<List<Event>>("events.json", HttpMethod.GET, "event", option);
+                    MakeRequest<List<Event>>("events.json", HttpMethod.GET, "events", option);
         }
 
         public virtual async Task<Event> GetAsync(long id, string fields = null)
@@ -40,7 +40,7 @@ namespace BizwebSharp.Services
         {
             return
                 await
-                    MakeRequest<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.GET, "event", option);
+                    MakeRequest<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.GET, "events", option);
         }
     }
 }
