@@ -178,7 +178,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public async Task DisposeAsync()
         {
-            foreach (var obj in Created)
+            foreach (var obj in CreatedOrders)
             {
                 try
                 {
