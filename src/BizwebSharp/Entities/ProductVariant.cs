@@ -10,7 +10,7 @@ namespace BizwebSharp.Entities
         ///     The unique numeric identifier for the product.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         ///     The title of the product variant.
@@ -28,14 +28,14 @@ namespace BizwebSharp.Entities
         ///     The order of the product variant in the list of product variants. 1 is the first position.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         ///     The weight of the product variant in grams.
         /// </summary>
         [JsonProperty("grams")]
         [JsonConverter(typeof(NullToZeroConverter))]
-        public int Grams { get; set; }
+        public int? Grams { get; set; }
 
         /// <summary>
         ///     Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock.

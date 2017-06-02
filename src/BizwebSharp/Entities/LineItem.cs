@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         /// The amount available to fulfill. This is the quantity - max(refunded_quantity, fulfilled_quantity) - pending_fulfilled_quantity.
         /// </summary>
         [JsonProperty("fulfillable_quantity")]
-        public int FulfillableQuantity { get; set; }
+        public int? FulfillableQuantity { get; set; }
 
         /// <summary>
         /// Service provider who is doing the fulfillment. Valid values are either "manual" or the name of the provider. eg: "amazon", "shipwire", etc.
@@ -27,7 +27,7 @@ namespace BizwebSharp.Entities
         /// The weight of the item in grams.
         /// </summary>
         [JsonProperty("grams")]
-        public int Grams { get; set; }
+        public int? Grams { get; set; }
 
         /// <summary>
         /// The price of the item before discounts have been applied.
@@ -46,7 +46,7 @@ namespace BizwebSharp.Entities
         /// The number of products that were purchased.
         /// </summary>
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// States whether or not the fulfillment requires shipping.

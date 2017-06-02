@@ -57,7 +57,7 @@ namespace BizwebSharp.Entities
         /// <summary>
         /// The id of the customer's last order.
         /// </summary>
-        /// <remarks>Property can be null or longer than max int32 value. Set to nullable long instead.</remarks>
+        /// <remarks>Property can be null or longer than max int32 value. Set to nullable long? instead.</remarks>
         [JsonProperty("last_order_id")]
         public long? LastOrderId { get; set; }
 
@@ -77,7 +77,7 @@ namespace BizwebSharp.Entities
         /// The number of orders associated with this customer.
         /// </summary>
         [JsonProperty("orders_count")]
-        public int OrdersCount { get; set; }
+        public int? OrdersCount { get; set; }
 
         /// <summary>
         /// The state of the customer in a shop. Valid values are 'disabled', 'decline', 'invited' and 'enabled'.

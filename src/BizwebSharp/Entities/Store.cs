@@ -119,9 +119,9 @@ namespace BizwebSharp.Entities
         //public bool SetupRequired { get; set; }
 
         [JsonProperty("used_volumn")]
-        public long UsedVolumn { get; set; }
+        public long? UsedVolumn { get; set; }
 
         [JsonProperty("max_volumn")]
-        public long MaxVolumn { get; set; }
+        public long? MaxVolumn { get; set; }
     }
 }

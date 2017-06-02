@@ -8,7 +8,7 @@ namespace BizwebSharp.Entities
         /// The id of the custom collection containing the product.
         /// </summary>
         [JsonProperty("collection_id")]
-        public long CollectionId { get; set; }
+        public long? CollectionId { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for the product in the custom collection.
@@ -26,7 +26,7 @@ namespace BizwebSharp.Entities
         /// A number specifying the manually sorted position of this product in a custom collection. The first position is 1. This value only applies when the custom collection is viewed using the Manual sort order.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         /// This is the same value as position but padded with leading zeroes to make it alphanumeric-sortable.

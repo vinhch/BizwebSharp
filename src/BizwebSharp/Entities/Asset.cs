@@ -37,7 +37,7 @@ namespace BizwebSharp.Entities
         /// The asset size in bytes.
         /// </summary>
         [JsonProperty("size")]
-        public long Size { get; set; }
+        public long? Size { get; set; }
 
         /// <summary>
         /// When set in an asset and used in <see cref="AssetService.CreateOrUpdateAsync(long, Asset)"/>,
@@ -56,7 +56,7 @@ namespace BizwebSharp.Entities
         /// A unique numeric identifier for the theme.
         /// </summary>
         [JsonProperty("theme_id")]
-        public long ThemeId { get; set; }
+        public long? ThemeId { get; set; }
 
         /// <summary>
         /// The asset that you are adding.

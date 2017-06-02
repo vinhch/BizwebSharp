@@ -8,13 +8,13 @@ namespace BizwebSharp.Entities
         /// The unique identifier of the order
         /// </summary>
         [JsonProperty("order_id")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         /// <summary>
         /// The unique identifier of the refund
         /// </summary>
         [JsonProperty("refund_id")]
-        public long RefundId { get; set; }
+        public long? RefundId { get; set; }
 
         /// <summary>
         /// The amount refunded (it is negative and does not include tax).

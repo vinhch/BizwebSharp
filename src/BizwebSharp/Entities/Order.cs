@@ -78,7 +78,7 @@ namespace BizwebSharp.Entities
         /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address.
         /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to
         /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update
-        /// the customer's email and apps will have to use the customer update endpoint to do so.
+        /// the customer's email and apps will have to use the customer update endpoint? to do so.
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
@@ -120,7 +120,7 @@ namespace BizwebSharp.Entities
         public IEnumerable<LineItem> LineItems { get; set; }
 
         /// <summary>
-        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point of sale.
+        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point? of sale.
         /// </summary>
         [JsonProperty("location_id")]
         public long? LocationId { get; set; }
@@ -147,14 +147,14 @@ namespace BizwebSharp.Entities
         /// Numerical identifier unique to the shop. A number is sequential and starts at 1000.
         /// </summary>
         [JsonProperty("number")]
-        public int Number { get; set; }
+        public int? Number { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the order. This one is used by the shop owner and customer.
         /// This is different from the id property, which is also a unique numeric identifier for the order, but used for API purposes.
         /// </summary>
         [JsonProperty("order_number")]
-        public int OrderNumber { get; set; }
+        public int? OrderNumber { get; set; }
 
         /// <summary>
         /// The URL pointing to the order status web page. The URL will be null unless the order was created from a checkout.
@@ -267,7 +267,7 @@ namespace BizwebSharp.Entities
         public long? TotalWeight { get; set; }
 
         /// <summary>
-        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale.
+        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point? of sale.
         /// </summary>
         [JsonProperty("user_id")]
         public long? UserId { get; set; }

@@ -56,13 +56,13 @@ namespace BizwebSharp.Entities
         /// The number of times this discount code can be redeemed. It can be redeemed by one or many customers; the usage_limit is a store-wide absolute value. Leave blank for unlimited uses.
         /// </summary>
         [JsonProperty("usage_limit")]
-        public int UsageLimit { get; set; }
+        public int? UsageLimit { get; set; }
 
         /// <summary>
         /// The id of a collection or product that this discount code is restricted to. Leave blank for a store-wide discount. If applies_to_id is set, then the applies_to_resource property is also mandatory.
         /// </summary>
         [JsonProperty("applies_to_id")]
-        public long AppliesToId { get; set; }
+        public long? AppliesToId { get; set; }
 
         /// <summary>
         /// When a discount applies to a product or collection resource, applies_once determines whether the discount should be applied once per order, or to every applicable item in the cart.
@@ -86,6 +86,6 @@ namespace BizwebSharp.Entities
         /// Returns a count of successful checkouts where the discount code has been used.Cannot exceed the usage_limit property.
         /// </summary>
         [JsonProperty("times_used")]
-        public int TimesUsed { get; set; }
+        public int? TimesUsed { get; set; }
     }
 }
