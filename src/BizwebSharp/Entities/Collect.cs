@@ -14,7 +14,7 @@ namespace BizwebSharp.Entities
         /// The unique numeric identifier for the product in the custom collection.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         /// States whether or not the collect is featured.
