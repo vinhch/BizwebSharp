@@ -8,7 +8,7 @@ using BizwebSharp.Options;
 namespace BizwebSharp.Services
 {
     public abstract class BaseServiceWithSimpleCRUD<T, TOption> : BaseService
-        where T : BaseEntityWithTimeline, new()
+        where T : BaseEntity, new()
         where TOption : CountOption, new()
     {
         protected string ApiClassPath { get; }
