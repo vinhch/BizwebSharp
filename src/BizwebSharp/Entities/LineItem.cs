@@ -52,7 +52,7 @@ namespace BizwebSharp.Entities
         /// States whether or not the fulfillment requires shipping.
         /// </summary>
         [JsonProperty("requires_shipping")]
-        public bool RequiresShipping { get; set; }
+        public bool? RequiresShipping { get; set; }
 
         /// <summary>
         /// A unique identifier of the item in the fulfillment.
@@ -94,13 +94,13 @@ namespace BizwebSharp.Entities
         /// States whether the order used a gift card.
         /// </summary>
         [JsonProperty("gift_card")]
-        public bool GiftCard { get; set; }
+        public bool? GiftCard { get; set; }
 
         /// <summary>
         /// States whether or not the product was taxable.
         /// </summary>
         [JsonProperty("taxable")]
-        public bool Taxable { get; set; }
+        public bool? Taxable { get; set; }
 
         /// <summary>
         /// An array of <see cref="TaxLine"/> objects, each of which details the taxes applicable to this <see cref="LineItem"/>.

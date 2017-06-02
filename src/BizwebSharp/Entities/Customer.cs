@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         /// Indicates whether the customer has consented to be sent marketing material via email.
         /// </summary>
         [JsonProperty("accepts_marketing")]
-        public bool AcceptsMarketing { get; set; }
+        public bool? AcceptsMarketing { get; set; }
 
         /// <summary>
         /// A list of addresses for the customer.
@@ -95,7 +95,7 @@ namespace BizwebSharp.Entities
         /// Indicates whether the customer should be charged taxes when placing orders.
         /// </summary>
         [JsonProperty("tax_exempt")]
-        public bool TaxExempt { get; set; }
+        public bool? TaxExempt { get; set; }
 
         /// <summary>
         /// The total amount of money that the customer has spent at the shop.
@@ -108,6 +108,6 @@ namespace BizwebSharp.Entities
         /// States whether or not the email address has been verified.
         /// </summary>
         [JsonProperty("verified_email")]
-        public bool VerifiedEmail { get; set; }
+        public bool? VerifiedEmail { get; set; }
     }
 }

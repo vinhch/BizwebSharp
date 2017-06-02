@@ -10,7 +10,7 @@ namespace BizwebSharp.Entities
         public DateTimeOffset? PublishedOn { get; set; }
 
         [JsonProperty("published")]
-        public bool Published { get; set; }
+        public bool? Published { get; set; }
 
         [JsonProperty("published_scope")]
         public string PublishedScope { get; set; }

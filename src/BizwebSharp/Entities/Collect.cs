@@ -20,7 +20,7 @@ namespace BizwebSharp.Entities
         /// States whether or not the collect is featured.
         /// </summary>
         [JsonProperty("featured")]
-        public bool Featured { get; set; }
+        public bool? Featured { get; set; }
 
         /// <summary>
         /// A number specifying the manually sorted position of this product in a custom collection. The first position is 1. This value only applies when the custom collection is viewed using the Manual sort order.
