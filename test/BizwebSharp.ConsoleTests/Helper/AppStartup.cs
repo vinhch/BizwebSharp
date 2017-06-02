@@ -39,7 +39,8 @@ namespace BizwebSharp.ConsoleTests
                 // get appsettings
                 var builder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json");
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile("appsettings.private.json");
 
                 Configuration = builder.Build();
             }
