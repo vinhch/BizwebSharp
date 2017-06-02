@@ -36,7 +36,7 @@ namespace BizwebSharp.Entities
         /// The date and time when the order was cancelled. If the order was not cancelled, this value is null.
         /// </summary>
         [JsonProperty("cancelled_on")]
-        public DateTime? CancelledOn { get; set; }
+        public DateTimeOffset? CancelledOn { get; set; }
 
         /// <summary>
         /// Unique identifier for a particular cart that is attached to a particular order.
@@ -54,7 +54,7 @@ namespace BizwebSharp.Entities
         /// The date and time when the order was closed. If the order was not clsoed, this value is null.
         /// </summary>
         [JsonProperty("closed_on")]
-        public DateTime? ClosedOn { get; set; }
+        public DateTimeOffset? ClosedOn { get; set; }
 
         /// <summary>
         /// The three letter code (ISO 4217) for the currency used for the payment.
@@ -172,7 +172,7 @@ namespace BizwebSharp.Entities
         /// The date that the order was processed at.
         /// </summary>
         [JsonProperty("processed_on")]
-        public DateTime? ProcessedOn { get; set; }
+        public DateTimeOffset? ProcessedOn { get; set; }
 
         /// <summary>
         /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.

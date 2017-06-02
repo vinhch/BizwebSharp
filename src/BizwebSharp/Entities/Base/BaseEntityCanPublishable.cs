@@ -7,7 +7,7 @@ namespace BizwebSharp.Entities
     {
         [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
              NullValueHandling = NullValueHandling.Include)]
-        public DateTime? PublishedOn { get; set; }
+        public DateTimeOffset? PublishedOn { get; set; }
 
         [JsonProperty("published")]
         public bool Published { get; set; }
