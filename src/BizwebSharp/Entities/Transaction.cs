@@ -40,7 +40,8 @@ namespace BizwebSharp.Entities
         /// An object containing information about the credit card used for this transaction.
         /// </summary>
         [JsonProperty("payment_details")]
-        public IEnumerable<PaymentDetail> PaymentDetails { get; set; }
+        //public IEnumerable<PaymentDetail> PaymentDetails { get; set; }
+        public PaymentDetail PaymentDetails { get; set; }
 
         /// <summary>
         /// The kind of transaction. Known values are 'authorization', 'capture', 'sale', 'void' and 'refund'.
@@ -52,7 +53,7 @@ namespace BizwebSharp.Entities
         /// A unique numeric identifier for the order.
         /// </summary>
         [JsonProperty("order_id")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         /// <summary>
         /// Shopify does not currently offer documentation for this object.
