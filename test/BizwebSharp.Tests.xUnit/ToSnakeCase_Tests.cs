@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using BizwebSharp.Entities;
+﻿using BizwebSharp.Entities;
 using BizwebSharp.Extensions;
 using Xunit;
 
