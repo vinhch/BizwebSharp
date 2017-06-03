@@ -43,6 +43,10 @@ namespace BizwebSharp.Enums
 
         [EnumMember(Value = "read_users")] ReadUsers,
 
-        [EnumMember(Value = "write_users")] WriteUsers
+        [EnumMember(Value = "write_users")] WriteUsers,
+
+        [EnumMember(Value = "read_discounts")] ReadDiscounts,
+
+        [EnumMember(Value = "write_discounts")] WriteDiscounts
     }
 }
