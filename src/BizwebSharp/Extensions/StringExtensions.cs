@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace BizwebSharp.Extensions
 {
@@ -13,7 +10,7 @@ namespace BizwebSharp.Extensions
             {
                 var s = x.ToString();
 
-                if (!char.IsUpper(x))
+                if (char.IsLower(x))
                 {
                     return s;
                 }
