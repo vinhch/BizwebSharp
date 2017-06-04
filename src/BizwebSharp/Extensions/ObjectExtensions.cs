@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Extensions
+namespace BizwebSharp
 {
     internal static class ObjectExtensions
     {

@@ -7,7 +7,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BizwebSharp.Enums;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using RestSharp.Portable;

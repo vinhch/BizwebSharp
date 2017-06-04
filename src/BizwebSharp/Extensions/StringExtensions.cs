@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace BizwebSharp.Extensions
+namespace BizwebSharp
 {
     public static class StringExtensions
     {

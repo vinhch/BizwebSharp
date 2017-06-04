@@ -1,5 +1,4 @@
-﻿using BizwebSharp.Extensions;
-using Xunit;
+﻿using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
 {
