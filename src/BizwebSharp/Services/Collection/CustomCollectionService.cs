@@ -1,5 +1,4 @@
-﻿using BizwebSharp.Entities;
-using BizwebSharp.Infrastructure;
+﻿using BizwebSharp.Infrastructure;
 
 namespace BizwebSharp.Services
 {

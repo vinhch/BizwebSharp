@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BizwebSharp.Enums;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Order : BaseEntityWithTimeline
     {

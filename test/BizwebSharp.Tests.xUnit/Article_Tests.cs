@@ -5,7 +5,6 @@ using BizwebSharp.Services;
 using Xunit;
 using System.Linq;
 using System.Net;
-using BizwebSharp.Entities;
 using BizwebSharp.Infrastructure;
 using FluentAssertions;
 

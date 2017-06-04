@@ -2,7 +2,7 @@
 using BizwebSharp.Converters;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class ProductVariant : BaseEntityWithTimeline
     {

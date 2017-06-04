@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;

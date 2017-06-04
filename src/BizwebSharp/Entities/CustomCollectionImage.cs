@@ -1,4 +1,4 @@
-﻿namespace BizwebSharp.Entities
+﻿namespace BizwebSharp
 {
     public class CustomCollectionImage : Image
     {

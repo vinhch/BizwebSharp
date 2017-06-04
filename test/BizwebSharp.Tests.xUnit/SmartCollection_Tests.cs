@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Services;
 using Xunit;

@@ -1,5 +1,4 @@
-﻿using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
+﻿using BizwebSharp.Extensions;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
