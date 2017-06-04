@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Infrastructure.RequestPolicies
+namespace BizwebSharp.Infrastructure
 {
     public class LimitRetryExecutionPolicy : IRequestExecutionPolicy
     {

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using BizwebSharp.Options;
 using BizwebSharp.Services;
 using Xunit;

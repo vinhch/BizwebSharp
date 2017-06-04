@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using BizwebSharp.Const;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using BizwebSharp.Serializers;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable;

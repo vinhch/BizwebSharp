@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
 

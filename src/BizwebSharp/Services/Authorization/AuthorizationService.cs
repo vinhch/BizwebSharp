@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using Microsoft.Extensions.Primitives;
 using RestSharp.Portable;
 
