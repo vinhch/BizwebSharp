@@ -94,20 +94,6 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Update Products")]
         public async Task Updates_Products()
         {
-            //const string name = "BizwebSharp Updated Test Product";
-            //var created = await Fixture.Create();
-            //var id = created.Id.Value;
-
-            //created.Name = name;
-            //created.Id = null;
-
-            //var updated = await Fixture.Service.UpdateAsync(id, created);
-
-            //// Reset the id so the Fixture can properly delete this object.
-            //created.Id = id;
-
-            //Assert.Equal(name, updated.Name);
-
             const string name = "BizwebSharp Updated Test Product";
             var created = await Fixture.Create();
             var id = created.Id.Value;
