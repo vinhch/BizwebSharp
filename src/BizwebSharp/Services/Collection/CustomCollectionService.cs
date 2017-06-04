@@ -1,6 +1,6 @@
 ﻿using BizwebSharp.Infrastructure;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class CustomCollectionService : CollectionService<CustomCollection>
     {

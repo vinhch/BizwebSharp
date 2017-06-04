@@ -2,7 +2,6 @@
 using System.Net;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Services;
 using FluentAssertions;
 using Xunit;
 using System.Linq;

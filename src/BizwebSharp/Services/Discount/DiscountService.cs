@@ -1,7 +1,7 @@
 ﻿using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class DiscountService : BaseServiceWithSimpleCRUD<Discount, ListOption>
     {

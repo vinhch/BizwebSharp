@@ -1,7 +1,7 @@
 ﻿using BizwebSharp.Infrastructure;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class CustomerUpdateOption : Parameterizable
     {

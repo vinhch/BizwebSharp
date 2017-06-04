@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public abstract class BaseServiceWithSimpleCRUD<T, TOption> : BaseService
         where T : BaseEntity, new()

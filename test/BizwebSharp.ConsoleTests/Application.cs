@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using BizwebSharp.ConsoleTests.Web;
 using BizwebSharp.Enums;
-using BizwebSharp.Services.Authorization;
 using Microsoft.Extensions.Configuration;
 
 namespace BizwebSharp.ConsoleTests

@@ -4,7 +4,6 @@ using System.Net;
 using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Services;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using BizwebSharp.Services.Authorization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Internal;
 using Newtonsoft.Json.Linq;

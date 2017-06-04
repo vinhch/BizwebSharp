@@ -4,7 +4,7 @@ using BizwebSharp.Infrastructure;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public abstract class BaseService
     {

@@ -11,7 +11,7 @@ using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Services.Authorization
+namespace BizwebSharp
 {
     public static class AuthorizationService
     {

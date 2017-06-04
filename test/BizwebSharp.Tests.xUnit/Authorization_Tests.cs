@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using BizwebSharp.Enums;
-using BizwebSharp.Services.Authorization;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit

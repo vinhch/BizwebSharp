@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class SimpleBizwebService : BaseService
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class AssetService : BaseService
     {
