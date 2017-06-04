@@ -1,4 +1,4 @@
-﻿namespace BizwebSharp.Const
+﻿namespace BizwebSharp
 {
     internal static class ApiConst
     {
