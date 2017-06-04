@@ -57,6 +57,7 @@ namespace BizwebSharp.Infrastructure
             {
                 client.AddDefaultParameter(ApiConst.HEADER_KEY_ACCESS_TOKEN, authState.AccessToken,
                     ParameterType.HttpHeader);
+                client.AddDefaultParameter("Cache-Control", "no-cache", ParameterType.HttpHeader);
             }
 
             return client;
@@ -101,7 +102,9 @@ namespace BizwebSharp.Infrastructure
 
                 // If the error was caused by reaching the API rate limit, throw a rate limit exception.
                 if ((int) code == 429 /* Too many requests */)
+                {
                     throw new ApiRateLimitException(code, errors, message, rawResponse, requestInfo);
+                }
 
                 throw new BizwebSharpException(code, errors, message, rawResponse, requestInfo);
             }
