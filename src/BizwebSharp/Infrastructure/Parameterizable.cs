@@ -27,7 +27,9 @@ namespace BizwebSharp.Infrastructure
                 var propName = property.Name;
 
                 if (value == null)
+                {
                     continue;
+                }
 
                 if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
                 {
@@ -67,10 +69,21 @@ namespace BizwebSharp.Infrastructure
             var valueType = value.GetType();
 
             if (valueType.GetTypeInfo().IsEnum)
+            {
                 value = ((Enum) value).ToSerializedString();
+            }
 
             if (valueType == typeof(DateTime))
+            {
+                //Dates must be serialized in YYYY-MM-DD HH:MM format.
                 value = ((DateTime) value).ToString("o");
+            }
+
+            if (valueType == typeof(DateTimeOffset))
+            {
+                //Dates must be serialized in YYYY-MM-DD HH:MM format.
+                value = ((DateTimeOffset)value).ToString("s");
+            }
 
             return new Parameter
             {
