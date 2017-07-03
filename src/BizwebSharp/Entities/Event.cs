@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace BizwebSharp
 {
@@ -8,7 +9,7 @@ namespace BizwebSharp
         /// Refers to a certain event and its resources.
         /// </summary>
         [JsonProperty("arguments")]
-        public string[] Arguments { get; set; }
+        public IEnumerable<string> Arguments { get; set; }
 
         /// <summary>
         /// A text field containing information about the event.
