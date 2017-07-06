@@ -33,24 +33,6 @@ namespace BizwebSharp
             return output;
         };
 
-        private static string PrepareQuerystring(NameValueCollection querystring, string joinWith)
-        {
-            var queryDictionary = new Dictionary<string, string>();
-            foreach (var item in querystring)
-            {
-                var key = (string)item;
-                var value = querystring[key];
-
-                if (!QueryKeyForHash.Contains(key)) continue;
-
-                queryDictionary[EncodeQuery(key, true)] = EncodeQuery(value, false);
-            }
-            var kvps = queryDictionary.OrderBy(kvp => kvp.Key)
-                .Select(kvp => $"{kvp.Key}={kvp.Value}");
-
-            return string.Join(joinWith, kvps);
-        }
-
         private static string PrepareQuerystring(IEnumerable<KeyValuePair<string, StringValues>> querystring, string joinWith)
         {
             var queryDictionary = new Dictionary<string, string>();
@@ -81,20 +63,6 @@ namespace BizwebSharp
         // 9. Request is authentic if the computed string equals the `hash` in query string.
         // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
 
-        public static bool IsAuthenticRequest(NameValueCollection querystring, string apiSecretKey,
-            double? requestTimestampSpan = null)
-        {
-            var hmac = querystring.Get("hmac");
-            if (string.IsNullOrEmpty(hmac))
-                return false;
-
-            var kvps = PrepareQuerystring(querystring, "&");
-            var timestampInString = querystring.Get("timestamp");
-
-            return ValidateRequest(hmac, kvps, apiSecretKey, timestampInString,
-                requestTimestampSpan);
-        }
-
         public static bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring,
             string apiSecretKey,
             double? requestTimestampSpan = null)
@@ -104,7 +72,7 @@ namespace BizwebSharp
                 return false;
 
             var kvps = PrepareQuerystring(querystring, "&");
-            var timestampInString = querystring.First(s => s.Key == "timestamp").Value;
+            var timestampInString = querystring.First(s => s.Key.ToLower() == "timestamp").Value;
 
             return ValidateRequest(hmac, kvps, apiSecretKey, timestampInString,
                 requestTimestampSpan);
@@ -138,21 +106,6 @@ namespace BizwebSharp
             return isValidSignature && isValidTimestamp;
         }
 
-        public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string apiSecretKey)
-        {
-            var signature = querystring.Get("signature");
-
-            if (string.IsNullOrEmpty(signature))
-                return false;
-
-            // To calculate signature, order all querystring parameters by alphabetical (exclude the
-            // signature itself). Then, hash it with the secret key.
-
-            var kvps = PrepareQuerystring(querystring, string.Empty);
-
-            return ValidateRequest(signature, kvps, apiSecretKey);
-        }
-
         public static bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string apiSecretKey)
         {
             var signature = querystring.FirstOrDefault(kvp => kvp.Key.ToLower() == "signature").Value;
@@ -166,37 +119,6 @@ namespace BizwebSharp
             var kvps = PrepareQuerystring(querystring, string.Empty);
 
             return ValidateRequest(signature, kvps, apiSecretKey);
-        }
-
-        public static async Task<bool> IsAuthenticWebhookAsync(NameValueCollection requestHeaders, Stream inputStream,
-            string apiSecretKey)
-        {
-            //Input stream may have already been read when a controller determines parameters to
-            //pass to an action. Reset position to 0.
-            inputStream.Position = 0;
-
-            //We do not dispose the StreamReader because disposing it will also dispose the input stream,
-            //and disposing a request's input stream can cause major headaches for the developer.
-            string requestBody;
-            using (var reader = new StreamReader(inputStream))
-            {
-                requestBody = await reader.ReadToEndAsync();
-            }
-
-            return IsAuthenticWebhook(requestHeaders, requestBody, apiSecretKey);
-        }
-
-        public static bool IsAuthenticWebhook(NameValueCollection requestHeaders, string requestBody,
-            string apiSecretKey)
-        {
-            var hmacHeader = requestHeaders.Get("X-Bizweb-Hmac-Sha256");
-
-            if (string.IsNullOrEmpty(hmacHeader))
-            {
-                return false;
-            }
-
-            return ValidateRequest(hmacHeader, requestBody, apiSecretKey);
         }
 
         public static async Task<bool> IsAuthenticWebhookAsync(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders,
@@ -220,7 +142,11 @@ namespace BizwebSharp
         public static bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody,
             string apiSecretKey)
         {
-            var hmacHeader = requestHeaders.FirstOrDefault(kvp => kvp.Key == "X-Bizweb-Hmac-Sha256").Value;
+            var hmacHeader =
+                requestHeaders.FirstOrDefault(
+                    kvp =>
+                        string.Equals(kvp.Key, ApiConst.HEADER_KEY_HMAC_SHA256,
+                            StringComparison.CurrentCultureIgnoreCase)).Value;
 
             if (string.IsNullOrEmpty(hmacHeader))
             {
@@ -275,5 +201,31 @@ namespace BizwebSharp
 
             return response.Value<string>("access_token");
         }
+
+        #region method with NameValueCollection for .Net Framework
+
+        public static bool IsAuthenticRequest(NameValueCollection querystring, string apiSecretKey,
+            double? requestTimestampSpan = null)
+        {
+            return IsAuthenticRequest(querystring.ToPairs2(), apiSecretKey, requestTimestampSpan);
+        }
+
+        public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string apiSecretKey)
+        {
+            return IsAuthenticProxyRequest(querystring.ToPairs2(), apiSecretKey);
+        }
+
+        public static async Task<bool> IsAuthenticWebhookAsync(NameValueCollection requestHeaders, Stream inputStream,
+            string apiSecretKey)
+        {
+            return await IsAuthenticWebhookAsync(requestHeaders.ToPairs2(), inputStream, apiSecretKey);
+        }
+
+        public static bool IsAuthenticWebhook(NameValueCollection requestHeaders, string requestBody,
+            string apiSecretKey)
+        {
+            return IsAuthenticWebhook(requestHeaders.ToPairs2(), requestBody, apiSecretKey);
+        }
+        #endregion
     }
 }
