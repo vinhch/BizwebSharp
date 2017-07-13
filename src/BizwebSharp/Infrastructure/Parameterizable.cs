@@ -73,16 +73,14 @@ namespace BizwebSharp.Infrastructure
                 value = ((Enum) value).ToSerializedString();
             }
 
-            if (valueType == typeof(DateTime))
+            //Dates must be serialized in YYYY-MM-DD HH:MM format.
+            if (valueType == typeof(DateTime) || valueType == typeof(DateTime?))
             {
-                //Dates must be serialized in YYYY-MM-DD HH:MM format.
-                value = ((DateTime) value).ToString("o");
+                value = ((DateTime)value).ToString("o");
             }
-
-            if (valueType == typeof(DateTimeOffset))
+            else if (valueType == typeof(DateTimeOffset) || valueType == typeof(DateTimeOffset?))
             {
-                //Dates must be serialized in YYYY-MM-DD HH:MM format.
-                value = ((DateTimeOffset)value).ToString("s");
+                value = ((DateTimeOffset)value).ToString("o");
             }
 
             return new Parameter
