@@ -16,7 +16,7 @@ namespace BizwebSharp.Infrastructure
         ///     Converts the object to an array of RestSharp parameters.
         /// </summary>
         /// <returns>The array of RestSharp parameters.</returns>
-        public IEnumerable<Parameter> ToParameters(ParameterType type)
+        public virtual IEnumerable<Parameter> ToParameters(ParameterType type)
         {
             var output = new List<Parameter>();
 

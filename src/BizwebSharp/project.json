@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.0.1-*",
   "authors": [ "Cao Ha Vinh" ],
   "description": "BizwebSharp is a C# and .NET client library for Bizweb.vn API",
 
