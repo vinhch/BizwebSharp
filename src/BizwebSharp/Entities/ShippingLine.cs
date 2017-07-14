@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class ShippingLine
     {
@@ -15,7 +15,7 @@ namespace BizwebSharp.Entities
         /// The price of this shipping method.
         /// </summary>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The source of the shipping method.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BizwebSharp.Extensions
+namespace BizwebSharp
 {
     internal static class DateTimeExtensions
     {

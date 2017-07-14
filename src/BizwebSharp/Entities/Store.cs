@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Store : BaseEntityWithTimeline
     {
@@ -113,15 +113,15 @@ namespace BizwebSharp.Entities
         //public string Zip { get; set; }
 
         //[JsonProperty("has_storefront")]
-        //public bool HasStorefront { get; set; }
+        //public bool? HasStorefront { get; set; }
 
         //[JsonProperty("setup_required")]
-        //public bool SetupRequired { get; set; }
+        //public bool? SetupRequired { get; set; }
 
         [JsonProperty("used_volumn")]
-        public long UsedVolumn { get; set; }
+        public long? UsedVolumn { get; set; }
 
         [JsonProperty("max_volumn")]
-        public long MaxVolumn { get; set; }
+        public long? MaxVolumn { get; set; }
     }
 }

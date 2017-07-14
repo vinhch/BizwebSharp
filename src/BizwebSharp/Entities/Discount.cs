@@ -2,7 +2,7 @@
 using BizwebSharp.Enums;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Discount : BaseEntityWithTimeline
     {
@@ -31,13 +31,13 @@ namespace BizwebSharp.Entities
         /// The date when the discount code becomes disabled in ISO 8601 format.
         /// </summary>
         [JsonProperty("ends_at")]
-        public DateTime? EndsAt { get; set; }
+        public DateTimeOffset? EndsAt { get; set; }
 
         /// <summary>
         /// The date the discount becomes valid for use during checkout in ISO 8601 format.
         /// </summary>
         [JsonProperty("starts_at")]
-        public DateTime? StartsAt { get; set; }
+        public DateTimeOffset? StartsAt { get; set; }
 
         /// <summary>
         /// The status of the discount code. Valid values are enabled, disabled, or depleted.
@@ -56,25 +56,25 @@ namespace BizwebSharp.Entities
         /// The number of times this discount code can be redeemed. It can be redeemed by one or many customers; the usage_limit is a store-wide absolute value. Leave blank for unlimited uses.
         /// </summary>
         [JsonProperty("usage_limit")]
-        public int UsageLimit { get; set; }
+        public int? UsageLimit { get; set; }
 
         /// <summary>
         /// The id of a collection or product that this discount code is restricted to. Leave blank for a store-wide discount. If applies_to_id is set, then the applies_to_resource property is also mandatory.
         /// </summary>
         [JsonProperty("applies_to_id")]
-        public long AppliesToId { get; set; }
+        public long? AppliesToId { get; set; }
 
         /// <summary>
         /// When a discount applies to a product or collection resource, applies_once determines whether the discount should be applied once per order, or to every applicable item in the cart.
         /// </summary>
         [JsonProperty("applies_once")]
-        public bool AppliesOnce { get; set; }
+        public bool? AppliesOnce { get; set; }
 
         /// <summary>
         /// Determines whether the discount should be applied once, or any number of times per customer.
         /// </summary>
         [JsonProperty("applies_once_per_customer")]
-        public bool AppliesOncePerCustomer { get; set; }
+        public bool? AppliesOncePerCustomer { get; set; }
 
         /// <summary>
         /// The discount code can be set to apply to only a product, smart_collection, customersavedsearch or custom_collection.If applies_to_resource is set, then applies_to_id should also be set.
@@ -86,6 +86,6 @@ namespace BizwebSharp.Entities
         /// Returns a count of successful checkouts where the discount code has been used.Cannot exceed the usage_limit property.
         /// </summary>
         [JsonProperty("times_used")]
-        public int TimesUsed { get; set; }
+        public int? TimesUsed { get; set; }
     }
 }

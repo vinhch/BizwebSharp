@@ -20,10 +20,16 @@ namespace BizwebSharp.Infrastructure
             {
                 var requestHeaders = response.Request.Parameters.Where(p => p.Type == ParameterType.HttpHeader);
                 if (requestHeaders.Any())
-                    Header = string.Join("\n", requestHeaders.Select(h => $"{h.Name}: {h.Value.ToString()}"));
+                {
+                    Header = string.Join("\n", requestHeaders.Select(h => $"{h.Name}: {h.ToRequestString()}"));
+                }
 
                 var requestBody = response.Request.Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody);
-                Body = requestBody?.Value.ToString();
+                var bodyByteArray = requestBody?.Value as byte[];
+                if (bodyByteArray != null)
+                {
+                    Body = System.Text.Encoding.UTF8.GetString(bodyByteArray);
+                }
             }
         }
 

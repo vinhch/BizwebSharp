@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class FulfillmentService : BaseService
     {
@@ -43,7 +41,7 @@ namespace BizwebSharp.Services
         public virtual async Task<Fulfillment> CreateAsync(long orderId, Fulfillment inputObject, bool notifyCustomer = false)
         {
             var body = inputObject.ToDictionary();
-            body.Add("notify_customer", notifyCustomer);
+            body["notify_customer"] = notifyCustomer;
 
             var root = new Dictionary<string, object>
             {

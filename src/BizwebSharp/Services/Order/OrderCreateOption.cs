@@ -1,7 +1,7 @@
 ﻿using BizwebSharp.Infrastructure;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class OrderCreateOption : Parameterizable
     {
@@ -17,7 +17,7 @@ namespace BizwebSharp.Services
         /// <summary>
         /// The inventory behavior for the order. Known values are 'bypass', 'decrement_ignoring_policy' and 'decrement_obeying_policy'.
         /// </summary>
-        [JsonProperty("inventory_behavior")]
-        public string InventoryBehavior { get; set; }
+        [JsonProperty("inventory_behaviour")]
+        public string InventoryBehaviour { get; set; }
     }
 }

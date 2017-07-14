@@ -1,7 +1,7 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Event : BaseEntityWithTimeline
     {
@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         /// Refers to a certain event and its resources.
         /// </summary>
         [JsonProperty("arguments")]
-        public string[] Arguments { get; set; }
+        public IEnumerable<string> Arguments { get; set; }
 
         /// <summary>
         /// A text field containing information about the event.
@@ -33,7 +33,7 @@ namespace BizwebSharp.Entities
         /// The id of the resource that generated the event.
         /// </summary>
         [JsonProperty("subject_id")]
-        public long SubjectId { get; set; }
+        public long? SubjectId { get; set; }
 
         /// <summary>
         /// The type of the resource that generated the event.

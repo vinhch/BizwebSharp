@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class LineItem : BaseEntity
     {
@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         /// The amount available to fulfill. This is the quantity - max(refunded_quantity, fulfilled_quantity) - pending_fulfilled_quantity.
         /// </summary>
         [JsonProperty("fulfillable_quantity")]
-        public int FulfillableQuantity { get; set; }
+        public int? FulfillableQuantity { get; set; }
 
         /// <summary>
         /// Service provider who is doing the fulfillment. Valid values are either "manual" or the name of the provider. eg: "amazon", "shipwire", etc.
@@ -27,14 +27,14 @@ namespace BizwebSharp.Entities
         /// The weight of the item in grams.
         /// </summary>
         [JsonProperty("grams")]
-        public int Grams { get; set; }
+        public int? Grams { get; set; }
 
         /// <summary>
         /// The price of the item before discounts have been applied.
         /// </summary>
         /// <remarks>Shopify returns this value as a string.</remarks>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The unique numeric identifier for the product in the fulfillment. Can be null if the original product associated with the order is deleted at a later date
@@ -46,13 +46,13 @@ namespace BizwebSharp.Entities
         /// The number of products that were purchased.
         /// </summary>
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
         /// <summary>
         /// States whether or not the fulfillment requires shipping.
         /// </summary>
         [JsonProperty("requires_shipping")]
-        public bool RequiresShipping { get; set; }
+        public bool? RequiresShipping { get; set; }
 
         /// <summary>
         /// A unique identifier of the item in the fulfillment.
@@ -94,13 +94,13 @@ namespace BizwebSharp.Entities
         /// States whether the order used a gift card.
         /// </summary>
         [JsonProperty("gift_card")]
-        public bool GiftCard { get; set; }
+        public bool? GiftCard { get; set; }
 
         /// <summary>
         /// States whether or not the product was taxable.
         /// </summary>
         [JsonProperty("taxable")]
-        public bool Taxable { get; set; }
+        public bool? Taxable { get; set; }
 
         /// <summary>
         /// An array of <see cref="TaxLine"/> objects, each of which details the taxes applicable to this <see cref="LineItem"/>.
@@ -112,7 +112,7 @@ namespace BizwebSharp.Entities
         /// The total discount amount applied to this line item. This value is not subtracted in the line item price.
         /// </summary>
         [JsonProperty("total_discount")]
-        public decimal TotalDiscount { get; set; }
+        public decimal? TotalDiscount { get; set; }
 
         /// <summary>
         /// An array of custom information for an item that has been added to the cart.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BizwebSharp.Enums;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Order : BaseEntityWithTimeline
     {
@@ -24,7 +24,7 @@ namespace BizwebSharp.Entities
         /// This is set when checking the "I want to receive occasional emails about new products, promotions and other news" checkbox during checkout.
         /// </summary>
         [JsonProperty("buyer_accepts_marketing")]
-        public bool BuyerAcceptsMarketing { get; set; }
+        public bool? BuyerAcceptsMarketing { get; set; }
 
         /// <summary>
         /// The reason why the order was cancelled. If the order was not cancelled, this value is null. Known values are "customer", "fraud", "inventory" and "other".
@@ -36,7 +36,7 @@ namespace BizwebSharp.Entities
         /// The date and time when the order was cancelled. If the order was not cancelled, this value is null.
         /// </summary>
         [JsonProperty("cancelled_on")]
-        public DateTime? CancelledOn { get; set; }
+        public DateTimeOffset? CancelledOn { get; set; }
 
         /// <summary>
         /// Unique identifier for a particular cart that is attached to a particular order.
@@ -45,7 +45,7 @@ namespace BizwebSharp.Entities
         public string CartToken { get; set; }
 
         /// <summary>
-        /// A <see cref="ShopifySharp.ClientDetails"/> object containing information about the client.
+        /// A <see cref="ClientDetails"/> object containing information about the client.
         /// </summary>
         [JsonProperty("client_details")]
         public IEnumerable<ClientDetail> ClientDetails { get; set; }
@@ -54,7 +54,7 @@ namespace BizwebSharp.Entities
         /// The date and time when the order was closed. If the order was not clsoed, this value is null.
         /// </summary>
         [JsonProperty("closed_on")]
-        public DateTime? ClosedOn { get; set; }
+        public DateTimeOffset? ClosedOn { get; set; }
 
         /// <summary>
         /// The three letter code (ISO 4217) for the currency used for the payment.
@@ -78,7 +78,7 @@ namespace BizwebSharp.Entities
         /// The order's email address. Note: On and after 2015-11-03, you should be using <see cref="ContactEmail"/> to refer to the customer's email address.
         /// Between 2015-11-03 and 2015-12-03, updates to an order's email will also update the customer's email. This is temporary so apps can be migrated over to
         /// doing customer updates rather than order updates to change the contact email. After 2015-12-03, updating updating an order's email will no longer update
-        /// the customer's email and apps will have to use the customer update endpoint to do so.
+        /// the customer's email and apps will have to use the customer update endpoint? to do so.
         /// </summary>
         [JsonProperty("email")]
         public string Email { get; set; }
@@ -120,7 +120,7 @@ namespace BizwebSharp.Entities
         public IEnumerable<LineItem> LineItems { get; set; }
 
         /// <summary>
-        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point of sale.
+        /// The unique numeric identifier for the physical location at which the order was processed. Only present on orders processed at point? of sale.
         /// </summary>
         [JsonProperty("location_id")]
         public long? LocationId { get; set; }
@@ -147,14 +147,14 @@ namespace BizwebSharp.Entities
         /// Numerical identifier unique to the shop. A number is sequential and starts at 1000.
         /// </summary>
         [JsonProperty("number")]
-        public int Number { get; set; }
+        public int? Number { get; set; }
 
         /// <summary>
         /// A unique numeric identifier for the order. This one is used by the shop owner and customer.
         /// This is different from the id property, which is also a unique numeric identifier for the order, but used for API purposes.
         /// </summary>
         [JsonProperty("order_number")]
-        public int OrderNumber { get; set; }
+        public int? OrderNumber { get; set; }
 
         /// <summary>
         /// The URL pointing to the order status web page. The URL will be null unless the order was created from a checkout.
@@ -172,7 +172,7 @@ namespace BizwebSharp.Entities
         /// The date that the order was processed at.
         /// </summary>
         [JsonProperty("processed_on")]
-        public DateTime? ProcessedOn { get; set; }
+        public DateTimeOffset? ProcessedOn { get; set; }
 
         /// <summary>
         /// The type of payment processing method. Known values are 'checkout', 'direct', 'manual', 'offsite', 'express', 'free' and 'none'.
@@ -216,7 +216,7 @@ namespace BizwebSharp.Entities
         /// Price of the order before shipping and taxes
         /// </summary>
         [JsonProperty("subtotal_price")]
-        public decimal SubtotalPrice { get; set; }
+        public decimal? SubtotalPrice { get; set; }
 
         /// <summary>
         /// An array of <see cref="TaxLine"/> objects, each of which details the total taxes applicable to the order.
@@ -228,7 +228,7 @@ namespace BizwebSharp.Entities
         /// States whether or not taxes are included in the order subtotal.
         /// </summary>
         [JsonProperty("taxes_included")]
-        public bool TaxesIncluded { get; set; }
+        public bool? TaxesIncluded { get; set; }
 
         /// <summary>
         /// Unique identifier for a particular order.
@@ -240,25 +240,25 @@ namespace BizwebSharp.Entities
         /// The total amount of the discounts applied to the price of the order.
         /// </summary>
         [JsonProperty("total_discounts")]
-        public decimal TotalDiscounts { get; set; }
+        public decimal? TotalDiscounts { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order.
         /// </summary>
         [JsonProperty("total_line_items_price")]
-        public decimal TotalLineItemsPrice { get; set; }
+        public decimal? TotalLineItemsPrice { get; set; }
 
         /// <summary>
         /// The sum of all the prices of all the items in the order, with taxes and discounts included (must be positive).
         /// </summary>
         [JsonProperty("total_price")]
-        public decimal TotalPrice { get; set; }
+        public decimal? TotalPrice { get; set; }
 
         /// <summary>
         /// The sum of all the taxes applied to the order (must be positive).
         /// </summary>
         [JsonProperty("total_tax")]
-        public decimal TotalTax { get; set; }
+        public decimal? TotalTax { get; set; }
 
         /// <summary>
         /// The sum of all the weights of the line items in the order, in grams.
@@ -267,7 +267,7 @@ namespace BizwebSharp.Entities
         public long? TotalWeight { get; set; }
 
         /// <summary>
-        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point of sale.
+        /// The unique numerical identifier for the user logged into the terminal at the time the order was processed at. Only present on orders processed at point? of sale.
         /// </summary>
         [JsonProperty("user_id")]
         public long? UserId { get; set; }

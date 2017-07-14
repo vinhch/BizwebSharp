@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class SmartCollectionRule : BaseEntity
     {
@@ -24,6 +24,6 @@ namespace BizwebSharp.Entities
         public string Column { get; set; }
 
         [JsonProperty("collection_id", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public long CollectionId { get; set; }
+        public long? CollectionId { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Infrastructure.RequestPolicies
+namespace BizwebSharp.Infrastructure
 {
     /// <summary>
     ///     See https://help.shopify.com/api/guides/api-call-limit

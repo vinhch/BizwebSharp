@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     /// <summary>
     ///     An entity representing a Shopify product.
@@ -47,12 +47,6 @@ namespace BizwebSharp.Entities
         /// </summary>
         [JsonProperty("template_suffix")]
         public string TemplateSuffix { get; set; }
-
-        /// <summary>
-        ///     The sales channels in which the product is visible.
-        /// </summary>
-        [JsonProperty("published_scope")]
-        public string PublishedScope { get; set; }
 
         /// <summary>
         ///     A categorization that a product can be tagged with, commonly used for filtering and searching.

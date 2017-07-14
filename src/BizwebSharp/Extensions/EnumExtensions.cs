@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace BizwebSharp.Extensions
+namespace BizwebSharp
 {
     /// <summary>
     ///     Enum Extension Method

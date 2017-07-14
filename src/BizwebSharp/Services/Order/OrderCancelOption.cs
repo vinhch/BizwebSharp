@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class OrderCancelOption
     {

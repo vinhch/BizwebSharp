@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class CustomCollection : BaseEntityCanPublishable
     {
@@ -26,10 +26,10 @@ namespace BizwebSharp.Entities
         public string SortOrder { get; set; }
 
         [JsonProperty("disjunctive")]
-        public bool Disjunctive { get; set; }
+        public bool? Disjunctive { get; set; }
 
         [JsonProperty("products_count")]
-        public bool ProductsCount { get; set; }
+        public bool? ProductsCount { get; set; }
 
         [JsonProperty("image")]
         public CustomCollectionImage Image { get; set; }

@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class TaxLine
     {
@@ -8,13 +8,13 @@ namespace BizwebSharp.Entities
         /// The amount of tax to be charged.
         /// </summary>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         /// The rate of tax to be applied.
         /// </summary>
         [JsonProperty("rate")]
-        public decimal Rate { get; set; }
+        public decimal? Rate { get; set; }
 
         /// <summary>
         /// The name of the tax.

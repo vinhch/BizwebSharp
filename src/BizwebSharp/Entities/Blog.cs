@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using BizwebSharp.Enums;
+using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Blog : BaseEntityWithTimeline
     {
@@ -14,7 +15,7 @@ namespace BizwebSharp.Entities
         public string Description { get; set; }
 
         [JsonProperty("commentable")]
-        public string Commentable { get; set; }
+        public BlogCommentable Commentable { get; set; }
 
         [JsonProperty("meta_title")]
         public string MetaTitle { get; set; }

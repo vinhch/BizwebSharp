@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class BlogService : BaseService
     {
@@ -41,7 +39,7 @@ namespace BizwebSharp.Services
 
             if (metafields != null && metafields.Any())
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return await MakeRequest<Blog>($"blogs.json", HttpMethod.POST, "blog", new {blog = body});
@@ -53,7 +51,7 @@ namespace BizwebSharp.Services
 
             if (metafields != null && metafields.Any())
             {
-                body.Add("metafields", metafields);
+                body["metafields"] = metafields;
             }
 
             return await MakeRequest<Blog>($"blogs/{blogId}.json", HttpMethod.PUT, "blog", new {blog = body});

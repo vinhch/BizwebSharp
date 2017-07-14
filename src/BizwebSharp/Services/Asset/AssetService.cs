@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
 using BizwebSharp.Infrastructure;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class AssetService : BaseService
     {
@@ -27,7 +26,7 @@ namespace BizwebSharp.Services
 
             if (!string.IsNullOrEmpty(fields))
             {
-                option.Add("fields", fields);
+                option["fields"] = fields;
             }
 
             return await MakeRequest<Asset>($"themes/{themeId}/assets.json", HttpMethod.GET, "asset", option);

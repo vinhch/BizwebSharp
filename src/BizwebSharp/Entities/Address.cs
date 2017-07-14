@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Address : BaseEntityWithTimeline
     {
@@ -50,7 +50,7 @@ namespace BizwebSharp.Entities
         /// Indicates whether this address is the default address.
         /// </summary>
         [JsonProperty("default")]
-        public bool Default { get; set; }
+        public bool? Default { get; set; }
 
         /// <summary>
         /// The first name.

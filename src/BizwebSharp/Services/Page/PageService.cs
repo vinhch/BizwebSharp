@@ -1,8 +1,7 @@
-﻿using BizwebSharp.Entities;
-using BizwebSharp.Infrastructure;
+﻿using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class PageService : BaseServiceHavePublishedOption<Page, PageOption>
     {

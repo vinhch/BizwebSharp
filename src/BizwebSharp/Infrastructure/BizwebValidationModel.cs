@@ -1,6 +1,4 @@
-﻿using BizwebSharp.Services.Authorization;
-
-namespace BizwebSharp.Infrastructure
+﻿namespace BizwebSharp.Infrastructure
 {
     public class BizwebValidationModel
     {

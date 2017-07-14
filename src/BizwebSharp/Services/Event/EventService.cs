@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class EventService : BaseService
     {
@@ -21,7 +20,7 @@ namespace BizwebSharp.Services
         {
             return
                 await
-                    MakeRequest<List<Event>>("events.json", HttpMethod.GET, "event", option);
+                    MakeRequest<List<Event>>("events.json", HttpMethod.GET, "events", option);
         }
 
         public virtual async Task<Event> GetAsync(long id, string fields = null)
@@ -40,7 +39,7 @@ namespace BizwebSharp.Services
         {
             return
                 await
-                    MakeRequest<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.GET, "event", option);
+                    MakeRequest<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.GET, "events", option);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Infrastructure.RequestPolicies
+namespace BizwebSharp.Infrastructure
 {
     public class DefaultRequestExecutionPolicy : IRequestExecutionPolicy
     {
@@ -11,6 +11,7 @@ namespace BizwebSharp.Infrastructure.RequestPolicies
             return (await executeRequestAsync(client)).Result;
         }
 
-        public static IRequestExecutionPolicy Default { get; } = new DefaultRequestExecutionPolicy();
+        //public static IRequestExecutionPolicy Default { get; set; } = new DefaultRequestExecutionPolicy();
+        public static IRequestExecutionPolicy Default { get; set; } = new LimitRetryExecutionPolicy();
     }
 }

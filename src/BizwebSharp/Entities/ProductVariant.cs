@@ -2,7 +2,7 @@
 using BizwebSharp.Converters;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class ProductVariant : BaseEntityWithTimeline
     {
@@ -10,7 +10,7 @@ namespace BizwebSharp.Entities
         ///     The unique numeric identifier for the product.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         ///     The title of the product variant.
@@ -28,14 +28,14 @@ namespace BizwebSharp.Entities
         ///     The order of the product variant in the list of product variants. 1 is the first position.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         ///     The weight of the product variant in grams.
         /// </summary>
         [JsonProperty("grams")]
         [JsonConverter(typeof(NullToZeroConverter))]
-        public int Grams { get; set; }
+        public int? Grams { get; set; }
 
         /// <summary>
         ///     Specifies whether or not customers are allowed to place an order for a product variant when it's out of stock.
@@ -61,7 +61,7 @@ namespace BizwebSharp.Entities
         ///     The price of the product variant.
         /// </summary>
         [JsonProperty("price")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         /// <summary>
         ///     The competitors prices for the same item.
@@ -91,14 +91,14 @@ namespace BizwebSharp.Entities
         ///     Specifies whether or not a tax is charged when the product variant is sold.
         /// </summary>
         [JsonProperty("taxable")]
-        public bool Taxable { get; set; }
+        public bool? Taxable { get; set; }
 
         /// <summary>
         ///     Specifies whether or not a customer needs to provide a shipping address when placing an order for this product
         ///     variant.
         /// </summary>
         [JsonProperty("requires_shipping")]
-        public bool RequiresShipping { get; set; }
+        public bool? RequiresShipping { get; set; }
 
         /// <summary>
         ///     The barcode, UPC or ISBN number for the product.
@@ -110,21 +110,21 @@ namespace BizwebSharp.Entities
         ///     The number of items in stock for this product variant.
         /// </summary>
         [JsonProperty("inventory_quantity")]
-        public int InventoryQuantity { get; set; }
+        public int? InventoryQuantity { get; set; }
 
         /// <summary>
         ///     The original stock level the client believes the product variant has.
         ///     This should be sent to avoid a race condition when the item being adjusted is simultaneously sold online.
         /// </summary>
         [JsonProperty("old_inventory_quantity")]
-        public int OldInventoryQuantity { get; set; }
+        public int? OldInventoryQuantity { get; set; }
 
         /// <summary>
         ///     Instead of sending a new and old value for inventory an adjustment value can be sent.
         ///     If an adjustment value is sent it will take priority.
         /// </summary>
         [JsonProperty("inventory_quantity_adjustment")]
-        public int InventoryQuantityAdjustment { get; set; }
+        public int? InventoryQuantityAdjustment { get; set; }
 
         /// <summary>
         ///     The unique numeric identifier for one of the product's images.
@@ -136,7 +136,7 @@ namespace BizwebSharp.Entities
         ///     The weight of the product variant in the unit system specified with weight_unit.
         /// </summary>
         [JsonProperty("weight")]
-        public decimal Weight { get; set; }
+        public decimal? Weight { get; set; }
 
         /// <summary>
         ///     The unit system that the product variant's weight is measure in. The weight_unit can be either "g", "kg, "oz", or

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Customer : BaseEntityWithTimeline
     {
@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         /// Indicates whether the customer has consented to be sent marketing material via email.
         /// </summary>
         [JsonProperty("accepts_marketing")]
-        public bool AcceptsMarketing { get; set; }
+        public bool? AcceptsMarketing { get; set; }
 
         /// <summary>
         /// A list of addresses for the customer.
@@ -57,7 +57,7 @@ namespace BizwebSharp.Entities
         /// <summary>
         /// The id of the customer's last order.
         /// </summary>
-        /// <remarks>Property can be null or longer than max int32 value. Set to nullable long instead.</remarks>
+        /// <remarks>Property can be null or longer than max int32 value. Set to nullable long? instead.</remarks>
         [JsonProperty("last_order_id")]
         public long? LastOrderId { get; set; }
 
@@ -77,7 +77,7 @@ namespace BizwebSharp.Entities
         /// The number of orders associated with this customer.
         /// </summary>
         [JsonProperty("orders_count")]
-        public int OrdersCount { get; set; }
+        public int? OrdersCount { get; set; }
 
         /// <summary>
         /// The state of the customer in a shop. Valid values are 'disabled', 'decline', 'invited' and 'enabled'.
@@ -95,19 +95,19 @@ namespace BizwebSharp.Entities
         /// Indicates whether the customer should be charged taxes when placing orders.
         /// </summary>
         [JsonProperty("tax_exempt")]
-        public bool TaxExempt { get; set; }
+        public bool? TaxExempt { get; set; }
 
         /// <summary>
         /// The total amount of money that the customer has spent at the shop.
         /// </summary>
         /// <remarks>The Shopify API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
         [JsonProperty("total_spent")]
-        public decimal TotalSpent { get; set; }
+        public decimal? TotalSpent { get; set; }
 
         /// <summary>
         /// States whether or not the email address has been verified.
         /// </summary>
         [JsonProperty("verified_email")]
-        public bool VerifiedEmail { get; set; }
+        public bool? VerifiedEmail { get; set; }
     }
 }

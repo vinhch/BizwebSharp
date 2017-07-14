@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public abstract class BaseService
     {
@@ -16,7 +15,7 @@ namespace BizwebSharp.Services
 
         protected BizwebAuthorizationState _AuthState { get; }
 
-        public IRequestExecutionPolicy ExecutionPolicy { get; set; } = new LimitRetryExecutionPolicy();
+        public IRequestExecutionPolicy ExecutionPolicy { get; set; } = DefaultRequestExecutionPolicy.Default;
 
         private static ICustomRestRequest CreateRestRequest(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null)

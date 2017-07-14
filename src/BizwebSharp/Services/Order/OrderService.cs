@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class OrderService : BaseServiceWithSimpleCRUD<Order, OrderOption>
     {
@@ -16,7 +14,7 @@ namespace BizwebSharp.Services
         public virtual async Task<int> CountForCustomerAsync(long customerId, OrderOption option = null)
         {
             var optionDictionary = option.ToDictionary();
-            optionDictionary.Add("customer_id", customerId);
+            optionDictionary["customer_id"] = customerId;
 
             return await MakeRequest<int>($"{ApiClassPathInPlural}/count.json", HttpMethod.GET, "count", option);
         }
@@ -24,7 +22,7 @@ namespace BizwebSharp.Services
         public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderOption option = null)
         {
             var optionDictionary = option.ToDictionary();
-            optionDictionary.Add("customer_id", customerId);
+            optionDictionary["customer_id"] = customerId;
 
             return await MakeRequest<List<Order>>($"{ApiClassPathInPlural}.json", HttpMethod.GET, ApiClassPathInPlural, optionDictionary);
         }
@@ -44,7 +42,7 @@ namespace BizwebSharp.Services
             var body = order.ToDictionary();
             foreach (var kvp in option.ToDictionary())
             {
-                body.Add(kvp);
+                body[kvp.Key] = kvp.Value;
             }
 
             var root = new Dictionary<string, object>

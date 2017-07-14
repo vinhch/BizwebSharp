@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Fulfillment : BaseEntityWithTimeline
     {
@@ -18,7 +18,7 @@ namespace BizwebSharp.Entities
         /// The unique numeric identifier for the order.
         /// </summary>
         [JsonProperty("order_id")]
-        public long OrderId { get; set; }
+        public long? OrderId { get; set; }
 
         /// <summary>
         /// A textfield with information about the receipt.

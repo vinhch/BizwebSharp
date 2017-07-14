@@ -8,13 +8,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 using System.Threading.Tasks;
-using BizwebSharp.Services.Authorization;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http.Internal;
 using Newtonsoft.Json.Linq;
 using Microsoft.Extensions.Configuration;
 
-namespace BizwebSharp.ConsoleTests
+namespace BizwebSharp.ConsoleTests.Web
 {
     public class Startup
     {
@@ -100,7 +99,7 @@ namespace BizwebSharp.ConsoleTests
             }
 
             var bwSettings = new BizwebSettings();
-            AppStartup.Configuration.GetSection("BizwebSettings").Bind(bwSettings);
+            Application.Configuration.GetSection("BizwebSettings").Bind(bwSettings);
             var accessToken =
                 await
                     AuthorizationService.AuthorizeAsync(model.Code, model.Store, bwSettings.ApiKey,

@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class ThemeService : BaseServiceWithSimpleCRUD<Theme, ListOption>
     {
@@ -18,7 +16,7 @@ namespace BizwebSharp.Services
             var body = theme.ToDictionary();
             if (!string.IsNullOrEmpty(sourceUrl))
             {
-                body.Add("src", sourceUrl);
+                body["src"] = sourceUrl;
             }
 
             var root = new Dictionary<string, object>

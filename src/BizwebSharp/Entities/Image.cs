@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Image : BaseEntityWithTimeline
     {
@@ -20,6 +20,6 @@ namespace BizwebSharp.Entities
         public string ContentType { get; set; }
 
         [JsonProperty("size", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public long Size { get; set; }
+        public long? Size { get; set; }
     }
 }

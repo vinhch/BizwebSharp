@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BizwebSharp.Extensions;
 using Newtonsoft.Json;
 using RestSharp.Portable;
 
@@ -17,7 +16,7 @@ namespace BizwebSharp.Infrastructure
         ///     Converts the object to an array of RestSharp parameters.
         /// </summary>
         /// <returns>The array of RestSharp parameters.</returns>
-        public IEnumerable<Parameter> ToParameters(ParameterType type)
+        public virtual IEnumerable<Parameter> ToParameters(ParameterType type)
         {
             var output = new List<Parameter>();
 
@@ -28,7 +27,9 @@ namespace BizwebSharp.Infrastructure
                 var propName = property.Name;
 
                 if (value == null)
+                {
                     continue;
+                }
 
                 if (property.CustomAttributes.Any(x => x.AttributeType == typeof(JsonPropertyAttribute)))
                 {
@@ -68,10 +69,19 @@ namespace BizwebSharp.Infrastructure
             var valueType = value.GetType();
 
             if (valueType.GetTypeInfo().IsEnum)
+            {
                 value = ((Enum) value).ToSerializedString();
+            }
 
-            if (valueType == typeof(DateTime))
-                value = ((DateTime) value).ToString("o");
+            //Dates must be serialized in YYYY-MM-DD HH:MM format.
+            if (valueType == typeof(DateTime) || valueType == typeof(DateTime?))
+            {
+                value = ((DateTime)value).ToString("o");
+            }
+            else if (valueType == typeof(DateTimeOffset) || valueType == typeof(DateTimeOffset?))
+            {
+                value = ((DateTimeOffset)value).ToString("o");
+            }
 
             return new Parameter
             {

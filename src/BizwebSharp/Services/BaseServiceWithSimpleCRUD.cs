@@ -1,14 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public abstract class BaseServiceWithSimpleCRUD<T, TOption> : BaseService
-        where T : BaseEntityWithTimeline, new()
+        where T : BaseEntity, new()
         where TOption : CountOption, new()
     {
         protected string ApiClassPath { get; }

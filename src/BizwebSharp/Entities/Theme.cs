@@ -1,7 +1,7 @@
 ﻿using BizwebSharp.Enums;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class Theme : BaseEntityWithTimeline
     {
@@ -21,12 +21,12 @@ namespace BizwebSharp.Entities
         /// Indicates if the theme can currently be previewed.
         /// </summary>
         [JsonProperty("previewable")]
-        public bool Previewable { get; set; }
+        public bool? Previewable { get; set; }
 
         /// <summary>
         /// Indicates if files are still being copied into place for this theme.
         /// </summary>
         [JsonProperty("processing")]
-        public bool Processing { get; set; }
+        public bool? Processing { get; set; }
     }
 }

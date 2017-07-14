@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using BizwebSharp.Const;
-using BizwebSharp.Infrastructure.RequestPolicies;
 using BizwebSharp.Serializers;
 using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
@@ -42,10 +40,13 @@ namespace BizwebSharp.Infrastructure
             return builder.Uri;
         }
 
-        public static IRestClient CreateClient(BizwebAuthorizationState authState)
+        public static IRestClient CreateClient(BizwebAuthorizationState authState, bool ignoreResponseStatusCode = true)
         {
             var uri = BuildUri(authState.ApiUrl);
-            var client = new RestClient(uri);
+            var client = new RestClient(uri)
+            {
+                IgnoreResponseStatusCode = ignoreResponseStatusCode
+            };
 
             //Set up the JSON.NET deserializer for the RestSharp client
             //var deserializer = new JsonNetSerializer();
@@ -56,6 +57,7 @@ namespace BizwebSharp.Infrastructure
             {
                 client.AddDefaultParameter(ApiConst.HEADER_KEY_ACCESS_TOKEN, authState.AccessToken,
                     ParameterType.HttpHeader);
+                client.AddDefaultParameter("Cache-Control", "no-cache", ParameterType.HttpHeader);
             }
 
             return client;
@@ -100,7 +102,9 @@ namespace BizwebSharp.Infrastructure
 
                 // If the error was caused by reaching the API rate limit, throw a rate limit exception.
                 if ((int) code == 429 /* Too many requests */)
+                {
                     throw new ApiRateLimitException(code, errors, message, rawResponse, requestInfo);
+                }
 
                 throw new BizwebSharpException(code, errors, message, rawResponse, requestInfo);
             }
@@ -136,7 +140,7 @@ namespace BizwebSharp.Infrastructure
                     // Error is type #4
                     var description = parsed["error_description"];
 
-                    errors.Add("invalid_request", new List<string> {description.Value<string>()});
+                    errors["invalid_request"] = new List<string> {description.Value<string>()};
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
@@ -144,7 +148,7 @@ namespace BizwebSharp.Infrastructure
 
                     //errors can be either a single string, or an array of other errors
                     if (parsedErrors.Type == JTokenType.String)
-                        errors.Add("Error", new List<string> {parsedErrors.Value<string>()});
+                        errors["Error"] = new List<string> {parsedErrors.Value<string>()};
                     else
                         foreach (var val in parsedErrors.Values())
                         {
@@ -161,7 +165,7 @@ namespace BizwebSharp.Infrastructure
                                     break;
                             }
 
-                            errors.Add(name, list);
+                            errors[name] = list;
                         }
                 }
                 else
@@ -171,7 +175,7 @@ namespace BizwebSharp.Infrastructure
             }
             catch (Exception e)
             {
-                errors.Add(e.Message, new List<string> {json});
+                errors[e.Message] = new List<string> {json};
             }
 
             // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.

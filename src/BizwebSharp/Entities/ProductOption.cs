@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace BizwebSharp.Entities
+namespace BizwebSharp
 {
     public class ProductOption : BaseEntity
     {
@@ -9,7 +9,7 @@ namespace BizwebSharp.Entities
         ///     The unique numeric identifier for the product.
         /// </summary>
         [JsonProperty("product_id")]
-        public long ProductId { get; set; }
+        public long? ProductId { get; set; }
 
         /// <summary>
         ///     The name of the option.
@@ -21,7 +21,7 @@ namespace BizwebSharp.Entities
         ///     The order of the product variant in the list of product variants. 1 is the first position.
         /// </summary>
         [JsonProperty("position")]
-        public int Position { get; set; }
+        public int? Position { get; set; }
 
         /// <summary>
         ///     The values for the options.

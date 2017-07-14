@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using BizwebSharp.Entities;
-using BizwebSharp.Extensions;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public abstract class BaseServiceHavePublishedOption<T, TOption> : BaseServiceWithSimpleCRUD<T, TOption>
         where T : BaseEntityWithTimeline, new()
@@ -30,9 +28,9 @@ namespace BizwebSharp.Services
             if (option != null)
             {
                 var body = inputObject.ToDictionary();
-                foreach (var item in option.ToDictionary())
+                foreach (var kvp in option.ToDictionary())
                 {
-                    body.Add(item);
+                    body[kvp.Key] = kvp.Value;
                 }
                 root[ApiClassPath] = body;
             }
