@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
-    public class BaseEntityCanPublishable : BaseEntityWithTimeline
+    public abstract class BaseEntityCanPublishable : BaseEntityWithTimeline
     {
         [JsonProperty("published_on", DefaultValueHandling = DefaultValueHandling.Include,
              NullValueHandling = NullValueHandling.Include)]
