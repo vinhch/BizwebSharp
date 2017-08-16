@@ -233,6 +233,8 @@ namespace BizwebSharp.Infrastructure
                 {
                     RootElement = request.RootElement
                 };
+
+                //Notice: deserialize can fails when response body null or empty
                 var result = deserializer.Deserialize<T>(response);
 
                 return new RequestResult<T>(response, result);
