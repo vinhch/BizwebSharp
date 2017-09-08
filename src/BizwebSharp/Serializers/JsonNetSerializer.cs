@@ -21,6 +21,8 @@ namespace BizwebSharp.Serializers
 
         public T Deserialize<T>(IRestResponse response)
         {
+            //Notice: deserialize can fails when response body null or empty
+            //Create a default T or null ?
             var output = Activator.CreateInstance<T>();
 
             var settings = new JsonSerializerSettings
