@@ -74,40 +74,42 @@ namespace BizwebSharp.Infrastructure
 
         public static void CheckResponseExceptions(IRestResponse response)
         {
-            if ((response.StatusCode != HttpStatusCode.OK) && (response.StatusCode != HttpStatusCode.Created))
+            var statusCode = (int)response.StatusCode;
+            if (statusCode < 200 || statusCode >= 300)
             {
-                var rawResponse = response.Content;
-                var errors = ParseErrorJson(rawResponse);
-                var requestInfo = new RequestSimpleInfo(response);
-
-                var code = response.StatusCode;
-                var message = $"Response did not indicate success. Status: {(int) code} {response.StatusDescription}.";
-
-                if (errors == null)
-                {
-                    errors = new Dictionary<string, IEnumerable<string>>
-                    {
-                        {
-                            $"{(int) code} {response.StatusDescription}",
-                            new[] {message}
-                        }
-                    };
-                }
-                else
-                {
-                    var firstError = errors.First();
-
-                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
-                }
-
-                // If the error was caused by reaching the API rate limit, throw a rate limit exception.
-                if ((int) code == 429 /* Too many requests */)
-                {
-                    throw new ApiRateLimitException(code, errors, message, rawResponse, requestInfo);
-                }
-
-                throw new BizwebSharpException(code, errors, message, rawResponse, requestInfo);
+                return;
             }
+
+            var rawResponse = response.Content;
+            var errors = ParseErrorJson(rawResponse);
+            var requestInfo = new RequestSimpleInfo(response);
+
+            var message = $"Response did not indicate success. Status: {statusCode} {response.StatusDescription}.";
+
+            if (errors == null)
+            {
+                errors = new Dictionary<string, IEnumerable<string>>
+                {
+                    {
+                        $"{statusCode} {response.StatusDescription}",
+                        new[] {message}
+                    }
+                };
+            }
+            else
+            {
+                var firstError = errors.First();
+
+                message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+            }
+
+            // If the error was caused by reaching the API rate limit, throw a rate limit exception.
+            if (statusCode == 429 /* Too many requests */)
+            {
+                throw new ApiRateLimitException(response.StatusCode, errors, message, rawResponse, requestInfo);
+            }
+
+            throw new BizwebSharpException(response.StatusCode, errors, message, rawResponse, requestInfo);
 
             //if (response.ErrorException != null)
             //{
