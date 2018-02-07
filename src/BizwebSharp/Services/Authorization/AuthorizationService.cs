@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
@@ -21,6 +22,28 @@ namespace BizwebSharp
             "store",
             "timestamp"
         };
+
+        private static readonly Regex _querystringRegex = new Regex(@"[?|&]([\w\.]+)=([^?|^&]+)", RegexOptions.Compiled);
+
+        /// <remarks>
+        /// Source for this method: https://stackoverflow.com/a/22046389
+        /// </remarks>
+        public static IDictionary<string, string> ParseRawQuerystring(string qs)
+        {
+            // Must use an absolute uri, else Uri.Query throws an InvalidOperationException
+            var uri = new UriBuilder("http://localhost:3000")
+            {
+                Query = Uri.UnescapeDataString(qs)
+            }.Uri;
+            var match = _querystringRegex.Match(uri.PathAndQuery);
+            var paramaters = new Dictionary<string, string>();
+            while (match.Success)
+            {
+                paramaters.Add(match.Groups[1].Value, match.Groups[2].Value);
+                match = match.NextMatch();
+            }
+            return paramaters;
+        }
 
         private static Func<string, bool, string> EncodeQuery { get; } = (s, isKey) =>
         {
@@ -62,7 +85,9 @@ namespace BizwebSharp
         // 8. Compute the kvps with an HMAC-SHA256 using the secret key.
         // 9. Request is authentic if the computed string equals the `hash` in query string.
         // Reference: https://docs.shopify.com/api/guides/authentication/oauth#making-authenticated-requests
-
+        /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
         public static bool IsAuthenticRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring,
             string apiSecretKey,
             double? requestTimestampSpan = null)
@@ -76,6 +101,24 @@ namespace BizwebSharp
 
             return ValidateRequest(hmac, kvps, apiSecretKey, timestampInString,
                 requestTimestampSpan);
+        }
+
+        /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
+        public static bool IsAuthenticRequest(IDictionary<string, string> querystring, string apiSecretKey)
+        {
+            var qs = querystring.Select(kvp => new KeyValuePair<string, StringValues>(kvp.Key, kvp.Value));
+
+            return IsAuthenticRequest(qs, apiSecretKey);
+        }
+
+        /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
+        public static bool IsAuthenticRequest(string querystring, string apiSecretKey)
+        {
+            return IsAuthenticRequest(ParseRawQuerystring(querystring), apiSecretKey);
         }
 
         public static bool ValidateRequest(string signature, string contentToCheck, string apiSecretKey,
@@ -204,6 +247,9 @@ namespace BizwebSharp
 
         #region method with NameValueCollection for .Net Framework
 
+        /// <summary>
+        /// Determines if an incoming request is authentic.
+        /// </summary>
         public static bool IsAuthenticRequest(NameValueCollection querystring, string apiSecretKey,
             double? requestTimestampSpan = null)
         {
