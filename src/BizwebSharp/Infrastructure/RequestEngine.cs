@@ -75,7 +75,7 @@ namespace BizwebSharp.Infrastructure
         public static void CheckResponseExceptions(IRestResponse response)
         {
             var statusCode = (int)response.StatusCode;
-            if (statusCode < 200 || statusCode >= 300)
+            if (statusCode >= 200 && statusCode < 300)
             {
                 return;
             }
