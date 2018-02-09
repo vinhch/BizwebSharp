@@ -1,11 +1,11 @@
 ﻿using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
 
-namespace BizwebSharp.Services
+namespace BizwebSharp
 {
     public class PriceRuleService : BaseServiceWithSimpleCRUD<PriceRule, PriceRuleOption>
     {
-        protected PriceRuleService(BizwebAuthorizationState authState) : base(authState)
+        public PriceRuleService(BizwebAuthorizationState authState) : base(authState)
         {
         }
     }
