@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Serializers;
 using Newtonsoft.Json.Linq;
@@ -12,7 +13,20 @@ namespace BizwebSharp.Infrastructure
 {
     public static class RequestEngine
     {
-        public static Uri BuildUri(string myApiUrl, bool usingHttps = true)
+        private static HttpClient _httpClient = new HttpClient();
+        public static HttpClient CurrentHttpClient
+        {
+            get
+            {
+                if (_httpClient == null)
+                {
+                    _httpClient = new HttpClient();
+                }
+                return _httpClient;
+            }
+        }
+
+        public static Uri BuildUri(string myApiUrl, bool usingHttps = true, bool withAdminPath = true)
         {
             //var protocolScheme = usingHttps ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
             var protocolScheme = usingHttps ? "https" : "http";
@@ -32,7 +46,7 @@ namespace BizwebSharp.Infrastructure
 
             var builder = new UriBuilder(myApiUrl)
             {
-                Path = "admin/",
+                Path = withAdminPath ? "admin/" : "/",
                 Scheme = protocolScheme,
                 Port = usingHttps ? 443 : 80 //default SSL port
             };
@@ -142,7 +156,7 @@ namespace BizwebSharp.Infrastructure
                     // Error is type #4
                     var description = parsed["error_description"];
 
-                    errors["invalid_request"] = new List<string> {description.Value<string>()};
+                    errors["invalid_request"] = new List<string> { description.Value<string>() };
                 }
                 else if (parsed.Any(x => x.Path == "errors"))
                 {
@@ -150,7 +164,7 @@ namespace BizwebSharp.Infrastructure
 
                     //errors can be either a single string, or an array of other errors
                     if (parsedErrors.Type == JTokenType.String)
-                        errors["Error"] = new List<string> {parsedErrors.Value<string>()};
+                        errors["Error"] = new List<string> { parsedErrors.Value<string>() };
                     else
                         foreach (var val in parsedErrors.Values())
                         {
@@ -177,7 +191,7 @@ namespace BizwebSharp.Infrastructure
             }
             catch (Exception e)
             {
-                errors[e.Message] = new List<string> {json};
+                errors[e.Message] = new List<string> { json };
             }
 
             // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.

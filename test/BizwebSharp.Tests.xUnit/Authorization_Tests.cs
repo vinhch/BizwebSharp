@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using Xunit;
 
@@ -39,6 +40,24 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Contains($"client_id={Utils.BwSetting.ApiKey}", result);
             Assert.Contains($"scope=read_customers,write_customers", result);
             Assert.Contains($"redirect_uri={redirectUrl}", result);
+        }
+
+        [Fact(DisplayName = "Validates Shop Urls", Skip = "This method is not work yet.")]
+        public async Task Validates_Shop_Urls()
+        {
+            string validUrl = Utils.BwSetting.Store;
+            string invalidUrl = "https://google.com";
+
+            Assert.True(await AuthorizationService.IsValidShopDomainAsync(validUrl));
+            Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
+        }
+
+        [Fact(DisplayName = "Validates Shop Malfunctioned Urls")]
+        public async Task Validates_Shop_Malfunctioned_Urls()
+        {
+            string invalidUrl = "foo";
+
+            Assert.False(await AuthorizationService.IsValidShopDomainAsync(invalidUrl));
         }
     }
 }

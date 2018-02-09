@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -243,6 +244,35 @@ namespace BizwebSharp
             var response = await RequestEngine.ExecuteRequestAsync(client, req, new DefaultRequestExecutionPolicy());
 
             return response.Value<string>("access_token");
+        }
+
+        /// <summary>
+        /// A convenience function that tries to ensure that a given URL is a valid Bizweb domain. It does this by making a HEAD request to the given domain, and returns true if the response contains an X-StoreId header.
+        ///
+        /// **Warning**: a domain could fake the response header, which would cause this method to return true.
+        ///
+        /// **Warning**: this method of validation is not officially supported by Bizweb and could break at any time.
+        /// </summary>
+        /// <param name="url">The URL of the shop to check.</param>
+        /// <returns>A boolean indicating whether the URL is valid.</returns>
+        public static async Task<bool> IsValidShopDomainAsync(string url)
+        {
+            var uri = RequestEngine.BuildUri(url);
+            var client = RequestEngine.CurrentHttpClient;
+
+            using (var msg = new HttpRequestMessage(System.Net.Http.HttpMethod.Head, uri))
+            {
+                try
+                {
+                    var response = await client.SendAsync(msg);
+
+                    return response.Headers.Any(h => h.Key == "X-StoreId");
+                }
+                catch (HttpRequestException)
+                {
+                    return false;
+                }
+            }
         }
 
         #region method with NameValueCollection for .Net Framework
