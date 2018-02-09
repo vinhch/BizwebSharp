@@ -18,7 +18,7 @@ namespace BizwebSharp.Tests.xUnit
             this.Fixture = fixture;
         }
 
-        [Fact]
+        [Fact(DisplayName = "Count Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Counts_Themes()
         {
             var count = await Fixture.Service.CountAsync();
@@ -26,7 +26,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.True(count > 0);
         }
 
-        [Fact]
+        [Fact(DisplayName = "List Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Lists_Themes()
         {
             var list = await Fixture.Service.ListAsync();
@@ -34,7 +34,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.True(list.Count() > 0);
         }
 
-        [Fact(Skip = "Often fails during CI tests because stores can only have 20 themes.")]
+        [Fact(DisplayName = "Delete Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Deletes_Themes()
         {
             var created = await Fixture.Create(true);
@@ -54,7 +54,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.False(threw);
         }
 
-        [Fact(Skip = "Often fails during CI tests because stores can only have 20 themes.")]
+        [Fact(DisplayName = "Delete Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Gets_Themes()
         {
             var created = await Fixture.Create();
@@ -66,7 +66,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Equal(Fixture.Role, obj.Role);
         }
 
-        [Fact(Skip = "Often fails during CI tests because stores can only have 20 themes.")]
+        [Fact(DisplayName = "Create Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Creates_Themes()
         {
             var obj = await Fixture.Create();
@@ -77,7 +77,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Equal(Fixture.Role, obj.Role);
         }
 
-        [Fact(Skip = "Often fails during CI tests because stores can only have 20 themes.")]
+        [Fact(DisplayName = "Update Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
         public async Task Updates_Themes()
         {
             string newValue = ("BizwebSharp Updated Theme_" + Guid.NewGuid()).Substring(0, 50);
