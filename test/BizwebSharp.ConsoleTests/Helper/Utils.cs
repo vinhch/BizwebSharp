@@ -65,7 +65,7 @@ namespace BizwebSharp.ConsoleTests
             return clean;
         }
 
-        public static async Task ConsoleWriteLine(string text)
+        public static async Task ConsoleWriteLineAsync(string text)
         {
             Console.WriteLine($"Console: {DateTime.Now.ToString("dd/MM/yyyy-HH:mm:ss")} - {text}");
         }

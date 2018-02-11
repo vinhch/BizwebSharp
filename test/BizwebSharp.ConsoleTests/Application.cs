@@ -54,7 +54,7 @@ namespace BizwebSharp.ConsoleTests
             var bwAuthorizationUrl = CreateBizwebAuthorizationUrl();
             Process.Start(Utils.GetDefaultBrowserPath(), bwAuthorizationUrl);
             //Console.WriteLine(bwAuthorizationUrl);
-            Utils.ConsoleWriteLine(bwAuthorizationUrl);
+            Utils.ConsoleWriteLineAsync(bwAuthorizationUrl);
         }
 
         private static string CreateBizwebAuthorizationUrl()
