@@ -70,14 +70,14 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Create Products")]
         public async Task Creates_Products()
         {
-            var obj = await Fixture.Create();
+            var created = await Fixture.Create();
 
-            Assert.NotNull(obj);
-            Assert.True(obj.Id.HasValue);
-            Assert.Equal(Fixture.Title, obj.Name);
-            Assert.Equal(Fixture.Content, obj.Content);
-            Assert.Equal(Fixture.ProductType, obj.ProductType);
-            Assert.Equal(Fixture.Vendor, obj.Vendor);
+            Assert.NotNull(created);
+            Assert.True(created.Id.HasValue);
+            Assert.Equal(Fixture.Title, created.Name);
+            Assert.Equal(Fixture.Content, created.Content);
+            Assert.Equal(Fixture.ProductType, created.ProductType);
+            Assert.Equal(Fixture.Vendor, created.Vendor);
         }
 
         [Fact(DisplayName = "Create Unpublished Products")]

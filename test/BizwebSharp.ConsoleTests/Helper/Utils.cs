@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Win32;
 
 namespace BizwebSharp.ConsoleTests
@@ -62,6 +63,11 @@ namespace BizwebSharp.ConsoleTests
             var url = p.Split('"');
             var clean = url[1];
             return clean;
+        }
+
+        public static async Task ConsoleWriteLineAsync(string text)
+        {
+            Console.WriteLine($"Console: {DateTime.Now.ToString("dd/MM/yyyy-HH:mm:ss")} - {text}");
         }
     }
 }

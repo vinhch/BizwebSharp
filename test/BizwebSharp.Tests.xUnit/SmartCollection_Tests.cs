@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using Xunit;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace BizwebSharp.Tests.xUnit
 {
@@ -130,6 +131,15 @@ namespace BizwebSharp.Tests.xUnit
                 //BodyHtml = BodyHtml,
                 Alias = Alias,
                 Name = Name,
+                Rules = new List<SmartCollectionRule>
+                {
+                    new SmartCollectionRule
+                    {
+                        Column = "variant_price",
+                        Condition = "20",
+                        Relation = "less_than"
+                    }
+                }
             });
 
             if (!skipAddToCreatedList)

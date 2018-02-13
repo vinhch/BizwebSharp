@@ -19,7 +19,10 @@ namespace BizwebSharp.ConsoleTests.Web
     {
         public void Configure(IApplicationBuilder app)
         {
-            app.Run(async context =>
+            app.UseDeveloperExceptionPage();
+            //app.UseReturnExceptionToJson();
+
+            app.Use(async (context, next) =>
             {
                 var sb = new StringBuilder();
                 sb.Append("Get Bizweb AccessToken\n\n");
@@ -44,6 +47,7 @@ namespace BizwebSharp.ConsoleTests.Web
                 sb.Append($"\nAccessToken = {token}\n");
 
                 await context.Response.WriteAsync(sb.ToString());
+                await next();
             });
         }
 

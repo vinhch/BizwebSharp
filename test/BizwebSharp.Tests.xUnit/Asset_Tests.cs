@@ -53,7 +53,9 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Get Assets")]
         public async Task Gets_Assets()
         {
-            var key = Fixture.Created.First().Key;
+            const string key = "snippets/test-get-assets.bwt";
+            var created = await Fixture.Create(key);
+
             var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
 
             Assert.NotNull(asset);
