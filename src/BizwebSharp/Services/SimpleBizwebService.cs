@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
-using RestSharp.Portable;
 
 namespace BizwebSharp
 {
@@ -13,19 +13,18 @@ namespace BizwebSharp
 
         public async Task<string> GetAsync(string apiPath)
         {
-            var req = RequestEngine.CreateRequest(apiPath, Method.GET);
-            using (var client = RequestEngine.CreateClient(_AuthState))
+            using (var req = RequestEngine.CreateRequest(_AuthState, apiPath, HttpMethod.Get))
             {
-                return await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
+                return await RequestEngine.ExecuteRequestToStringAsync(req, ExecutionPolicy);
             }
         }
 
-        private async Task<string> PostOrPutAsync(Method method, string apiPath, object data, string rootElement = null)
+        private async Task<string> PostOrPutAsync(HttpMethod method, string apiPath, object data, string rootElement = null)
         {
-            var req = RequestEngine.CreateRequest(apiPath, method, rootElement);
+            JsonContent content = null;
             if (string.IsNullOrEmpty(rootElement))
             {
-                req.AddJsonBody(data);
+                content = new JsonContent(data);
             }
             else
             {
@@ -33,31 +32,30 @@ namespace BizwebSharp
                 {
                     {rootElement, data}
                 };
-                req.AddJsonBody(body);
+                content = new JsonContent(body);
             }
 
-            using (var client = RequestEngine.CreateClient(_AuthState))
+            using (var req = RequestEngine.CreateRequest(_AuthState, apiPath, method, content, rootElement))
             {
-                return await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
+                return await RequestEngine.ExecuteRequestToStringAsync(req, ExecutionPolicy);
             }
         }
 
         public async Task<string> PostAsync(string apiPath, object data, string rootElement = null)
         {
-            return await PostOrPutAsync(Method.POST, apiPath, data, rootElement);
+            return await PostOrPutAsync(HttpMethod.Post, apiPath, data, rootElement);
         }
 
         public async Task<string> PutAsync(string apiPath, object data, string rootElement = null)
         {
-            return await PostOrPutAsync(Method.PUT, apiPath, data, rootElement);
+            return await PostOrPutAsync(HttpMethod.Put, apiPath, data, rootElement);
         }
 
         public async Task DeleteAsync(string apiPath)
         {
-            var req = RequestEngine.CreateRequest(apiPath, Method.DELETE);
-            using (var client = RequestEngine.CreateClient(_AuthState))
+            using (var req = RequestEngine.CreateRequest(_AuthState, apiPath, HttpMethod.Delete))
             {
-                await RequestEngine.ExecuteRequestToStringAsync(client, req, ExecutionPolicy);
+                await RequestEngine.ExecuteRequestToStringAsync(req, ExecutionPolicy);
             }
         }
     }

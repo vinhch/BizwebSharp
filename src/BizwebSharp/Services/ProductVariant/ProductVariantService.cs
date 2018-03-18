@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -15,7 +16,7 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<int>($"products/{productId}/{ApiClassPathInPlural}/count.json", HttpMethod.GET, "count",
+                    MakeRequestAsync<int>($"products/{productId}/{ApiClassPathInPlural}/count.json", HttpMethod.Get, "count",
                         option);
         }
 
@@ -23,8 +24,8 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<List<ProductVariant>>($"products/{productId}/{ApiClassPathInPlural}.json",
-                        HttpMethod.GET, ApiClassPathInPlural, option);
+                    MakeRequestAsync<List<ProductVariant>>($"products/{productId}/{ApiClassPathInPlural}.json",
+                        HttpMethod.Get, ApiClassPathInPlural, option);
         }
 
         public virtual async Task<ProductVariant> CreateAsync(long productId, ProductVariant variant)
@@ -36,13 +37,13 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<ProductVariant>($"products/{productId}/{ApiClassPathInPlural}.json", HttpMethod.POST,
+                    MakeRequestAsync<ProductVariant>($"products/{productId}/{ApiClassPathInPlural}.json", HttpMethod.Post,
                         ApiClassPath, root);
         }
 
         public virtual async Task DeleteAsync(long productId, long variantId)
         {
-            await MakeRequest($"products/{productId}/{ApiClassPathInPlural}/{variantId}.json", HttpMethod.DELETE);
+            await MakeRequestAsync($"products/{productId}/{ApiClassPathInPlural}/{variantId}.json", HttpMethod.Delete);
         }
     }
 }

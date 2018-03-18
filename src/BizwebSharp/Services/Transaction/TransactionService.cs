@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -13,14 +14,14 @@ namespace BizwebSharp
 
         public virtual async Task<int> CountAsync(long orderId, ListOption option = null)
         {
-            return await MakeRequest<int>($"orders/{orderId}/transactions/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>($"orders/{orderId}/transactions/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<Transaction>> ListAsync(long orderId, ListOption option = null)
         {
             return
                 await
-                    MakeRequest<List<Transaction>>($"orders/{orderId}/transactions.json", HttpMethod.GET, "transactions",
+                    MakeRequestAsync<List<Transaction>>($"orders/{orderId}/transactions.json", HttpMethod.Get, "transactions",
                         option);
         }
 
@@ -34,7 +35,7 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.GET, "transaction",
+                    MakeRequestAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.Get, "transaction",
                         options);
         }
 
@@ -45,7 +46,7 @@ namespace BizwebSharp
                 {"transaction", inputObject}
             };
 
-            return await MakeRequest<Transaction>($"orders/{orderId}/transactions.json", HttpMethod.POST, "transaction", root);
+            return await MakeRequestAsync<Transaction>($"orders/{orderId}/transactions.json", HttpMethod.Post, "transaction", root);
         }
 
         public virtual async Task<Transaction> UpdateAsync(long orderId, long transactionId, Transaction inputObject)
@@ -56,13 +57,13 @@ namespace BizwebSharp
             };
             return
                 await
-                    MakeRequest<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.PUT,
+                    MakeRequestAsync<Transaction>($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.Put,
                         "transaction", root);
         }
 
         public virtual async Task DeleteAsync(long orderId, long transactionId)
         {
-            await MakeRequest($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.DELETE);
+            await MakeRequestAsync($"orders/{orderId}/transactions/{transactionId}.json", HttpMethod.Delete);
         }
     }
 }

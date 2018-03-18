@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -13,14 +14,14 @@ namespace BizwebSharp
 
         public virtual async Task<int> CountAsync(long productId, PublishableListOption option = null)
         {
-            return await MakeRequest<int>($"products/{productId}/images/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>($"products/{productId}/images/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<ProductImage>> ListAsync(long productId, PublishableListOption option = null)
         {
             return
                 await
-                    MakeRequest<List<ProductImage>>($"products/{productId}/images.json", HttpMethod.GET, "images",
+                    MakeRequestAsync<List<ProductImage>>($"products/{productId}/images.json", HttpMethod.Get, "images",
                         option);
         }
 
@@ -34,7 +35,7 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<ProductImage>($"products/{productId}/images/{imageId}.json", HttpMethod.GET, "image",
+                    MakeRequestAsync<ProductImage>($"products/{productId}/images/{imageId}.json", HttpMethod.Get, "image",
                         options);
         }
 
@@ -45,7 +46,7 @@ namespace BizwebSharp
                 {"image", inputObject}
             };
 
-            return await MakeRequest<ProductImage>($"products/{productId}/images.json", HttpMethod.POST, "image", root);
+            return await MakeRequestAsync<ProductImage>($"products/{productId}/images.json", HttpMethod.Post, "image", root);
         }
 
         public virtual async Task<ProductImage> UpdateAsync(long productId, long productImageId, ProductImage inputObject)
@@ -56,13 +57,13 @@ namespace BizwebSharp
             };
             return
                 await
-                    MakeRequest<ProductImage>($"products/{productId}/images/{productImageId}.json", HttpMethod.PUT,
+                    MakeRequestAsync<ProductImage>($"products/{productId}/images/{productImageId}.json", HttpMethod.Put,
                         "image", root);
         }
 
         public virtual async Task DeleteAsync(long productId, long imageId)
         {
-            await MakeRequest($"products/{productId}/images/{imageId}.json", HttpMethod.DELETE);
+            await MakeRequestAsync($"products/{productId}/images/{imageId}.json", HttpMethod.Delete);
         }
     }
 }

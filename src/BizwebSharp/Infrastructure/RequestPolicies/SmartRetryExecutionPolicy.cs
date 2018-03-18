@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
-using RestSharp.Portable;
 
 namespace BizwebSharp.Infrastructure
 {
@@ -26,9 +26,10 @@ namespace BizwebSharp.Infrastructure
 
         private static readonly ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(IRestClient baseClient, ICustomRestRequest request, ExecuteRequestAsync<T> executeRequestAsync)
+        public async Task<T> Run<T>(HttpClient baseClient, BizwebRequestMessage baseReqMsg,
+            ExecuteRequestAsync<T> executeRequestAsync)
         {
-            var accessToken = GetAccessToken(baseClient);
+            var accessToken = GetAccessToken(baseReqMsg);
             LeakyBucket bucket = null;
 
             if (accessToken != null)
@@ -38,6 +39,7 @@ namespace BizwebSharp.Infrastructure
 
             while (true)
             {
+                var reqMsg = baseReqMsg.Clone();
                 if (accessToken != null)
                 {
                     await bucket.GrantAsync();
@@ -45,7 +47,7 @@ namespace BizwebSharp.Infrastructure
 
                 try
                 {
-                    var fullResult = await executeRequestAsync(baseClient);
+                    var fullResult = await executeRequestAsync(baseClient, reqMsg);
                     var bucketContentSize = GetBucketContentSize(fullResult.Response);
 
                     if (bucketContentSize != null)
@@ -68,19 +70,20 @@ namespace BizwebSharp.Infrastructure
             }
         }
 
-        private static string GetAccessToken(IRestClient client)
+        private static string GetAccessToken(HttpRequestMessage requestMsg)
         {
-            return client.DefaultParameters
-                .SingleOrDefault(p => p.Type == ParameterType.HttpHeader &&
-                                      string.Equals(p.Name, ApiConst.HEADER_KEY_ACCESS_TOKEN,
-                                          StringComparison.CurrentCultureIgnoreCase))
+            return requestMsg.Headers
+                .Where(p => string.Equals(p.Key, ApiConst.HEADER_KEY_ACCESS_TOKEN,
+                    StringComparison.CurrentCultureIgnoreCase))
+                .Select(p => new {p.Key, p.Value})
+                .SingleOrDefault()
                 ?.Value
-                ?.ToString();
+                ?.FirstOrDefault();
         }
 
-        private static int? GetBucketContentSize(IRestResponse response)
+        private static int? GetBucketContentSize(HttpResponseMessage responseMsg)
         {
-            var headers = response.Headers.FirstOrDefault(kvp => string.Equals(kvp.Key, ApiConst.HEADER_API_CALL_LIMIT,
+            var headers = responseMsg.Headers.FirstOrDefault(kvp => string.Equals(kvp.Key, ApiConst.HEADER_API_CALL_LIMIT,
                 StringComparison.CurrentCultureIgnoreCase));
 
             var apiCallLimitHeaderValue = headers.Value?.FirstOrDefault();

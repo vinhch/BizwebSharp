@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -28,14 +29,14 @@ namespace BizwebSharp
 
         public virtual async Task<int> CountAsync(TOption option = null)
         {
-            return await MakeRequest<int>($"{ApiClassPathInPlural}/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>($"{ApiClassPathInPlural}/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<T>> ListAsync(TOption option = null)
         {
             return
                 await
-                    MakeRequest<List<T>>($"{ApiClassPathInPlural}.json", HttpMethod.GET, ApiClassPathInPlural, option);
+                    MakeRequestAsync<List<T>>($"{ApiClassPathInPlural}.json", HttpMethod.Get, ApiClassPathInPlural, option);
         }
 
         public virtual async Task<T> GetAsync(long id, string fields = null)
@@ -46,7 +47,7 @@ namespace BizwebSharp
                 options = new { fields };
             }
 
-            return await MakeRequest<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.GET, ApiClassPath, options);
+            return await MakeRequestAsync<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Get, ApiClassPath, options);
         }
 
         public virtual async Task<T> CreateAsync(T inputObject)
@@ -56,7 +57,7 @@ namespace BizwebSharp
                 {ApiClassPath, inputObject}
             };
 
-            return await MakeRequest<T>($"{ApiClassPathInPlural}.json", HttpMethod.POST, ApiClassPath, root);
+            return await MakeRequestAsync<T>($"{ApiClassPathInPlural}.json", HttpMethod.Post, ApiClassPath, root);
         }
 
         public virtual async Task<T> UpdateAsync(long id, T inputObject)
@@ -65,12 +66,12 @@ namespace BizwebSharp
             {
                 {ApiClassPath, inputObject}
             };
-            return await MakeRequest<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.PUT, ApiClassPath, root);
+            return await MakeRequestAsync<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Put, ApiClassPath, root);
         }
 
         public virtual async Task DeleteAsync(long id)
         {
-            await MakeRequest($"{ApiClassPathInPlural}/{id}.json", HttpMethod.DELETE);
+            await MakeRequestAsync($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Delete);
         }
     }
 }

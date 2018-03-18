@@ -1,16 +1,16 @@
-﻿using RestSharp.Portable;
+﻿using System.Net.Http;
 
 namespace BizwebSharp.Infrastructure
 {
     public class RequestResult<T>
     {
-        public RequestResult(IRestResponse response, T result)
+        public RequestResult(HttpResponseMessage response, T result)
         {
             Response = response;
             Result = result;
         }
 
-        public IRestResponse Response { get; }
+        public HttpResponseMessage Response { get; }
         public T Result { get; }
     }
 }

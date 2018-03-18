@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
-using RestSharp.Portable;
 
 namespace BizwebSharp.Options
 {
@@ -43,33 +42,23 @@ namespace BizwebSharp.Options
         public string Order { get; set; }
 
         /// <summary>
-        ///     Parameterizes this class, with special handling for <see cref="Ids" />.
+        /// Parameterizes this class, with special handling for <see cref="Ids"/>.
         /// </summary>
-        /// <param name="propName">
-        ///     The name of the property. Will match the property's <see cref="JsonPropertyAttribute" /> name —
-        ///     rather than the real property name — where applicable. Use <paramref name="property" />.Name to get the real name.
-        /// </param>
+        /// <param name="propName">The name of the property. Will match the property's <see cref="JsonPropertyAttribute"/> name —
+        /// rather than the real property name — where applicable. Use <paramref name="property"/>.Name to get the real name.</param>
         /// <param name="value">The property's value.</param>
         /// <param name="property">The property itself.</param>
-        /// <param name="type">The type of parameter to create.</param>
         /// <returns>The new parameter.</returns>
-        public override Parameter ToSingleParameter(string propName, object value, PropertyInfo property,
-            ParameterType type)
+        public override KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
-            if ((propName == "ids") || (propName == "Ids"))
+            if (propName == "ids" || propName == "Ids")
             {
-                //RestSharp does not automatically convert arrays into querystring params.
-                var param = new Parameter
-                {
-                    Name = propName,
-                    Type = type,
-                    Value = string.Join(",", value as IEnumerable<long>)
-                };
+                var param = new KeyValuePair<string, object>(propName, string.Join(",", value as IEnumerable<long>));
 
                 return param;
             }
 
-            return base.ToSingleParameter(propName, value, property, type);
+            return base.ToSingleParameter(propName, value, property);
         }
     }
 }

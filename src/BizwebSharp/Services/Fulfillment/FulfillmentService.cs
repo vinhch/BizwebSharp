@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -13,14 +14,14 @@ namespace BizwebSharp
 
         public virtual async Task<int> CountAsync(long orderId, ListOption option = null)
         {
-            return await MakeRequest<int>($"orders/{orderId}/fulfillments/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>($"orders/{orderId}/fulfillments/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<Fulfillment>> ListAsync(long orderId, ListOption option = null)
         {
             return
                 await
-                    MakeRequest<List<Fulfillment>>($"orders/{orderId}/fulfillments.json", HttpMethod.GET, "fulfillments",
+                    MakeRequestAsync<List<Fulfillment>>($"orders/{orderId}/fulfillments.json", HttpMethod.Get, "fulfillments",
                         option);
         }
 
@@ -34,7 +35,7 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", HttpMethod.GET, "fulfillment",
+                    MakeRequestAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", HttpMethod.Get, "fulfillment",
                         options);
         }
 
@@ -48,7 +49,7 @@ namespace BizwebSharp
                 {"fulfillment", body}
             };
 
-            return await MakeRequest<Fulfillment>($"orders/{orderId}/fulfillments.json", HttpMethod.POST, "fulfillment", root);
+            return await MakeRequestAsync<Fulfillment>($"orders/{orderId}/fulfillments.json", HttpMethod.Post, "fulfillment", root);
         }
 
         public virtual async Task<Fulfillment> UpdateAsync(long orderId, long fulfillmentId, Fulfillment inputObject)
@@ -59,7 +60,7 @@ namespace BizwebSharp
             };
             return
                 await
-                    MakeRequest<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", HttpMethod.PUT,
+                    MakeRequestAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}.json", HttpMethod.Put,
                         "fulfillment", root);
         }
 
@@ -67,16 +68,16 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}/complete..json",
-                        HttpMethod.POST, "fulfillment");
+                    MakeRequestAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}/complete..json",
+                        HttpMethod.Post, "fulfillment");
         }
 
         public virtual async Task<Fulfillment> CancelAsync(long orderId, long fulfillmentId)
         {
             return
                 await
-                    MakeRequest<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel..json",
-                        HttpMethod.POST, "fulfillment");
+                    MakeRequestAsync<Fulfillment>($"orders/{orderId}/fulfillments/{fulfillmentId}/cancel..json",
+                        HttpMethod.Post, "fulfillment");
         }
     }
 }

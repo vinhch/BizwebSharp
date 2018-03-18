@@ -1,8 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using Newtonsoft.Json.Linq;
-using RestSharp.Portable;
 
 namespace BizwebSharp
 {
@@ -17,24 +18,23 @@ namespace BizwebSharp
 
         public IRequestExecutionPolicy ExecutionPolicy { get; set; } = DefaultRequestExecutionPolicy.Default;
 
-        private static ICustomRestRequest CreateRestRequest(string path, HttpMethod httpMethod, string rootElement = null,
-            object payload = null)
+        private static BizwebRequestMessage CreateRequestMessage(BizwebAuthorizationState authState, string path,
+            HttpMethod method, string rootElement = null, object payload = null)
         {
-            var method = HttpMethodToRestSharpMethod(httpMethod);
-            var req = RequestEngine.CreateRequest(path, method, rootElement);
+            JsonContent content = null;
 
-            if (payload == null) return req;
-
-            if (method != Method.GET && method != Method.DELETE)
+            if (payload == null)
             {
-                req.AddJsonBody(payload);
+                return RequestEngine.CreateRequest(authState, path, method, rootElement: rootElement);
+            }
+
+            if (method != HttpMethod.Get && method != HttpMethod.Delete)
+            {
+                content = new JsonContent(payload);
             }
             else if (payload is Parameterizable)
             {
-                foreach (var parameter in ((Parameterizable)payload).ToParameters(ParameterType.GetOrPost))
-                {
-                    req.Parameters.Add(parameter);
-                }
+                path = RequestEngine.CreateUriPathAndQuery(path, ((Parameterizable) payload).ToParameters());
             }
             else
             {
@@ -44,46 +44,34 @@ namespace BizwebSharp
                 //}
 
                 var token = JToken.FromObject(payload);
-                foreach (JProperty item in token)
+                var queryParams = token.Select(s =>
                 {
-                    req.AddParameter(item.Name, item.Value);
-                }
+                    var i = (JProperty) s;
+                    return new KeyValuePair<string, object>(i.Name, i.Value);
+                });
+
+                path = RequestEngine.CreateUriPathAndQuery(path, queryParams);
             }
 
-            return req;
+            return RequestEngine.CreateRequest(authState, path, method, content, rootElement);
         }
 
-        protected async Task<T> MakeRequest<T>(string path, HttpMethod httpMethod, string rootElement = null,
+        protected async Task<T> MakeRequestAsync<T>(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null) where T : new()
         {
-            var req = CreateRestRequest(path, httpMethod, rootElement, payload);
-            using (var client = RequestEngine.CreateClient(_AuthState))
+            using (var reqMsg = CreateRequestMessage(_AuthState, path, httpMethod, rootElement, payload))
             {
-                return await RequestEngine.ExecuteRequestAsync<T>(client, req, ExecutionPolicy);
+                return await RequestEngine.ExecuteRequestAsync<T>(reqMsg, ExecutionPolicy);
             }
         }
 
-        protected async Task MakeRequest(string path, HttpMethod httpMethod, string rootElement = null,
+        protected async Task MakeRequestAsync(string path, HttpMethod httpMethod, string rootElement = null,
             object payload = null)
         {
-            var req = CreateRestRequest(path, httpMethod, rootElement, payload);
-            using (var client = RequestEngine.CreateClient(_AuthState))
+            using (var reqMsg = CreateRequestMessage(_AuthState, path, httpMethod, rootElement, payload))
             {
-                await RequestEngine.ExecuteRequestAsync(client, req, ExecutionPolicy);
+                await RequestEngine.ExecuteRequestAsync(reqMsg, ExecutionPolicy);
             }
-        }
-
-        private static Method HttpMethodToRestSharpMethod(HttpMethod method)
-        {
-            var methodName = Enum.GetName(typeof(HttpMethod), method);
-
-            Method result;
-            if (!Enum.TryParse(methodName, out result))
-            {
-                throw new ArgumentOutOfRangeException(nameof(method), method, null);
-            }
-
-            return result;
         }
     }
 }

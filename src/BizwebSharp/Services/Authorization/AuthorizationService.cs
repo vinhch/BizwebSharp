@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
-using RestSharp.Portable;
 
 namespace BizwebSharp
 {
@@ -29,7 +28,7 @@ namespace BizwebSharp
         /// <remarks>
         /// Source for this method: https://stackoverflow.com/a/22046389
         /// </remarks>
-        public static IDictionary<string, string> ParseRawQuerystring(string qs)
+        private static IDictionary<string, string> ParseRawQuerystring(string qs)
         {
             // Must use an absolute uri, else Uri.Query throws an InvalidOperationException
             var uri = new UriBuilder("http://localhost:3000")
@@ -235,15 +234,24 @@ namespace BizwebSharp
         public static async Task<string> AuthorizeAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
-            var client = RequestEngine.CreateClient(new BizwebAuthorizationState { ApiUrl = myApiUrl });
-            var req = RequestEngine.CreateRequest("oauth/access_token", Method.POST);
+            var authState = new BizwebAuthorizationState
+            {
+                ApiUrl = myApiUrl
+            };
 
             //Build request body
-            req.AddJsonBody(new { client_id = apiKey, client_secret = apiSecretKey, code });
+            var content = new JsonContent(new
+            {
+                client_id = apiKey,
+                client_secret = apiSecretKey,
+                code
+            });
 
-            var response = await RequestEngine.ExecuteRequestAsync(client, req, new DefaultRequestExecutionPolicy());
-
-            return response.Value<string>("access_token");
+            using (var reqMsg = RequestEngine.CreateRequest(authState, "oauth/access_token", HttpMethod.Post, content))
+            {
+                var response = await RequestEngine.ExecuteRequestAsync(reqMsg, new DefaultRequestExecutionPolicy());
+                return response.Value<string>("access_token");
+            }
         }
 
         /// <summary>

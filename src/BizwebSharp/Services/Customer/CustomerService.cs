@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -33,7 +34,7 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<List<Customer>>($"{ApiClassPathInPlural}/search.json", HttpMethod.GET, ApiClassPathInPlural, option);
+                    MakeRequestAsync<List<Customer>>($"{ApiClassPathInPlural}/search.json", HttpMethod.Get, ApiClassPathInPlural, option);
         }
 
         public virtual async Task<Customer> CreateAsync(Customer inputObject, CustomerCreateOption option)
@@ -55,7 +56,7 @@ namespace BizwebSharp
                 {ApiClassPath, body}
             };
 
-            return await MakeRequest<Customer>($"{ApiClassPathInPlural}.json", HttpMethod.POST, ApiClassPath, root);
+            return await MakeRequestAsync<Customer>($"{ApiClassPathInPlural}.json", HttpMethod.Post, ApiClassPath, root);
         }
 
         public virtual async Task<Customer> UpdateAsync(long id, Customer inputObject, CustomerUpdateOption option)
@@ -76,7 +77,7 @@ namespace BizwebSharp
             {
                 {ApiClassPath, body}
             };
-            return await MakeRequest<Customer>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.PUT, ApiClassPath, root);
+            return await MakeRequestAsync<Customer>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Put, ApiClassPath, root);
         }
     }
 }

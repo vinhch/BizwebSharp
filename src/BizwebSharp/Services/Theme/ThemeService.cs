@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -24,7 +25,7 @@ namespace BizwebSharp
                 {ApiClassPath, body}
             };
 
-            return await MakeRequest<Theme>($"{ApiClassPathInPlural}.json", HttpMethod.POST, ApiClassPath, root);
+            return await MakeRequestAsync<Theme>($"{ApiClassPathInPlural}.json", HttpMethod.Post, ApiClassPath, root);
         }
     }
 }
