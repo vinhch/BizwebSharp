@@ -136,10 +136,9 @@ namespace BizwebSharp
 
             //Check request timestamp span if need
             var isValidTimestamp = true;
-            double timestamp;
             if (!string.IsNullOrEmpty(timestampInString) &&
                 requestTimestampSpan != null &&
-                double.TryParse(timestampInString, out timestamp))
+                double.TryParse(timestampInString, out double timestamp))
             {
                 var currentTimestamp = DateTime.UtcNow.ToUnixTimestamp();
                 isValidTimestamp = currentTimestamp - timestamp < requestTimestampSpan;
