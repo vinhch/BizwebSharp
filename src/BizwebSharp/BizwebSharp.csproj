@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>BizwebSharp is a C# and .NET client library for Bizweb.vn API</Description>
-    <VersionPrefix>1.0.1</VersionPrefix>
+    <VersionPrefix>1.1.0</VersionPrefix>
     <Authors>Cao Ha Vinh</Authors>
     <TargetFrameworks>netstandard1.6;netstandard1.3</TargetFrameworks>
     <AssemblyName>BizwebSharp</AssemblyName>
