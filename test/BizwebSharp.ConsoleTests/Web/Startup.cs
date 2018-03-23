@@ -44,10 +44,13 @@ namespace BizwebSharp.ConsoleTests.Web
                 sb.Append($"\nRequestBody = {requestBody}\n");
 
                 var token = await AuthorizeAnAccessTokenAsync(bizwebValidation);
-                sb.Append($"\nAccessToken = {token}\n");
+                sb.Append($"\nAccessToken = {JsonConvert.SerializeObject(token, Formatting.Indented)}\n");
 
-                await context.Response.WriteAsync(sb.ToString());
-                await next();
+                //context.Response.StatusCode = 200;
+                //context.Response.ContentType = "text/plain";
+                await context.Response.WriteAsync(sb.ToString(), Encoding.UTF8);
+
+                //await next(); // if this middleware is the last, show don't need next()
             });
         }
 
@@ -95,7 +98,7 @@ namespace BizwebSharp.ConsoleTests.Web
             return requestBody;
         }
 
-        private static async Task<string> AuthorizeAnAccessTokenAsync(BizwebValidationModel model)
+        private static async Task<object> AuthorizeAnAccessTokenAsync(BizwebValidationModel model)
         {
             if (string.IsNullOrEmpty(model.Store))
             {
@@ -106,7 +109,7 @@ namespace BizwebSharp.ConsoleTests.Web
             Application.Configuration.GetSection("BizwebSettings").Bind(bwSettings);
             var accessToken =
                 await
-                    AuthorizationService.AuthorizeAsync(model.Code, model.Store, bwSettings.ApiKey,
+                    AuthorizationService.AuthorizeWithResultAsync(model.Code, model.Store, bwSettings.ApiKey,
                         bwSettings.ApiSecretKey);
             return accessToken;
         }

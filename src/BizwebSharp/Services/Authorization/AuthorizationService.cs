@@ -234,6 +234,12 @@ namespace BizwebSharp
         public static async Task<string> AuthorizeAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
+            return (await AuthorizeWithResultAsync(code, myApiUrl, apiKey, apiSecretKey)).AccessToken;
+        }
+
+        public static async Task<OAuthResult> AuthorizeWithResultAsync(string code, string myApiUrl, string apiKey,
+            string apiSecretKey)
+        {
             var authState = new BizwebAuthorizationState
             {
                 ApiUrl = myApiUrl
@@ -250,7 +256,18 @@ namespace BizwebSharp
             using (var reqMsg = RequestEngine.CreateRequest(authState, "oauth/access_token", HttpMethod.Post, content))
             {
                 var response = await RequestEngine.ExecuteRequestAsync(reqMsg, new DefaultRequestExecutionPolicy());
-                return response.Value<string>("access_token");
+
+                var accessToken = response.Value<string>("access_token");
+
+                IEnumerable<string> scopes = null;
+                var scope = response.Value<string>("scope");
+                if (scope != null)
+                {
+                    scope = scope.Replace(" ", ","); // only for bizweb
+                    scopes = scope.Split(',');
+                }
+
+                return new OAuthResult(accessToken, scopes);
             }
         }
 
