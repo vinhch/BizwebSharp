@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 
 namespace BizwebSharp
@@ -23,7 +24,7 @@ namespace BizwebSharp
                 }
             }
 
-            return await MakeRequest<Product>($"products.json", HttpMethod.POST, "product", new { product = productBody });
+            return await MakeRequestAsync<Product>($"products.json", HttpMethod.Post, "product", new { product = productBody });
         }
 
         public virtual async Task<Product> PublishAsync(long id, bool isPublish = true)
@@ -37,7 +38,7 @@ namespace BizwebSharp
                 }
             };
 
-            return await MakeRequest<Product>($"products/{id}.json", HttpMethod.PUT, "product", productBody);
+            return await MakeRequestAsync<Product>($"products/{id}.json", HttpMethod.Put, "product", productBody);
         }
 
         public virtual async Task<Product> UnpublishAsync(long id)

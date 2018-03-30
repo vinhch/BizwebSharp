@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -16,7 +17,7 @@ namespace BizwebSharp
             var optionDictionary = option.ToDictionary();
             optionDictionary["customer_id"] = customerId;
 
-            return await MakeRequest<int>($"{ApiClassPathInPlural}/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>($"{ApiClassPathInPlural}/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<Order>> ListForCustomerAsync(long customerId, OrderOption option = null)
@@ -24,17 +25,17 @@ namespace BizwebSharp
             var optionDictionary = option.ToDictionary();
             optionDictionary["customer_id"] = customerId;
 
-            return await MakeRequest<List<Order>>($"{ApiClassPathInPlural}.json", HttpMethod.GET, ApiClassPathInPlural, optionDictionary);
+            return await MakeRequestAsync<List<Order>>($"{ApiClassPathInPlural}.json", HttpMethod.Get, ApiClassPathInPlural, optionDictionary);
         }
 
         public virtual async Task<Order> CloseAsync(long id)
         {
-            return await MakeRequest<Order>($"{ApiClassPathInPlural}/{id}/close.json", HttpMethod.POST, ApiClassPath);
+            return await MakeRequestAsync<Order>($"{ApiClassPathInPlural}/{id}/close.json", HttpMethod.Post, ApiClassPath);
         }
 
         public virtual async Task<Order> OpenAsync(long id)
         {
-            return await MakeRequest<Order>($"{ApiClassPathInPlural}/{id}/open.json", HttpMethod.POST, ApiClassPath);
+            return await MakeRequestAsync<Order>($"{ApiClassPathInPlural}/{id}/open.json", HttpMethod.Post, ApiClassPath);
         }
 
         public virtual async Task<Order> CreateAsync(Order order, OrderCreateOption option)
@@ -50,13 +51,13 @@ namespace BizwebSharp
                 {ApiClassPath, body}
             };
 
-            return await MakeRequest<Order>($"{ApiClassPathInPlural}.json", HttpMethod.POST, ApiClassPath, root);
+            return await MakeRequestAsync<Order>($"{ApiClassPathInPlural}.json", HttpMethod.Post, ApiClassPath, root);
         }
 
         public virtual async Task CancelAsync(long id, OrderCancelOption option = null)
         {
             var root = option ?? new OrderCancelOption();
-            await MakeRequest($"{ApiClassPathInPlural}/{id}/cancel.json", HttpMethod.POST, ApiClassPath, root);
+            await MakeRequestAsync($"{ApiClassPathInPlural}/{id}/cancel.json", HttpMethod.Post, ApiClassPath, root);
         }
     }
 }

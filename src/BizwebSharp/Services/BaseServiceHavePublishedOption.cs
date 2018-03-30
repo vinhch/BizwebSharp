@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -35,7 +36,7 @@ namespace BizwebSharp
                 root[ApiClassPath] = body;
             }
 
-            return await MakeRequest<T>($"{ApiClassPathInPlural}.json", HttpMethod.POST, ApiClassPath, root);
+            return await MakeRequestAsync<T>($"{ApiClassPathInPlural}.json", HttpMethod.Post, ApiClassPath, root);
         }
 
         public virtual async Task<T> PublishAsync(long id, bool isPublish = true)
@@ -51,7 +52,7 @@ namespace BizwebSharp
                 {ApiClassPath, body}
             };
 
-            return await MakeRequest<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.PUT, ApiClassPath, root);
+            return await MakeRequestAsync<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Put, ApiClassPath, root);
         }
     }
 }

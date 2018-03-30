@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
-using RestSharp.Portable;
 
 namespace BizwebSharp.Infrastructure
 {
@@ -16,9 +15,9 @@ namespace BizwebSharp.Infrastructure
         ///     Converts the object to an array of RestSharp parameters.
         /// </summary>
         /// <returns>The array of RestSharp parameters.</returns>
-        public virtual IEnumerable<Parameter> ToParameters(ParameterType type)
+        public virtual IEnumerable<KeyValuePair<string, object>> ToParameters()
         {
-            var output = new List<Parameter>();
+            var output = new List<KeyValuePair<string, object>>();
 
             //Inspiration for this code from https://github.com/jaymedavis/stripe.net
             foreach (var property in GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
@@ -42,7 +41,7 @@ namespace BizwebSharp.Infrastructure
                     propName = attribute != null ? attribute.PropertyName : property.Name;
                 }
 
-                var parameter = ToSingleParameter(propName, value, property, type);
+                var parameter = ToSingleParameter(propName, value, property);
 
                 output.Add(parameter);
             }
@@ -52,7 +51,7 @@ namespace BizwebSharp.Infrastructure
 
         /// <summary>
         ///     Converts the given property and value to a parameter. Can be overriden to customize parameterization of a property.
-        ///     Will NOT be called by the <see cref="Parameterizable.ToParameters(ParameterType)" /> method if the value
+        ///     Will NOT be called by the <see cref="Parameterizable.ToParameters()" /> method if the value
         ///     is null.
         /// </summary>
         /// <param name="propName">
@@ -63,8 +62,7 @@ namespace BizwebSharp.Infrastructure
         /// <param name="property">The property itself.</param>
         /// <param name="type">The type of parameter to create.</param>
         /// <returns>The new parameter.</returns>
-        public virtual Parameter ToSingleParameter(string propName, object value, PropertyInfo property,
-            ParameterType type)
+        public virtual KeyValuePair<string, object> ToSingleParameter(string propName, object value, PropertyInfo property)
         {
             var valueType = value.GetType();
 
@@ -83,12 +81,7 @@ namespace BizwebSharp.Infrastructure
                 value = ((DateTimeOffset)value).ToString("o");
             }
 
-            return new Parameter
-            {
-                Name = propName,
-                Value = value,
-                Type = type
-            };
+            return new KeyValuePair<string, object>(propName, value);
         }
     }
 }

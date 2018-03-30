@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
-using RestSharp.Portable;
 
 namespace BizwebSharp.Infrastructure
 {
@@ -9,15 +9,16 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public class RetryExecutionPolicy : IRequestExecutionPolicy
     {
-        private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(500);
+        private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(3000);
 
-        public async Task<T> Run<T>(IRestClient client, ICustomRestRequest request,
+        public async Task<T> Run<T>(HttpClient client, BizwebRequestMessage baseReqMsg,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
             Start:
+            var reqMsg = baseReqMsg.Clone();
             try
             {
-                return (await executeRequestAsync(client)).Result;
+                return (await executeRequestAsync(client, reqMsg)).Result;
             }
             catch (ApiRateLimitException)
             {

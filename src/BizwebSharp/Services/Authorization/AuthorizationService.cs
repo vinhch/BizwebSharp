@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
-using RestSharp.Portable;
 
 namespace BizwebSharp
 {
@@ -29,7 +28,7 @@ namespace BizwebSharp
         /// <remarks>
         /// Source for this method: https://stackoverflow.com/a/22046389
         /// </remarks>
-        public static IDictionary<string, string> ParseRawQuerystring(string qs)
+        private static IDictionary<string, string> ParseRawQuerystring(string qs)
         {
             // Must use an absolute uri, else Uri.Query throws an InvalidOperationException
             var uri = new UriBuilder("http://localhost:3000")
@@ -137,10 +136,9 @@ namespace BizwebSharp
 
             //Check request timestamp span if need
             var isValidTimestamp = true;
-            double timestamp;
             if (!string.IsNullOrEmpty(timestampInString) &&
                 requestTimestampSpan != null &&
-                double.TryParse(timestampInString, out timestamp))
+                double.TryParse(timestampInString, out double timestamp))
             {
                 var currentTimestamp = DateTime.UtcNow.ToUnixTimestamp();
                 isValidTimestamp = currentTimestamp - timestamp < requestTimestampSpan;
@@ -235,15 +233,41 @@ namespace BizwebSharp
         public static async Task<string> AuthorizeAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
-            var client = RequestEngine.CreateClient(new BizwebAuthorizationState { ApiUrl = myApiUrl });
-            var req = RequestEngine.CreateRequest("oauth/access_token", Method.POST);
+            return (await AuthorizeWithResultAsync(code, myApiUrl, apiKey, apiSecretKey)).AccessToken;
+        }
+
+        public static async Task<OAuthResult> AuthorizeWithResultAsync(string code, string myApiUrl, string apiKey,
+            string apiSecretKey)
+        {
+            var authState = new BizwebAuthorizationState
+            {
+                ApiUrl = myApiUrl
+            };
 
             //Build request body
-            req.AddJsonBody(new { client_id = apiKey, client_secret = apiSecretKey, code });
+            var content = new JsonContent(new
+            {
+                client_id = apiKey,
+                client_secret = apiSecretKey,
+                code
+            });
 
-            var response = await RequestEngine.ExecuteRequestAsync(client, req, new DefaultRequestExecutionPolicy());
+            using (var reqMsg = RequestEngine.CreateRequest(authState, "oauth/access_token", HttpMethod.Post, content))
+            {
+                var response = await RequestEngine.ExecuteRequestAsync(reqMsg, new DefaultRequestExecutionPolicy());
 
-            return response.Value<string>("access_token");
+                var accessToken = response.Value<string>("access_token");
+
+                IEnumerable<string> scopes = null;
+                var scope = response.Value<string>("scope");
+                if (scope != null)
+                {
+                    scope = scope.Replace(" ", ","); // only for bizweb
+                    scopes = scope.Split(',');
+                }
+
+                return new OAuthResult(accessToken, scopes);
+            }
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -13,14 +14,14 @@ namespace BizwebSharp
 
         public virtual async Task<int> CountAsync(EventListOption option = null)
         {
-            return await MakeRequest<int>("events/count.json", HttpMethod.GET, "count", option);
+            return await MakeRequestAsync<int>("events/count.json", HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<Event>> ListAsync(EventListOption option = null)
         {
             return
                 await
-                    MakeRequest<List<Event>>("events.json", HttpMethod.GET, "events", option);
+                    MakeRequestAsync<List<Event>>("events.json", HttpMethod.Get, "events", option);
         }
 
         public virtual async Task<Event> GetAsync(long id, string fields = null)
@@ -31,7 +32,7 @@ namespace BizwebSharp
                 options = new { fields };
             }
 
-            return await MakeRequest<Event>($"events/{id}.json", HttpMethod.GET, "event", options);
+            return await MakeRequestAsync<Event>($"events/{id}.json", HttpMethod.Get, "event", options);
         }
 
         public virtual async Task<IEnumerable<Event>> ListAsync(string subjectType, long subjectId,
@@ -39,7 +40,7 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.GET, "events", option);
+                    MakeRequestAsync<List<Event>>($"{subjectType}/{subjectId}/events.json", HttpMethod.Get, "events", option);
         }
     }
 }

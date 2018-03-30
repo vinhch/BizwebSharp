@@ -8,6 +8,12 @@ namespace BizwebSharp
     public class Order : BaseEntityWithTimeline
     {
         /// <summary>
+        /// Unique identifier of the app who created the order.
+        /// </summary>
+        [JsonProperty("app_id")]
+        public long? AppId { get; set; }
+
+        /// <summary>
         /// The mailing address associated with the payment method. This address is an optional field that will not be available on orders that do not require one.
         /// </summary>
         [JsonProperty("billing_address")]
@@ -48,7 +54,7 @@ namespace BizwebSharp
         /// A <see cref="ClientDetails"/> object containing information about the client.
         /// </summary>
         [JsonProperty("client_details")]
-        public IEnumerable<ClientDetail> ClientDetails { get; set; }
+        public ClientDetail ClientDetails { get; set; }
 
         /// <summary>
         /// The date and time when the order was closed. If the order was not clsoed, this value is null.
@@ -63,7 +69,7 @@ namespace BizwebSharp
         public string Currency { get; set; }
 
         /// <summary>
-        /// A <see cref="Entities.Customer"/> object containing information about the customer. This value may be null if the order was created through Shopify POS.
+        /// A <see cref="Customer"/> object containing information about the customer. This value may be null if the order was created through Shopify POS.
         /// </summary>
         [JsonProperty("customer")]
         public Customer Customer { get; set; }

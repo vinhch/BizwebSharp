@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 
 namespace BizwebSharp
@@ -17,12 +18,12 @@ namespace BizwebSharp
                 option = new { fields };
             }
 
-            return await MakeRequest<Store>("store.json", HttpMethod.GET, "store", option);
+            return await MakeRequestAsync<Store>("store.json", HttpMethod.Get, "store", option);
         }
 
         public virtual async Task UninstallAppAsync()
         {
-            await MakeRequest("api_permissions/current.json", HttpMethod.DELETE);
+            await MakeRequestAsync("api_permissions/current.json", HttpMethod.Delete);
         }
     }
 }

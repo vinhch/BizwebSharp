@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using BizwebSharp.Options;
@@ -15,9 +16,9 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<int>(
+                    MakeRequestAsync<int>(
                         $"{resourceType}/{resourceId}/{ApiClassPathInPlural}/count.json",
-                        HttpMethod.GET, "count", option);
+                        HttpMethod.Get, "count", option);
         }
 
         public virtual async Task<IEnumerable<MetaField>> ListAsync(long resourceId, string resourceType,
@@ -25,8 +26,8 @@ namespace BizwebSharp
         {
             return
                 await
-                    MakeRequest<List<MetaField>>($"{resourceType}/{resourceId}/{ApiClassPathInPlural}.json",
-                        HttpMethod.GET, ApiClassPathInPlural, option);
+                    MakeRequestAsync<List<MetaField>>($"{resourceType}/{resourceId}/{ApiClassPathInPlural}.json",
+                        HttpMethod.Get, ApiClassPathInPlural, option);
         }
 
         public virtual async Task<MetaField> CreateAsync(long resourceId, string resourceType, MetaField inputObject)
@@ -38,7 +39,7 @@ namespace BizwebSharp
 
             return
                 await
-                    MakeRequest<MetaField>($"{resourceType}/{resourceId}/{ApiClassPathInPlural}.json", HttpMethod.POST,
+                    MakeRequestAsync<MetaField>($"{resourceType}/{resourceId}/{ApiClassPathInPlural}.json", HttpMethod.Post,
                         ApiClassPath, root);
         }
     }
