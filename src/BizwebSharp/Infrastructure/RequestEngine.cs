@@ -61,6 +61,8 @@ namespace BizwebSharp.Infrastructure
                 msg.Headers.Add("Cache-Control", "no-cache");
             }
 
+            msg.Headers.Add("Accept", "application/json");
+
             return msg;
         }
 
@@ -139,16 +141,16 @@ namespace BizwebSharp.Infrastructure
             return requestInfo;
         }
 
-        private static Dictionary<string, IEnumerable<string>> ParseErrorJson(string json)
+        private static Dictionary<string, IEnumerable<string>> ParseErrorJson(string inputStr)
         {
-            if (string.IsNullOrEmpty(json))
+            if (string.IsNullOrEmpty(inputStr))
                 return null;
 
             var errors = new Dictionary<string, IEnumerable<string>>();
 
             try
             {
-                var parsed = JToken.Parse(string.IsNullOrEmpty(json) ? "{}" : json);
+                var parsed = JToken.Parse(string.IsNullOrEmpty(inputStr) ? "{}" : inputStr);
 
                 // Errors can be any of the following:
                 // 1. { errors: "some error message"}
@@ -196,7 +198,7 @@ namespace BizwebSharp.Infrastructure
             }
             catch (Exception e)
             {
-                errors[e.Message] = new List<string> { json };
+                errors[e.Message] = new List<string> { inputStr };
             }
 
             // KVPs are structs and can never be null. Instead, check if the first error equals the default kvp value.

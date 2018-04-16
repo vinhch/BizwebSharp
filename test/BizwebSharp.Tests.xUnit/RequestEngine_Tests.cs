@@ -8,7 +8,7 @@ using Xunit;
 namespace BizwebSharp.Tests.xUnit
 {
     [Trait("Category", "RequestEngine")]
-    public class RequestEngineTests : IDisposable
+    public class RequestEngine_Tests : IDisposable
     {
         //private readonly IRestResponse _errorResponse;
         //private readonly IRestResponse _apiRateLimitResponse;
@@ -16,7 +16,7 @@ namespace BizwebSharp.Tests.xUnit
         private readonly HttpResponseMessage _apiRateLimitResponse;
 
         //Setup
-        public RequestEngineTests()
+        public RequestEngine_Tests()
         {
             //var req = new Moq.Mock<IRestResponse>();
             //req.Setup(r => r.StatusCode).Returns(System.Net.HttpStatusCode.InternalServerError);

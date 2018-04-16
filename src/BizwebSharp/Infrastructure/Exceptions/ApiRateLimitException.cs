@@ -15,8 +15,8 @@ namespace BizwebSharp.Infrastructure
         }
 
         public ApiRateLimitException(HttpStatusCode httpStatusCode, Dictionary<string, IEnumerable<string>> errors,
-            string message, string jsonError, RequestSimpleInfo requestInfo = null)
-            : base(httpStatusCode, errors, message, jsonError, requestInfo)
+            string message, string rawBody, RequestSimpleInfo requestInfo = null)
+            : base(httpStatusCode, errors, message, rawBody, requestInfo)
         {
         }
     }
