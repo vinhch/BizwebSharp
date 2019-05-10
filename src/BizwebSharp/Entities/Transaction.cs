@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb Transaction.
+    /// </summary>
     public class Transaction : BaseEntityWithTimeline
     {
         /// <summary>
@@ -31,7 +34,7 @@ namespace BizwebSharp
         public string Gateway { get; set; }
 
         /// <summary>
-        /// The origin of the transaction. This is set by Shopify and cannot be overridden. Example values include: 'web', 'pos', 'iphone', 'android'.
+        /// The origin of the transaction. This is set by Bizweb and cannot be overridden. Example values include: 'web', 'pos', 'iphone', 'android'.
         /// </summary>
         [JsonProperty("source_name")]
         public string SourceName { get; private set; }
@@ -56,7 +59,7 @@ namespace BizwebSharp
         public long? OrderId { get; set; }
 
         /// <summary>
-        /// Shopify does not currently offer documentation for this object.
+        /// Bizweb does not currently offer documentation for this object.
         /// </summary>
         [JsonProperty("receipt")]
         public object Receipt { get; set; }

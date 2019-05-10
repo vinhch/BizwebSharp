@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb fulfillment.
+    /// </summary>
     public class Fulfillment : BaseEntityWithTimeline
     {
         [JsonProperty("variant_inventory_management")]

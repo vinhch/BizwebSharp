@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb Webhook.
+    /// </summary>
     public class Webhook : BaseEntityWithTimeline
     {
         /// <summary>

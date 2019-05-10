@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb Theme.
+    /// </summary>
     public class Theme : BaseEntityWithTimeline
     {
         /// <summary>

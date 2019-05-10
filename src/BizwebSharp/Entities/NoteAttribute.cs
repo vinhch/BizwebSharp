@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb note attribute.
+    /// </summary>
     public class NoteAttribute
     {
         /// <summary>

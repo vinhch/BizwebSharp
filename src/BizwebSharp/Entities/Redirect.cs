@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb redirect.
+    /// </summary>
     public class Redirect : BaseEntity
     {
         /// <summary>

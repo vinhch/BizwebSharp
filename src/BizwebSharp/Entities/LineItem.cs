@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb line item.
+    /// </summary>
     public class LineItem : BaseEntity
     {
         /// <summary>
@@ -32,7 +35,7 @@ namespace BizwebSharp
         /// <summary>
         /// The price of the item before discounts have been applied.
         /// </summary>
-        /// <remarks>Shopify returns this value as a string.</remarks>
+        /// <remarks>Bizweb returns this value as a string.</remarks>
         [JsonProperty("price")]
         public decimal? Price { get; set; }
 

@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb lineitem property.
+    /// </summary>
     public class LineItemProperty
     {
         /// <summary>

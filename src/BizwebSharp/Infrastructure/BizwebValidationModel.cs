@@ -9,16 +9,16 @@
         public string State { get; set; }
         public string Error { get; set; }
 
-        public bool ValidateRequest(string sapoSecretKey, double? requestTimestampSpan = null)
+        public bool ValidateRequest(string secretKey, double? requestTimestampSpan = null)
         {
             var kvpInString = !string.IsNullOrEmpty(Code)
                 ? $"code={Code}&store={Store}"
                 : $"store={Store}";
 
             if (string.IsNullOrEmpty(Timestamp))
-                kvpInString += string.Format("&timestamp={0}", Timestamp);
+                kvpInString += $"&timestamp={Timestamp}";
 
-            return AuthorizationService.ValidateRequest(Hmac, kvpInString, sapoSecretKey, Timestamp,
+            return AuthorizationService.ValidateRequest(Hmac, kvpInString, secretKey, Timestamp,
                 requestTimestampSpan);
         }
     }

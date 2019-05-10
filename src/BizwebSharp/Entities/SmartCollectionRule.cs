@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb SmartCollectionRule.
+    /// </summary>
     public class SmartCollectionRule : BaseEntity
     {
         /// <summary>

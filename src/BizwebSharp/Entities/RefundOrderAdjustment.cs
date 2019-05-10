@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb RefundOrderAdjustment.
+    /// </summary>
     public class RefundOrderAdjustment : BaseEntity
     {
         /// <summary>

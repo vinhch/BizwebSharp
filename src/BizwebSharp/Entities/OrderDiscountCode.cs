@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb order's discount code.
+    /// </summary>
     public class OrderDiscountCode
     {
         /// <summary>

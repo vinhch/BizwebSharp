@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb event.
+    /// </summary>
     public class Event : BaseEntityWithTimeline
     {
         /// <summary>

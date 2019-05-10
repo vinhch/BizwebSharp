@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb RefundLineItem.
+    /// </summary>
     public class RefundLineItem : BaseEntity
     {
         /// <summary>

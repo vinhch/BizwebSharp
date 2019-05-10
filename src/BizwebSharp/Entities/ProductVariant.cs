@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb ProductVariant.
+    /// </summary>
     public class ProductVariant : BaseEntityWithTimeline
     {
         /// <summary>
@@ -51,8 +54,8 @@ namespace BizwebSharp
         public string FulfillmentService { get; set; }
 
         /// <summary>
-        ///     Specifies whether or not Shopify tracks the number of items in stock for this product variant. Known values are
-        ///     'blank' and 'shopify'.
+        ///     Specifies whether or not Bizweb tracks the number of items in stock for this product variant. Known values are
+        ///     'blank' and 'bizweb'.
         /// </summary>
         [JsonProperty("inventory_management")]
         public string InventoryManagement { get; set; }

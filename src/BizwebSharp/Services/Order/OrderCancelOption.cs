@@ -5,7 +5,7 @@ namespace BizwebSharp
     public class OrderCancelOption
     {
         /// <summary>
-        /// Amount to refund (decimal ex: 21.20).
+        /// Amount to refund (decimal e.g. 21.20).
         /// If set, Shopify will attempt to void/refund the payment depending on the status.
         /// </summary>
         [JsonProperty("amount")]

@@ -8,6 +8,9 @@ using Newtonsoft.Json.Linq;
 
 namespace BizwebSharp.Infrastructure
 {
+    /// <summary>
+    /// The Request engine - to ingest requests.
+    /// </summary>
     public static class RequestEngine
     {
         //HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
@@ -20,6 +23,13 @@ namespace BizwebSharp.Infrastructure
             return $"{path}?{string.Join("&", query)}";
         }
 
+        /// <summary>
+        /// Attempts to build a shop API <see cref="Uri"/> for the given shop.
+        /// Will throw a <see cref="BizwebSharpException"/> if the URL cannot be formatted.
+        /// </summary>
+        /// <param name="myApiUrl">The shop's *.bizwebvietnam.net URL.</param>
+        /// <exception cref="BizwebSharpException">Thrown if the given URL cannot be converted into a well-formed URI.</exception>
+        /// <returns>The shop's API <see cref="Uri"/>.</returns>
         public static Uri BuildUri(string myApiUrl, bool usingHttps = true, bool withAdminPath = true)
         {
             //var protocolScheme = usingHttps ? Uri.UriSchemeHttps : Uri.UriSchemeHttp;
@@ -48,6 +58,15 @@ namespace BizwebSharp.Infrastructure
             return builder.Uri;
         }
 
+        /// <summary>
+        /// Creates an <see cref="BizwebRequestMessage"/> by setting the method and the necessary authenticate information.
+        /// </summary>
+        /// <param name="authState">The Bizweb authenticate state.</param>
+        /// <param name="pathAndQuery">The request's path.</param>
+        /// <param name="method">The <see cref="HttpMethod"/> to use for the request.</param>
+        /// <param name="content">The <see cref="HttpContent"/> to use for the request.</param>
+        /// <param name="rootElement">The root element to deserialize. Default is null.</param>
+        /// <returns>The prepared <see cref="BizwebRequestMessage"/>.</returns>
         public static BizwebRequestMessage CreateRequest(BizwebAuthorizationState authState, string pathAndQuery,
             HttpMethod method, HttpContent content = null, string rootElement = null)
         {
@@ -66,30 +85,36 @@ namespace BizwebSharp.Infrastructure
             return msg;
         }
 
-        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage resMsg, RequestSimpleInfo requestInfo = null)
+        /// <summary>
+        /// Checks a response for exceptions or invalid status codes. Throws an exception when necessary.
+        /// </summary>
+        /// <param name="response">The response.</param>
+        /// <param name="requestInfo">An simple request info.</param>
+        /// <returns></returns>
+        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response, RequestSimpleInfo requestInfo = null)
         {
-            var statusCode = (int)resMsg.StatusCode;
+            var statusCode = (int)response.StatusCode;
             if (statusCode >= 200 && statusCode < 300)
             {
                 return;
             }
 
             string rawResponse = null;
-            if (resMsg.Content != null)
+            if (response.Content != null)
             {
-                rawResponse = await resMsg.Content.ReadAsStringAsync();
+                rawResponse = await response.Content.ReadAsStringAsync();
             }
 
             var errors = ParseErrorJson(rawResponse);
 
-            var message = $"Response did not indicate success. Status: {statusCode} {resMsg.ReasonPhrase}.";
+            var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}.";
 
             if (errors == null)
             {
                 errors = new Dictionary<string, IEnumerable<string>>
                 {
                     {
-                        $"{statusCode} {resMsg.ReasonPhrase}",
+                        $"{statusCode} {response.ReasonPhrase}",
                         new[] {message}
                     }
                 };
@@ -104,10 +129,10 @@ namespace BizwebSharp.Infrastructure
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if (statusCode == 429 /* Too many requests */)
             {
-                throw new ApiRateLimitException(resMsg.StatusCode, errors, message, rawResponse, requestInfo);
+                throw new ApiRateLimitException(response.StatusCode, errors, message, rawResponse, requestInfo);
             }
 
-            throw new BizwebSharpException(resMsg.StatusCode, errors, message, rawResponse, requestInfo);
+            throw new BizwebSharpException(response.StatusCode, errors, message, rawResponse, requestInfo);
 
             //if (response.ErrorException != null)
             //{
@@ -141,6 +166,10 @@ namespace BizwebSharp.Infrastructure
             return requestInfo;
         }
 
+        /// <summary>
+        /// Parses a JSON string for Bizweb API errors.
+        /// </summary>
+        /// <returns>Returns null if the JSON could not be parsed into an error.</returns>
         private static Dictionary<string, IEnumerable<string>> ParseErrorJson(string inputStr)
         {
             if (string.IsNullOrEmpty(inputStr))
@@ -208,6 +237,9 @@ namespace BizwebSharp.Infrastructure
             return errors;
         }
 
+        /// <summary>
+        /// Executes a request and returns the raw result string. Throws an exception when the response is invalid.
+        /// </summary>
         public static async Task<string> ExecuteRequestToStringAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
@@ -231,11 +263,17 @@ namespace BizwebSharp.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Executes a request and returns the raw result string. Throws an exception when the response is invalid.
+        /// </summary>
         public static async Task<string> ExecuteRequestToStringAsync(BizwebRequestMessage requestMsg)
         {
             return await ExecuteRequestToStringAsync(requestMsg, DefaultRequestExecutionPolicy.Default);
         }
 
+        /// <summary>
+        /// Executes a request and returns the JToken result. Throws an exception when the response is invalid.
+        /// </summary>
         public static async Task<JToken> ExecuteRequestAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
@@ -243,11 +281,18 @@ namespace BizwebSharp.Infrastructure
             return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
         }
 
+        /// <summary>
+        /// Executes a request and returns the JToken result. Throws an exception when the response is invalid.
+        /// </summary>
         public static async Task<JToken> ExecuteRequestAsync(BizwebRequestMessage requestMsg)
         {
             return await ExecuteRequestAsync(requestMsg, DefaultRequestExecutionPolicy.Default);
         }
 
+        /// <summary>
+        /// Executes a request and returns the given type. Throws an exception when the response is invalid.
+        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
+        /// </summary>
         public static async Task<T> ExecuteRequestAsync<T>(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
             where T : new()
@@ -275,6 +320,10 @@ namespace BizwebSharp.Infrastructure
             });
         }
 
+        /// <summary>
+        /// Executes a request and returns the given type. Throws an exception when the response is invalid.
+        /// Use this method when the expected response is a single line or simple object that doesn't warrant its own class.
+        /// </summary>
         public static async Task<T> ExecuteRequestAsync<T>(BizwebRequestMessage requestMsg)
             where T : new()
         {

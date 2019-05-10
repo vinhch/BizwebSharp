@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb customer.
+    /// </summary>
     public class Customer : BaseEntityWithTimeline
     {
         /// <summary>
@@ -37,7 +40,7 @@ namespace BizwebSharp
 
         /// <summary>
         /// Additional metadata about the customer. Note: This should only be used when creating or updating a <see cref="Customer"/>, as
-        /// Shopify will never return <see cref="Customer"/> metafields. Instead, you need to query metafields with <see cref="ShopifyMetafieldService"/>.
+        /// Bizweb will never return <see cref="Customer"/> metafields. Instead, you need to query metafields with <see cref="MetaFieldService"/>.
         /// </summary>
         [JsonProperty("metafields")]
         public IEnumerable<MetaField> Metafields { get; set; }
@@ -116,7 +119,7 @@ namespace BizwebSharp
         /// <summary>
         /// The total amount of money that the customer has spent at the shop.
         /// </summary>
-        /// <remarks>The Shopify API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
+        /// <remarks>The Bizweb API actually returns this value as a string, but Json.Net can automatically convert to decimal.</remarks>
         [JsonProperty("total_spent")]
         public decimal? TotalSpent { get; set; }
 
