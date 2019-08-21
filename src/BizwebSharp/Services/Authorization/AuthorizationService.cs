@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -11,6 +10,9 @@ using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
+#if (NET45)
+using System.Collections.Specialized;
+#endif
 
 namespace BizwebSharp
 {
@@ -398,6 +400,7 @@ namespace BizwebSharp
             }
         }
 
+#if (NET45)
         #region method with NameValueCollection for .Net Framework
         /// <summary>
         /// Determines if an incoming request is authentic.
@@ -447,5 +450,6 @@ namespace BizwebSharp
             return IsAuthenticWebhook(requestHeaders.ToPairs2(), requestBody, apiSecretKey);
         }
         #endregion
+#endif
     }
 }
