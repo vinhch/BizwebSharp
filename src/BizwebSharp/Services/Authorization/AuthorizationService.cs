@@ -68,7 +68,7 @@ namespace BizwebSharp
 
                 queryDictionary[EncodeQuery(key, true)] = EncodeQuery(value, false);
             }
-            var kvps = queryDictionary.OrderBy(kvp => kvp.Key)
+            var kvps = queryDictionary.OrderBy(kvp => kvp.Key, StringComparer.Ordinal)
                 .Select(kvp => $"{kvp.Key}={kvp.Value}");
 
             return string.Join(joinWith, kvps);
@@ -121,6 +121,15 @@ namespace BizwebSharp
             return IsAuthenticRequest(ParseRawQuerystring(querystring), apiSecretKey);
         }
 
+        /// <summary>
+        /// Determines if a request content is validation with it's signature and app's secret key.
+        /// </summary>
+        /// <param name="signature">The content signature.</param>
+        /// <param name="contentToCheck">The request content.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <param name="timestampInString">The request's timestamp</param>
+        /// <param name="requestTimestampSpan">A valid time period (span) for timestamp.</param>
+        /// <returns></returns>
         public static bool ValidateRequest(string signature, string contentToCheck, string apiSecretKey,
             string timestampInString = null, double? requestTimestampSpan = null)
         {
@@ -354,7 +363,7 @@ namespace BizwebSharp
                 {
                     var response = await client.SendAsync(msg);
 
-                    return response.Headers.Any(h => h.Key == "X-StoreId");
+                    return response.Headers.Any(h => h.Key.Equals("X-StoreId", StringComparison.OrdinalIgnoreCase));
                 }
                 catch (HttpRequestException)
                 {
