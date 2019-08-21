@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace BizwebSharp
 {
     /// <summary>
-    ///     An entity representing a Shopify product.
+    ///     An entity representing a Bizweb product.
     /// </summary>
     public class Product : BaseEntityCanPublishable
     {

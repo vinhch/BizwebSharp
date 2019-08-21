@@ -6,7 +6,7 @@ namespace BizwebSharp.Infrastructure
     public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(HttpClient client, BizwebRequestMessage reqMsg);
 
     /// <summary>
-    ///     Used to specify centralized logic that should run when executing shopify requests.
+    ///     Used to specify centralized logic that should run when executing bizweb requests.
     ///     It is most useful to implement retry logic, but it can also be used for other concerns (i.e. tracing)
     /// </summary>
     public interface IRequestExecutionPolicy

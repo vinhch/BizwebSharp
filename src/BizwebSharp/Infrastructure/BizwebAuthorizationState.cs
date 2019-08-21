@@ -3,16 +3,25 @@ using System.Linq;
 
 namespace BizwebSharp.Infrastructure
 {
+    /// <summary>
+    /// The class that contain Bizweb authorization data that need to connect to Bizweb API.
+    /// </summary>
     public class BizwebAuthorizationState
     {
         private string _apiUrl;
 
+        /// <summary>
+        /// The base store alias
+        /// </summary>
         public string Alias
         {
             get { return GetBizwebAliasFromApiUrl(ApiUrl); }
             set { ApiUrl = value == null ? null : value + ApiConst.BIZWEB_API_DOMAIN; }
         }
 
+        /// <summary>
+        /// The base store's *.bizwebvietnam.net URL.
+        /// </summary>
         public string ApiUrl
         {
             get { return _apiUrl; }
@@ -24,9 +33,10 @@ namespace BizwebSharp.Infrastructure
             }
         }
 
+        /// <summary>
+        /// The bizweb store access token. The token will be set as a default X-Bizweb-Access-Token for every request.
+        /// </summary>
         public string AccessToken { get; set; }
-
-        public bool IsValidation { get; set; }
 
         private static string GetBizwebAliasFromApiUrl(string apiUrl)
         {

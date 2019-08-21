@@ -7,8 +7,17 @@ using Newtonsoft.Json.Linq;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// Base class for Bizweb API services.
+    /// All Bizweb API services should inherit from this class so that we can
+    /// apply share base request method, authorization state and execution policy ...
+    /// </summary>
     public abstract class BaseService
     {
+        /// <summary>
+        /// Creates a new instance of BizwebService.
+        /// </summary>
+        /// <param name="authState">The object contain Bizweb authorization data.</param>
         protected BaseService(BizwebAuthorizationState authState)
         {
             _AuthState = authState;
@@ -16,6 +25,9 @@ namespace BizwebSharp
 
         protected BizwebAuthorizationState _AuthState { get; }
 
+        /// <summary>
+        /// The execution policy for service
+        /// </summary>
         public IRequestExecutionPolicy ExecutionPolicy { get; set; } = DefaultRequestExecutionPolicy.Default;
 
         private static BizwebRequestMessage CreateRequestMessage(BizwebAuthorizationState authState, string path,

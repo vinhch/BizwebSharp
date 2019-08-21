@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb order.
+    /// </summary>
     public class Order : BaseEntityWithTimeline
     {
         /// <summary>
@@ -69,7 +72,7 @@ namespace BizwebSharp
         public string Currency { get; set; }
 
         /// <summary>
-        /// A <see cref="Customer"/> object containing information about the customer. This value may be null if the order was created through Shopify POS.
+        /// A <see cref="BizwebSharp.Customer"/> object containing information about the customer. This value may be null if the order was created through Bizweb POS.
         /// </summary>
         [JsonProperty("customer")]
         public Customer Customer { get; set; }

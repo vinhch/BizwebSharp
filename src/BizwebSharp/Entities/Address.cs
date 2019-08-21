@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb customer address or order address.
+    /// </summary>
     public class Address : BaseEntityWithTimeline
     {
         /// <summary>

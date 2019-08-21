@@ -16,33 +16,31 @@ namespace BizwebSharp.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue,
             JsonSerializer serializer)
         {
-            T parsed;
-
-            if (!Enum.TryParse(reader.Value?.ToString() ?? "", true, out parsed))
+            if (Enum.TryParse(reader.Value?.ToString() ?? "", true, out T parsed))
             {
-                // Some EnumMember values have an '_', '-' or '/' in their value and will fail the TryParse or IsDefined checks.
-                // Use reflection to pull all of the enums values, get their EnumMember value and check if there's a match.
-
-                var enumType = typeof(T);
-                var enumVals = Enum.GetValues(enumType);
-
-                foreach (var enumVal in enumVals)
-                {
-                    var valInfo = enumType.GetMember(enumVal.ToString());
-                    var enumMember = valInfo[0].GetCustomAttributes(typeof(EnumMemberAttribute), false);
-
-                    if (!enumMember.Any())
-                        continue;
-
-                    if (((EnumMemberAttribute) enumMember.First()).Value == reader.Value?.ToString())
-                        return (T) enumVal;
-                }
-
-                //No match found. Return null.
-                return null;
+                return parsed;
             }
 
-            return parsed;
+            // Some EnumMember values have an '_', '-' or '/' in their value and will fail the TryParse or IsDefined checks.
+            // Use reflection to pull all of the enums values, get their EnumMember value and check if there's a match.
+
+            var enumType = typeof(T);
+            var enumVals = Enum.GetValues(enumType);
+
+            foreach (var enumVal in enumVals)
+            {
+                var valInfo = enumType.GetMember(enumVal.ToString());
+                var enumMember = valInfo[0].GetCustomAttributes(typeof(EnumMemberAttribute), false);
+
+                if (!enumMember.Any())
+                    continue;
+
+                if (((EnumMemberAttribute) enumMember.First()).Value == reader.Value?.ToString())
+                    return (T) enumVal;
+            }
+
+            //No match found. Return null.
+            return null;
         }
     }
 }

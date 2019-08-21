@@ -148,6 +148,14 @@ namespace BizwebSharp
             return isValidSignature && isValidTimestamp;
         }
 
+        /// <summary>
+        /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
+        /// except that proxy requests use HMACSHA256 rather than MD5.
+        /// </summary>
+        /// <param name="querystring">The collection of querystring parameters from the request.
+        /// Hint: use Request.QueryString if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
         public static bool IsAuthenticProxyRequest(IEnumerable<KeyValuePair<string, StringValues>> querystring, string apiSecretKey)
         {
             var signature = querystring.FirstOrDefault(kvp => kvp.Key.ToLower() == "signature").Value;
@@ -163,6 +171,14 @@ namespace BizwebSharp
             return ValidateRequest(signature, kvps, apiSecretKey);
         }
 
+        /// <summary>
+        /// Determines if an incoming webhook request is authentic.
+        /// </summary>
+        /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="inputStream">The request's input stream. This method does NOT dispose the stream.
+        /// Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static async Task<bool> IsAuthenticWebhookAsync(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders,
             Stream inputStream, string apiSecretKey)
         {
@@ -181,6 +197,13 @@ namespace BizwebSharp
             return IsAuthenticWebhook(requestHeaders, requestBody, apiSecretKey);
         }
 
+        /// <summary>
+        /// Determines if an incoming webhook request is authentic.
+        /// </summary>
+        /// <param name="requestHeaders">The request's headers. Hint: use Request.Headers if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="requestBody">The body of the request.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static bool IsAuthenticWebhook(IEnumerable<KeyValuePair<string, StringValues>> requestHeaders, string requestBody,
             string apiSecretKey)
         {
@@ -198,6 +221,18 @@ namespace BizwebSharp
             return ValidateRequest(hmacHeader, requestBody, apiSecretKey);
         }
 
+        /// <summary>
+        /// Builds an authorization URL for OAuth integration.
+        /// </summary>
+        /// <param name="scopes">An array of <see cref="AuthorizationScope"/> — the permissions that your app needs to run.</param>
+        /// <param name="myApiUrl">The shop's *.bizwebvietnam.net URL.</param>
+        /// <param name="apiKey">Your app's public API key.</param>
+        /// <param name="redirectUri">URL to redirect the user to after integration.</param>
+        /// <param name="state">
+        /// An optional, random string value provided by your application which is unique for each authorization request.
+        /// During the OAuth callback phase, your application should check that this value matches the one you provided to this method.
+        /// </param>
+        /// <returns>The authorization url.</returns>
         public static Uri BuildAuthorizationUrl(IEnumerable<AuthorizationScope> scopes, string myApiUrl,
             string apiKey, string redirectUri, string state = null)
         {
@@ -205,6 +240,19 @@ namespace BizwebSharp
                 apiKey, redirectUri, state);
         }
 
+        /// <summary>
+        /// Builds an authorization URL for OAuth integration.
+        /// </summary>
+        /// <param name="scopes">A permission strings, separated by comma, e.g. 'read_orders,write_script_tags'.
+        /// These are the permissions that your app needs to run.</param>
+        /// <param name="myApiUrl">The shop's *.bizwebvietnam.net URL.</param>
+        /// <param name="apiKey">Your app's public API key.</param>
+        /// <param name="redirectUri">URL to redirect the user to after integration.</param>
+        /// <param name="state">
+        /// An optional, random string value provided by your application which is unique for each authorization request.
+        /// During the OAuth callback phase, your application should check that this value matches the one you provided to this method.
+        /// </param>
+        /// <returns>The authorization url.</returns>
         public static Uri BuildAuthorizationUrl(string scopes, string myApiUrl,
             string apiKey, string redirectUri, string state = null)
         {
@@ -230,12 +278,28 @@ namespace BizwebSharp
             return builder.Uri;
         }
 
+        /// <summary>
+        /// Authorizes an application installation, generating an access token for the given shop.
+        /// </summary>
+        /// <param name="code">The authorization code generated by Shopify, which should be a parameter named 'code' on the request querystring.</param>
+        /// <param name="myApiUrl">The store's *.myshopify.com URL, which should be a paramter named 'shop' on the request querystring.</param>
+        /// <param name="apiKey">Your app's public API key.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>The shop access token.</returns>
         public static async Task<string> AuthorizeAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
             return (await AuthorizeWithResultAsync(code, myApiUrl, apiKey, apiSecretKey)).AccessToken;
         }
 
+        /// <summary>
+        /// Authorizes an application installation, generating an access token for the given shop.
+        /// </summary>
+        /// <param name="code">The authorization code generated by Bizweb OAuth, which should be a parameter named 'code' on the request querystring.</param>
+        /// <param name="myApiUrl">The store's *.bizwebvietnam.net URL, which should be a paramter named 'shop' on the request querystring.</param>
+        /// <param name="apiKey">Your app's public API key.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>The <see cref="OAuthResult"/> that's contain access token.</returns>
         public static async Task<OAuthResult> AuthorizeWithResultAsync(string code, string myApiUrl, string apiKey,
             string apiSecretKey)
         {
@@ -300,7 +364,6 @@ namespace BizwebSharp
         }
 
         #region method with NameValueCollection for .Net Framework
-
         /// <summary>
         /// Determines if an incoming request is authentic.
         /// </summary>
@@ -310,17 +373,39 @@ namespace BizwebSharp
             return IsAuthenticRequest(querystring.ToPairs2(), apiSecretKey, requestTimestampSpan);
         }
 
+        /// <summary>
+        /// Determines if an incoming proxy page request is authentic. Conceptually similar to <see cref="IsAuthenticRequest(NameValueCollection, string)"/>,
+        /// except that proxy requests use HMACSHA256 rather than MD5.
+        /// </summary>
+        /// <param name="querystring">A NameValueCollection containing the keys and values from the request's querystring.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the request is authentic or not.</returns>
         public static bool IsAuthenticProxyRequest(NameValueCollection querystring, string apiSecretKey)
         {
             return IsAuthenticProxyRequest(querystring.ToPairs2(), apiSecretKey);
         }
 
+        /// <summary>
+        /// Determines if an incoming webhook request is authentic.
+        /// </summary>
+        /// <param name="requestHeaders">A NameValueCollection containing the keys and values from the request's headers.</param>
+        /// <param name="inputStream">The request's input stream. This method does NOT dispose the stream.
+        /// Hint: use Request.InputStream if you're calling this from an ASP.NET MVC controller.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static async Task<bool> IsAuthenticWebhookAsync(NameValueCollection requestHeaders, Stream inputStream,
             string apiSecretKey)
         {
             return await IsAuthenticWebhookAsync(requestHeaders.ToPairs2(), inputStream, apiSecretKey);
         }
 
+        /// <summary>
+        /// Determines if an incoming webhook request is authentic.
+        /// </summary>
+        /// <param name="requestHeaders">A NameValueCollection containing the keys and values from the request's headers.</param>
+        /// <param name="requestBody">The body of the request.</param>
+        /// <param name="apiSecretKey">Your app's secret key.</param>
+        /// <returns>A boolean indicating whether the webhook is authentic or not.</returns>
         public static bool IsAuthenticWebhook(NameValueCollection requestHeaders, string requestBody,
             string apiSecretKey)
         {

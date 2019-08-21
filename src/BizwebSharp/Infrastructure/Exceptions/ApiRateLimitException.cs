@@ -4,6 +4,9 @@ using System.Net;
 
 namespace BizwebSharp.Infrastructure
 {
+    /// <summary>
+    /// An exception thrown when an API call has reached Bizweb's rate limit.
+    /// </summary>
     public class ApiRateLimitException : BizwebSharpException
     {
         public ApiRateLimitException(string message) : base(message)

@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb PaymentDetail.
+    /// </summary>
     public class PaymentDetail
     {
         [JsonProperty("avs_result_code")]

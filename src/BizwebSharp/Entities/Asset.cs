@@ -2,6 +2,10 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb asset.
+    /// Assets do not have ids, but rather keys, and are associated with specific themes.
+    /// </summary>
     public class Asset : BaseEntityWithTimeline
     {
         [JsonProperty("base64")]

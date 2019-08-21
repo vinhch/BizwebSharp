@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb discount.
+    /// </summary>
     public class Discount : BaseEntityWithTimeline
     {
         /// <summary>

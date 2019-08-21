@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace BizwebSharp
 {
     /// <summary>
-    ///     An object representing a product image.
+    ///     The class representing a product image.
     /// </summary>
     public class ProductImage : BaseEntityWithTimeline
     {

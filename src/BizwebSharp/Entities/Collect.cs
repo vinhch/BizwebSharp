@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb collect.
+    /// </summary>
     public class Collect : BaseEntityWithTimeline
     {
         /// <summary>

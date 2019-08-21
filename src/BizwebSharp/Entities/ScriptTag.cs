@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb ScriptTag.
+    /// </summary>
     public class ScriptTag : BaseEntityWithTimeline
     {
         ///// <summary>

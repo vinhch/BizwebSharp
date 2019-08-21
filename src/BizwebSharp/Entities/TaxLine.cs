@@ -2,6 +2,9 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb TaxLine.
+    /// </summary>
     public class TaxLine
     {
         /// <summary>

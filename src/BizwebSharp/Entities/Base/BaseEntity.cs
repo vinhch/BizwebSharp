@@ -2,6 +2,11 @@
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// Base class for Bizweb entities.
+    /// All Bizweb entities should inherit from this class so that we can
+    /// apply share properties and methods like Id...
+    /// </summary>
     public abstract class BaseEntity
     {
         /// <summary>

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BizwebSharp.Infrastructure
 {
     /// <summary>
-    /// A retry policy that attemps to pro-actively limit the number of requests that will result in a ShopifyRateLimitException
+    /// A retry policy that attemps to pro-actively limit the number of requests that will result in a ApiRateLimitException
     /// by implementing the leaky bucket algorithm.
     /// For example: if 100 requests are created in parallel, only 40 should be immediately sent, and the subsequent 60 requests
     /// should be throttled at 1 per 500ms.

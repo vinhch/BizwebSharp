@@ -3,6 +3,9 @@ using Newtonsoft.Json;
 
 namespace BizwebSharp
 {
+    /// <summary>
+    /// The class representing Bizweb ProductOption.
+    /// </summary>
     public class ProductOption : BaseEntity
     {
         /// <summary>
