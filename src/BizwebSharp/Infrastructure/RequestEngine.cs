@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -297,7 +298,14 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
         {
             var responseStr = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
-            return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
+
+            // Make sure that dates are not stripped of any timezone information
+            // if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
+            using (var sr = new StringReader(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr))
+            using (var jr = new JsonTextReader(sr) { DateParseHandling = DateParseHandling.None })
+            {
+                return await JToken.ReadFromAsync(jr);
+            }
         }
 
         /// <summary>
@@ -355,23 +363,13 @@ namespace BizwebSharp.Infrastructure
             //Create a default T or null ?
             var output = Activator.CreateInstance<T>();
 
-            var settings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
-            //if (!string.IsNullOrEmpty(DateFormat))
-            //{
-            //    settings.DateFormatString = DateFormat;
-            //}
-
             if (string.IsNullOrEmpty(rootElement))
             {
-                output = JsonConvert.DeserializeObject<T>(rawResponse, settings);
+                output = JsonConvert.DeserializeObject<T>(rawResponse, Serializer.DeserializeSettings);
             }
             else
             {
-                var data = JsonConvert.DeserializeObject(rawResponse, settings) as JToken;
+                var data = JsonConvert.DeserializeObject(rawResponse, Serializer.DeserializeSettings) as JToken;
 
                 if (data[rootElement] != null)
                     output = data[rootElement].ToObject<T>();
