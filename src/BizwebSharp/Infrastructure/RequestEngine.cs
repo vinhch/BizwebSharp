@@ -114,42 +114,64 @@ namespace BizwebSharp.Infrastructure
         public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response, RequestSimpleInfo requestInfo = null)
         {
             var statusCode = (int)response.StatusCode;
+            // No error if response was between 200 and 300.
             if (statusCode >= 200 && statusCode < 300)
             {
                 return;
             }
 
-            string rawResponse = null;
-            if (response.Content != null)
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault() ?? string.Empty;
+            var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}."; ;
+            Dictionary<string, IEnumerable<string>> errors;
+
+            if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
-                rawResponse = await response.Content.ReadAsStringAsync();
+                errors = ParseErrorJson(rawResponse);
+
+                if (errors == null)
+                {
+                    errors = new Dictionary<string, IEnumerable<string>>
+                    {
+                        {
+                            $"{statusCode} {response.ReasonPhrase}",
+                            new[] {message}
+                        }
+                    };
+                }
+                else
+                {
+                    var firstError = errors.First();
+
+                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                }
             }
-
-            var errors = ParseErrorJson(rawResponse);
-
-            var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}.";
-
-            if (errors == null)
+            else
             {
                 errors = new Dictionary<string, IEnumerable<string>>
                 {
                     {
                         $"{statusCode} {response.ReasonPhrase}",
-                        new[] {message}
+                        new[] { message }
+                    },
+                    {
+                        "NoJsonError",
+                        new[] { "Response did not return JSON, unable to parse error message (if any)." }
                     }
                 };
-            }
-            else
-            {
-                var firstError = errors.First();
-
-                message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
             }
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if (statusCode == 429 /* Too many requests */)
             {
-                throw new ApiRateLimitException(response.StatusCode, errors, message, rawResponse, requestInfo);
+                var listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
+                var rateLimitMessage = $"Error: {listMessage}";
+
+                // Shopify used to return JSON for rate limit exceptions, but then made an unannounced change and started returing HTML.
+                // This dictionary is an attempt at preserving what was previously returned.
+                errors.Add("Error", new List<string> {listMessage});
+
+                throw new ApiRateLimitException(response.StatusCode, errors, rateLimitMessage, rawResponse, requestInfo);
             }
 
             throw new BizwebSharpException(response.StatusCode, errors, message, rawResponse, requestInfo);

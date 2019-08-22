@@ -3,7 +3,7 @@
 namespace BizwebSharp.Infrastructure
 {
     /// <summary>
-    /// Contains JSON serialization settings and methods used by the rest of the ShopifySharp package.
+    /// Contains JSON serialization settings and methods used by the rest of the BizwebSharp package.
     /// </summary>
     internal static class Serializer
     {
