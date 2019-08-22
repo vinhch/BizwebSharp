@@ -42,9 +42,9 @@ namespace BizwebSharp
                 }
             }
 
-            return
-                await
-                    MakeRequestAsync<List<Customer>>($"{ApiClassPathInPlural}/search.json", HttpMethod.Get, ApiClassPathInPlural, option);
+            return await MakeRequestAsync<List<Customer>>($"{ApiClassPathInPlural}/search.json",
+                HttpMethod.Get, ApiClassPathInPlural,
+                optionDictionary);
         }
 
         /// <summary>
