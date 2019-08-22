@@ -5,6 +5,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+#if (NETSTANDARD2_0)
+using Microsoft.Extensions.DependencyInjection;
+#endif
 
 namespace BizwebSharp.Infrastructure
 {
@@ -13,9 +16,25 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public static class RequestEngine
     {
-        //HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        private static HttpClient _httpClient = new HttpClient();
-        public static HttpClient CurrentHttpClient => _httpClient ?? (_httpClient = new HttpClient());
+#if (NETSTANDARD2_0)
+        private static readonly ServiceCollection _currentServiceCollection = new ServiceCollection();
+        private static readonly ServiceProvider _currentServiceProvider =
+            _currentServiceCollection.AddHttpClient()
+                .BuildServiceProvider();
+        private static readonly IHttpClientFactory _currentHttpClientFactory =
+            _currentServiceProvider.GetService<IHttpClientFactory>();
+        internal static HttpClient CurrentHttpClient => _currentHttpClientFactory.CreateClient();
+#else
+        // HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+        private static HttpClient _currentHttpClient = new HttpClient();
+        internal static HttpClient CurrentHttpClient => _currentHttpClient ?? (_currentHttpClient = new HttpClient());
+#endif
+        private static readonly HttpClientHandler _httpClientHandlerNoRedirect = new HttpClientHandler
+        {
+            AllowAutoRedirect = false
+        };
+        private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_httpClientHandlerNoRedirect);
+        internal static HttpClient CurrentHttpClientNoRedirect => _httpClientNoRedirect;
 
         public static string CreateUriPathAndQuery(string path, IEnumerable<KeyValuePair<string, object>> queryParams)
         {

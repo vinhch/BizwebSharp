@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -135,8 +136,11 @@ namespace BizwebSharp
         public static bool ValidateRequest(string signature, string contentToCheck, string apiSecretKey,
             string timestampInString = null, double? requestTimestampSpan = null)
         {
-            var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(apiSecretKey));
-            var hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(contentToCheck));
+            byte[] hash;
+            using (var hmacHasher = new HMACSHA256(Encoding.UTF8.GetBytes(apiSecretKey)))
+            {
+                hash = hmacHasher.ComputeHash(Encoding.UTF8.GetBytes(contentToCheck));
+            }
 
             //Convert bytes back to string, replacing dashes, to get the final signature.
             var calculatedSignature = Convert.ToBase64String(hash);
@@ -382,16 +386,21 @@ namespace BizwebSharp
         /// <returns>A boolean indicating whether the URL is valid.</returns>
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
-            var uri = RequestEngine.BuildUri(url);
-            var client = RequestEngine.CurrentHttpClient;
+            var uri = RequestEngine.BuildUri(url, false);
+            var client = RequestEngine.CurrentHttpClientNoRedirect;
 
-            using (var msg = new HttpRequestMessage(System.Net.Http.HttpMethod.Head, uri))
+            using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
+                var version = (typeof(AuthorizationService)).GetTypeInfo().Assembly.GetName().Version;
+                msg.Headers.Add("User-Agent",
+                    $"BizwebSharp v{version} (https://github.com/vinhch/BizwebSharp)");
                 try
                 {
-                    var response = await client.SendAsync(msg);
-
-                    return response.Headers.Any(h => h.Key.Equals("X-StoreId", StringComparison.OrdinalIgnoreCase));
+                    using (var response = await client.SendAsync(msg))
+                    {
+                        return response.Headers
+                            .Any(h => h.Key.Equals("X-StoreId", StringComparison.OrdinalIgnoreCase));
+                    }
                 }
                 catch (HttpRequestException)
                 {

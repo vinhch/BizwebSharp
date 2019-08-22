@@ -24,7 +24,7 @@ namespace BizwebSharp.Tests.xUnit
         {
             var count = await Fixture.Service.CountAsync();
 
-            Assert.NotNull(count);
+            Assert.True(count > 0);
         }
 
         [Fact(DisplayName = "List Collects")]
@@ -32,7 +32,7 @@ namespace BizwebSharp.Tests.xUnit
         {
             var collects = await Fixture.Service.ListAsync();
 
-            Assert.True(collects.Count() > 0);
+            Assert.True(collects.Any());
         }
 
         [Fact(DisplayName = "List Collects With A Filter")]

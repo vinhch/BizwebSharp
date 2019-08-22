@@ -93,8 +93,8 @@ namespace BizwebSharp.Tests.xUnit
         {
             var authors = await Fixture.Service.ListAuthorsAsync();
 
-            Assert.True(authors.Count() > 0);
-            Assert.True(authors.Any(a => a == Fixture.Author));
+            Assert.True(authors.Any());
+            Assert.Contains(authors, a => a == Fixture.Author);
         }
 
         [Fact(DisplayName = "List Tags")]
