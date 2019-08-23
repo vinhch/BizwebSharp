@@ -18,7 +18,11 @@ namespace BizwebSharp.Infrastructure
             get => _default ?? (_default = new LimitRetryExecutionPolicy());
             set
             {
-                if (value == null) return;
+                if (value == null)
+                {
+                    _default = new LimitRetryExecutionPolicy();
+                    return;
+                }
                 _default = value;
             }
         }
