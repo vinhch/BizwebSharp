@@ -9,16 +9,18 @@ namespace BizwebSharp.Infrastructure
         private const byte MAX_RETRY = 10;
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(3000);
 
-        public async Task<T> Run<T>(HttpClient client, BizwebRequestMessage baseReqMsg,
+        public async Task<T> Run<T>(BizwebRequestMessage baseReqMsg,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
             var tryCount = 0;
             Start:
-            var reqMsg = baseReqMsg.Clone();
             try
             {
-                tryCount++;
-                return (await executeRequestAsync(client, reqMsg)).Result;
+                using (var reqMsg = baseReqMsg.Clone())
+                {
+                    tryCount++;
+                    return (await executeRequestAsync(reqMsg)).Result;
+                }
             }
             catch (ApiRateLimitException)
             {

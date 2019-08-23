@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace BizwebSharp.Infrastructure
 {
-    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(HttpClient client, BizwebRequestMessage reqMsg);
+    public delegate Task<RequestResult<T>> ExecuteRequestAsync<T>(BizwebRequestMessage reqMsg);
 
     /// <summary>
     ///     Used to specify centralized logic that should run when executing bizweb requests.
@@ -11,6 +11,6 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public interface IRequestExecutionPolicy
     {
-        Task<T> Run<T>(HttpClient baseClient, BizwebRequestMessage baseReqMsg, ExecuteRequestAsync<T> sendRequestAsync);
+        Task<T> Run<T>(BizwebRequestMessage baseReqMsg, ExecuteRequestAsync<T> sendRequestAsync);
     }
 }

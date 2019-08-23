@@ -285,14 +285,14 @@ namespace BizwebSharp.Infrastructure
         public static async Task<string> ExecuteRequestToStringAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
-            return await execPolicy.Run(CurrentHttpClient, requestMsg, async (client, reqMsg) =>
+            return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
                 //Need to create a RequestInfo before send RequestMessage
                 //because after that, HttpClient will dispose RequestMessage
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
                 //Make request
-                var request = client.SendAsync(reqMsg);
+                var request = CurrentHttpClient.SendAsync(reqMsg);
 
                 using (var response = await request)
                 {
@@ -346,14 +346,14 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
             where T : new()
         {
-            return await execPolicy.Run(CurrentHttpClient, requestMsg, async (client, reqMsg) =>
+            return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
                 //Need to create a RequestInfo before send RequestMessage
                 //because after that, HttpClient will dispose RequestMessage
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
                 //Make request
-                var request = client.SendAsync(reqMsg);
+                var request = CurrentHttpClient.SendAsync(reqMsg);
 
                 using (var response = await request)
                 {

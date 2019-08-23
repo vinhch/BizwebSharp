@@ -26,7 +26,7 @@ namespace BizwebSharp.Infrastructure
 
         private static readonly ConcurrentDictionary<string, LeakyBucket> _shopAccessTokenToLeakyBucket = new ConcurrentDictionary<string, LeakyBucket>();
 
-        public async Task<T> Run<T>(HttpClient baseClient, BizwebRequestMessage baseReqMsg,
+        public async Task<T> Run<T>(BizwebRequestMessage baseReqMsg,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
             var accessToken = GetAccessToken(baseReqMsg);
@@ -39,33 +39,35 @@ namespace BizwebSharp.Infrastructure
 
             while (true)
             {
-                var reqMsg = baseReqMsg.Clone();
-                if (accessToken != null)
+                using (var reqMsg = baseReqMsg.Clone())
                 {
-                    await bucket.GrantAsync();
-                }
-
-                try
-                {
-                    var fullResult = await executeRequestAsync(baseClient, reqMsg);
-                    var bucketContentSize = GetBucketContentSize(fullResult.Response);
-
-                    if (bucketContentSize != null)
+                    if (accessToken != null)
                     {
-                        bucket?.SetContentSize(bucketContentSize.Value);
+                        await bucket.GrantAsync();
                     }
 
-                    return fullResult.Result;
-                }
-                catch (BizwebSharpException)
-                {
-                    //An exception may still occur:
-                    //-Shopify may have a slightly different algorithm
-                    //-Shopify may change to a different algorithm in the future
-                    //-There may be timing and latency delays
-                    //-Multiple programs may use the same access token
-                    //-Multiple instance of the same program may use the same access token
-                    await Task.Delay(THROTTLE_DELAY);
+                    try
+                    {
+                        var fullResult = await executeRequestAsync(reqMsg);
+                        var bucketContentSize = GetBucketContentSize(fullResult.Response);
+
+                        if (bucketContentSize != null)
+                        {
+                            bucket?.SetContentSize(bucketContentSize.Value);
+                        }
+
+                        return fullResult.Result;
+                    }
+                    catch (BizwebSharpException)
+                    {
+                        //An exception may still occur:
+                        //-Shopify may have a slightly different algorithm
+                        //-Shopify may change to a different algorithm in the future
+                        //-There may be timing and latency delays
+                        //-Multiple programs may use the same access token
+                        //-Multiple instance of the same program may use the same access token
+                        await Task.Delay(THROTTLE_DELAY);
+                    }
                 }
             }
         }

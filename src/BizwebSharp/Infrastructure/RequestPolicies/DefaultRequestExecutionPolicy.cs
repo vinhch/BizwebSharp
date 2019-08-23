@@ -5,10 +5,10 @@ namespace BizwebSharp.Infrastructure
 {
     public class DefaultRequestExecutionPolicy : IRequestExecutionPolicy
     {
-        public async Task<T> Run<T>(HttpClient client, BizwebRequestMessage requestMsg,
+        public async Task<T> Run<T>(BizwebRequestMessage requestMsg,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
-            return (await executeRequestAsync(client, requestMsg)).Result;
+            return (await executeRequestAsync(requestMsg)).Result;
         }
 
         private static IRequestExecutionPolicy _default = new LimitRetryExecutionPolicy();
