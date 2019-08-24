@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.6;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>BizwebSharp</AssemblyName>
     <PackageId>BizwebSharp</PackageId>
     <RootNamespace>BizwebSharp</RootNamespace>
@@ -28,7 +28,7 @@
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="[2.1.0,2.2.0)" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.6' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.1.1" />
     <PackageReference Include="System.Reflection.TypeExtensions" Version="4.5.1" />
     <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
