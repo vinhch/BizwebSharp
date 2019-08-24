@@ -4,11 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BizwebSharp.Helper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-#if (NETSTANDARD2_0)
-using Microsoft.Extensions.DependencyInjection;
-#endif
 
 namespace BizwebSharp.Infrastructure
 {
@@ -17,26 +15,6 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public static class RequestEngine
     {
-#if (NETSTANDARD2_0)
-        private static readonly ServiceCollection _currentServiceCollection = new ServiceCollection();
-        private static readonly ServiceProvider _currentServiceProvider =
-            _currentServiceCollection.AddHttpClient()
-                .BuildServiceProvider();
-        private static readonly IHttpClientFactory _currentHttpClientFactory =
-            _currentServiceProvider.GetService<IHttpClientFactory>();
-        internal static HttpClient CurrentHttpClient => _currentHttpClientFactory.CreateClient();
-#else
-        // HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        private static HttpClient _currentHttpClient = new HttpClient();
-        internal static HttpClient CurrentHttpClient => _currentHttpClient ?? (_currentHttpClient = new HttpClient());
-#endif
-        private static readonly HttpClientHandler _httpClientHandlerNoRedirect = new HttpClientHandler
-        {
-            AllowAutoRedirect = false
-        };
-        private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_httpClientHandlerNoRedirect);
-        internal static HttpClient CurrentHttpClientNoRedirect => _httpClientNoRedirect;
-
         public static string CreateUriPathAndQuery(string path, IEnumerable<KeyValuePair<string, object>> queryParams)
         {
             var query = queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value.ToString())}");
@@ -292,7 +270,7 @@ namespace BizwebSharp.Infrastructure
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
                 //Make request
-                var request = CurrentHttpClient.SendAsync(reqMsg);
+                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
 
                 using (var response = await request)
                 {
@@ -353,7 +331,7 @@ namespace BizwebSharp.Infrastructure
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
                 //Make request
-                var request = CurrentHttpClient.SendAsync(reqMsg);
+                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
 
                 using (var response = await request)
                 {

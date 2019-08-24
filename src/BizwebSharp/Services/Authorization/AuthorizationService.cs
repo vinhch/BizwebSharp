@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using BizwebSharp.Enums;
+using BizwebSharp.Helper;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 #if (NET45)
@@ -387,7 +388,7 @@ namespace BizwebSharp
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
             var uri = RequestEngine.BuildUri(url, false);
-            var client = RequestEngine.CurrentHttpClientNoRedirect;
+            var client = HttpUtils.CreateHttpClientNoRedirect();
 
             using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
