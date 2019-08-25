@@ -11,10 +11,16 @@
   <PropertyGroup>
     <Description>BizwebSharp is a C# and .NET client library for Bizweb.vn API, and now is Sapo.vn web store API</Description>
     <Authors>Cao Ha Vinh</Authors>
+    <Copyright>Cao Ha Vinh</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://github.com/vinhch/BizwebSharp</PackageProjectUrl>
     <RepositoryUrl>https://github.com/vinhch/BizwebSharp</RepositoryUrl>
     <PackageTags>bizweb,sapo,ecommerce</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.1.1" />
