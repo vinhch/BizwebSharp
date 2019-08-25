@@ -51,11 +51,11 @@ namespace BizwebSharp.Infrastructure
 
             private static void DripAllBuckets()
             {
-                //foreach (var bucket in _allLeakyBuckets)
-                //{
-                //    bucket.ReleaseOne();
-                //}
-                Parallel.ForEach(_allLeakyBuckets, bucket => bucket.ReleaseOne());
+                //Parallel.ForEach(_allLeakyBuckets, bucket => bucket.ReleaseOne());
+                foreach (var bucket in _allLeakyBuckets)
+                {
+                    bucket.ReleaseOne();
+                }
             }
         }
     }

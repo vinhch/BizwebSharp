@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 
@@ -18,10 +19,10 @@ namespace BizwebSharp
         /// </summary>
         public virtual async Task<Store> GetAsync(string fields = null)
         {
-            dynamic option = null;
-            if (fields != null)
+            var option = new Dictionary<string, object>();
+            if (!string.IsNullOrEmpty(fields))
             {
-                option = new { fields };
+                option["fields"] = fields;
             }
 
             return await MakeRequestAsync<Store>("store.json", HttpMethod.Get, "store", option);

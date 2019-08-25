@@ -49,10 +49,10 @@ namespace BizwebSharp
         /// <returns>The <see cref="Transaction"/>.</returns>
         public virtual async Task<Transaction> GetAsync(long orderId, long transactionId, string fields = null)
         {
-            dynamic options = null;
+            var options = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                options = new { fields };
+                options["fields"] = fields;
             }
 
             return

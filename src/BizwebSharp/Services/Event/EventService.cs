@@ -39,10 +39,10 @@ namespace BizwebSharp
 
         public virtual async Task<Event> GetAsync(long id, string fields = null)
         {
-            dynamic options = null;
+            var options = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                options = new { fields };
+                options["fields"] = fields;
             }
 
             return await MakeRequestAsync<Event>($"events/{id}.json", HttpMethod.Get, "event", options);

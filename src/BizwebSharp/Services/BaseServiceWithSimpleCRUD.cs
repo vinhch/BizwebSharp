@@ -77,10 +77,10 @@ namespace BizwebSharp
         /// <param name="fields">Optional comma-separated list of fields to return.</param>
         public virtual async Task<T> GetAsync(long id, string fields = null)
         {
-            dynamic options = null;
+            var options = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                options = new { fields };
+                options["fields"] = fields;
             }
 
             return await MakeRequestAsync<T>($"{ApiClassPathInPlural}/{id}.json", HttpMethod.Get, ApiClassPath, options);
