@@ -17,6 +17,10 @@ namespace BizwebSharp.Infrastructure
     {
         public static string CreateUriPathAndQuery(string path, IEnumerable<KeyValuePair<string, object>> queryParams)
         {
+            if (queryParams == null || !queryParams.Any())
+            {
+                return path;
+            }
             var query = queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value.ToString())}");
             return $"{path}?{string.Join("&", query)}";
         }
