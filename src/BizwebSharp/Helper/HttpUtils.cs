@@ -43,15 +43,16 @@ namespace BizwebSharp.Helper
         internal static HttpClient CreateHttpClientNoRedirect()
             => CreateHttpClientFactory().CreateClient(NO_REDIRECT_HTTPCLIENT_TYPE);
 #else
-        // HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
+        // HttpClient instance need to be singleton
+        // because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
         private static readonly HttpClient _currentHttpClient = new HttpClient();
         internal static HttpClient CreateHttpClient() => _currentHttpClient;
 
-        private static readonly HttpClientHandler _httpClientHandlerNoRedirect = new HttpClientHandler
+        private static readonly HttpClientHandler _clientHandlerNoRedirect = new HttpClientHandler
         {
             AllowAutoRedirect = false
         };
-        private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_httpClientHandlerNoRedirect);
+        private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_clientHandlerNoRedirect);
         internal static HttpClient CreateHttpClientNoRedirect() => _httpClientNoRedirect;
 #endif
     }

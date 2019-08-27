@@ -15,7 +15,8 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public static class RequestEngine
     {
-        public static string CreateUriPathAndQuery(string path, IEnumerable<KeyValuePair<string, object>> queryParams)
+        public static string CreateUriPathAndQuery(string path,
+            IEnumerable<KeyValuePair<string, object>> queryParams)
         {
             if (queryParams == null || !queryParams.Any())
             {
@@ -69,8 +70,8 @@ namespace BizwebSharp.Infrastructure
         /// <param name="content">The <see cref="HttpContent"/> to use for the request.</param>
         /// <param name="rootElement">The root element to deserialize. Default is null.</param>
         /// <returns>The prepared <see cref="BizwebRequestMessage"/>.</returns>
-        public static BizwebRequestMessage CreateRequest(BizwebAuthorizationState authState, string pathAndQuery,
-            HttpMethod method, HttpContent content = null, string rootElement = null)
+        public static BizwebRequestMessage CreateRequest(BizwebAuthorizationState authState,
+            string pathAndQuery, HttpMethod method, HttpContent content = null, string rootElement = null)
         {
             var baseUri = BuildUri(authState.ApiUrl);
             var endPointUri = new Uri(baseUri, pathAndQuery);
@@ -93,7 +94,8 @@ namespace BizwebSharp.Infrastructure
         /// <param name="response">The response.</param>
         /// <param name="requestInfo">An simple request info.</param>
         /// <returns></returns>
-        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response, RequestSimpleInfo requestInfo = null)
+        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response,
+            RequestSimpleInfo requestInfo = null)
         {
             var statusCode = (int)response.StatusCode;
             // No error if response was between 200 and 300.
@@ -303,7 +305,7 @@ namespace BizwebSharp.Infrastructure
         {
             var responseStr = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
 
-            // Make sure that dates are not stripped of any timezone information
+            // When using JToken make sure that dates are not stripped of any timezone information
             // if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
             using (var sr = new StringReader(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr))
             using (var jr = new JsonTextReader(sr) { DateParseHandling = DateParseHandling.None })
@@ -328,27 +330,8 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
             where T : new()
         {
-            return await execPolicy.Run(requestMsg, async (reqMsg) =>
-            {
-                //Need to create a RequestInfo before send RequestMessage
-                //because after that, HttpClient will dispose RequestMessage
-                var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
-
-                //Make request
-                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
-
-                using (var response = await request)
-                {
-                    //Check for and throw exception when necessary.
-                    await CheckResponseExceptionsAsync(response, requestInfo);
-
-                    //Notice: deserialize can fails when response body null or empty
-                    var rawResponse = await response.Content.ReadAsStringAsync();
-                    var result = Deserialize<T>(rawResponse, reqMsg.RootElement);
-
-                    return new RequestResult<T>(response, result);
-                }
-            });
+            var rawResponse = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
+            return Deserialize<T>(rawResponse, requestMsg.RootElement);
         }
 
         /// <summary>
