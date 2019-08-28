@@ -1,27 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>BizwebSharp is a C# and .NET client library for Bizweb.vn API</Description>
-    <VersionPrefix>1.1.0</VersionPrefix>
-    <Authors>Cao Ha Vinh</Authors>
-    <TargetFrameworks>netstandard1.6;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>BizwebSharp</AssemblyName>
     <PackageId>BizwebSharp</PackageId>
     <RootNamespace>BizwebSharp</RootNamespace>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.6' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <VersionPrefix>2.0.0-beta1</VersionPrefix>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Description>BizwebSharp is a C# and .NET client library for Bizweb.vn API, and now is Sapo.vn web store API</Description>
+    <Authors>Cao Ha Vinh</Authors>
+    <Copyright>Cao Ha Vinh</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/vinhch/BizwebSharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vinhch/BizwebSharp</RepositoryUrl>
+    <PackageTags>bizweb,sapo,ecommerce</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.1.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
-    <PackageReference Include="System.Collections.Specialized" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.TypeExtensions" Version="4.3.0" />
-    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="[2.1.0,2.3)" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="[2.1.0,2.3)" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="[2.1.0,2.2.0)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.4' ">
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.1.1" />
+    <PackageReference Include="System.Reflection.TypeExtensions" Version="[4.3.0,4.6.0)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="[10.0.1,13.0.0)" />
   </ItemGroup>
 
 </Project>

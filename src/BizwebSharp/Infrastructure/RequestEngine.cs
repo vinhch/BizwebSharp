@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using BizwebSharp.Helper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,12 +15,13 @@ namespace BizwebSharp.Infrastructure
     /// </summary>
     public static class RequestEngine
     {
-        //HttpClient instance need to be singleton because of this https://aspnetmonsters.com/2016/08/2016-08-27-httpclientwrong/
-        private static HttpClient _httpClient = new HttpClient();
-        public static HttpClient CurrentHttpClient => _httpClient ?? (_httpClient = new HttpClient());
-
-        public static string CreateUriPathAndQuery(string path, IEnumerable<KeyValuePair<string, object>> queryParams)
+        public static string CreateUriPathAndQuery(string path,
+            IEnumerable<KeyValuePair<string, object>> queryParams)
         {
+            if (queryParams == null || !queryParams.Any())
+            {
+                return path;
+            }
             var query = queryParams.Select(kvp => $"{kvp.Key}={Uri.EscapeDataString(kvp.Value.ToString())}");
             return $"{path}?{string.Join("&", query)}";
         }
@@ -67,8 +70,8 @@ namespace BizwebSharp.Infrastructure
         /// <param name="content">The <see cref="HttpContent"/> to use for the request.</param>
         /// <param name="rootElement">The root element to deserialize. Default is null.</param>
         /// <returns>The prepared <see cref="BizwebRequestMessage"/>.</returns>
-        public static BizwebRequestMessage CreateRequest(BizwebAuthorizationState authState, string pathAndQuery,
-            HttpMethod method, HttpContent content = null, string rootElement = null)
+        public static BizwebRequestMessage CreateRequest(BizwebAuthorizationState authState,
+            string pathAndQuery, HttpMethod method, HttpContent content = null, string rootElement = null)
         {
             var baseUri = BuildUri(authState.ApiUrl);
             var endPointUri = new Uri(baseUri, pathAndQuery);
@@ -91,45 +94,68 @@ namespace BizwebSharp.Infrastructure
         /// <param name="response">The response.</param>
         /// <param name="requestInfo">An simple request info.</param>
         /// <returns></returns>
-        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response, RequestSimpleInfo requestInfo = null)
+        public static async Task CheckResponseExceptionsAsync(HttpResponseMessage response,
+            RequestSimpleInfo requestInfo = null)
         {
             var statusCode = (int)response.StatusCode;
+            // No error if response was between 200 and 300.
             if (statusCode >= 200 && statusCode < 300)
             {
                 return;
             }
 
-            string rawResponse = null;
-            if (response.Content != null)
+            var rawResponse = await response.Content.ReadAsStringAsync();
+            var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault() ?? string.Empty;
+            var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}."; ;
+            Dictionary<string, IEnumerable<string>> errors;
+
+            if (contentType.StartsWithIgnoreCase("application/json") || contentType.StartsWithIgnoreCase("text/json"))
             {
-                rawResponse = await response.Content.ReadAsStringAsync();
+                errors = ParseErrorJson(rawResponse);
+
+                if (errors == null)
+                {
+                    errors = new Dictionary<string, IEnumerable<string>>
+                    {
+                        {
+                            $"{statusCode} {response.ReasonPhrase}",
+                            new[] {message}
+                        }
+                    };
+                }
+                else
+                {
+                    var firstError = errors.First();
+
+                    message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
+                }
             }
-
-            var errors = ParseErrorJson(rawResponse);
-
-            var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}.";
-
-            if (errors == null)
+            else
             {
                 errors = new Dictionary<string, IEnumerable<string>>
                 {
                     {
                         $"{statusCode} {response.ReasonPhrase}",
-                        new[] {message}
+                        new[] { message }
+                    },
+                    {
+                        "NoJsonError",
+                        new[] { "Response did not return JSON, unable to parse error message (if any)." }
                     }
                 };
-            }
-            else
-            {
-                var firstError = errors.First();
-
-                message = $"{firstError.Key}: {string.Join(", ", firstError.Value)}";
             }
 
             // If the error was caused by reaching the API rate limit, throw a rate limit exception.
             if (statusCode == 429 /* Too many requests */)
             {
-                throw new ApiRateLimitException(response.StatusCode, errors, message, rawResponse, requestInfo);
+                var listMessage = "Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.";
+                var rateLimitMessage = $"Error: {listMessage}";
+
+                // Shopify used to return JSON for rate limit exceptions, but then made an unannounced change and started returing HTML.
+                // This dictionary is an attempt at preserving what was previously returned.
+                errors.Add("Error", new List<string> {listMessage});
+
+                throw new ApiRateLimitException(response.StatusCode, errors, rateLimitMessage, rawResponse, requestInfo);
             }
 
             throw new BizwebSharpException(response.StatusCode, errors, message, rawResponse, requestInfo);
@@ -243,14 +269,14 @@ namespace BizwebSharp.Infrastructure
         public static async Task<string> ExecuteRequestToStringAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
-            return await execPolicy.Run(CurrentHttpClient, requestMsg, async (client, reqMsg) =>
+            return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
                 //Need to create a RequestInfo before send RequestMessage
                 //because after that, HttpClient will dispose RequestMessage
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
                 //Make request
-                var request = client.SendAsync(reqMsg);
+                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
 
                 using (var response = await request)
                 {
@@ -278,7 +304,14 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
         {
             var responseStr = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
-            return JToken.Parse(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr);
+
+            // When using JToken make sure that dates are not stripped of any timezone information
+            // if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
+            using (var sr = new StringReader(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr))
+            using (var jr = new JsonTextReader(sr) { DateParseHandling = DateParseHandling.None })
+            {
+                return await JToken.ReadFromAsync(jr);
+            }
         }
 
         /// <summary>
@@ -297,27 +330,8 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
             where T : new()
         {
-            return await execPolicy.Run(CurrentHttpClient, requestMsg, async (client, reqMsg) =>
-            {
-                //Need to create a RequestInfo before send RequestMessage
-                //because after that, HttpClient will dispose RequestMessage
-                var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
-
-                //Make request
-                var request = client.SendAsync(reqMsg);
-
-                using (var response = await request)
-                {
-                    //Check for and throw exception when necessary.
-                    await CheckResponseExceptionsAsync(response, requestInfo);
-
-                    //Notice: deserialize can fails when response body null or empty
-                    var rawResponse = await response.Content.ReadAsStringAsync();
-                    var result = Deserialize<T>(rawResponse, reqMsg.RootElement);
-
-                    return new RequestResult<T>(response, result);
-                }
-            });
+            var rawResponse = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
+            return Deserialize<T>(rawResponse, requestMsg.RootElement);
         }
 
         /// <summary>
@@ -336,23 +350,13 @@ namespace BizwebSharp.Infrastructure
             //Create a default T or null ?
             var output = Activator.CreateInstance<T>();
 
-            var settings = new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            };
-
-            //if (!string.IsNullOrEmpty(DateFormat))
-            //{
-            //    settings.DateFormatString = DateFormat;
-            //}
-
             if (string.IsNullOrEmpty(rootElement))
             {
-                output = JsonConvert.DeserializeObject<T>(rawResponse, settings);
+                output = JsonConvert.DeserializeObject<T>(rawResponse, Serializer.DeserializeSettings);
             }
             else
             {
-                var data = JsonConvert.DeserializeObject(rawResponse, settings) as JToken;
+                var data = JsonConvert.DeserializeObject(rawResponse, Serializer.DeserializeSettings) as JToken;
 
                 if (data[rootElement] != null)
                     output = data[rootElement].ToObject<T>();

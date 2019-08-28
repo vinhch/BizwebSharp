@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BizwebSharp.Infrastructure
@@ -11,19 +10,23 @@ namespace BizwebSharp.Infrastructure
     {
         private static readonly TimeSpan RETRY_DELAY = TimeSpan.FromMilliseconds(3000);
 
-        public async Task<T> Run<T>(HttpClient client, BizwebRequestMessage baseReqMsg,
+        public async Task<T> Run<T>(BizwebRequestMessage baseReqMsg,
             ExecuteRequestAsync<T> executeRequestAsync)
         {
-            Start:
-            var reqMsg = baseReqMsg.Clone();
-            try
+            while (true)
             {
-                return (await executeRequestAsync(client, reqMsg)).Result;
-            }
-            catch (ApiRateLimitException)
-            {
-                await Task.Delay(RETRY_DELAY);
-                goto Start;
+                try
+                {
+                    using (var reqMsg = baseReqMsg.Clone())
+                    {
+                        var fullResult = await executeRequestAsync(reqMsg);
+                        return fullResult.Result;
+                    }
+                }
+                catch (ApiRateLimitException)
+                {
+                    await Task.Delay(RETRY_DELAY);
+                }
             }
         }
     }

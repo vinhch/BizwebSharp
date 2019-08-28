@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 
@@ -29,10 +27,7 @@ namespace BizwebSharp.Infrastructure
 
         private static string ToJson(object data)
         {
-            return JsonConvert.SerializeObject(data, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+            return JsonConvert.SerializeObject(data, Serializer.SerializeSettings);
         }
 
         public JsonContent Clone()

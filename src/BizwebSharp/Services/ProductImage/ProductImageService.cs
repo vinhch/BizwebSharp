@@ -49,10 +49,10 @@ namespace BizwebSharp
         /// <returns>The <see cref="ProductImage"/>.</returns>
         public virtual async Task<ProductImage> GetAsync(long productId, long imageId, string fields = null)
         {
-            dynamic options = null;
+            var options = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                options = new { fields };
+                options["fields"] = fields;
             }
 
             return

@@ -20,8 +20,7 @@ namespace BizwebSharp
             //foreach (
             //    var property in obj.GetType().GetTypeInfo().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             //{
-            foreach (
-                var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var property in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var value = property.GetValue(obj, null);
                 var propName = property.Name;

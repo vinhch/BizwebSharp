@@ -49,10 +49,10 @@ namespace BizwebSharp
         /// <returns>The <see cref="Fulfillment"/>.</returns>
         public virtual async Task<Fulfillment> GetAsync(long orderId, long fulfillmentId, string fields = null)
         {
-            dynamic options = null;
+            var options = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                options = new { fields };
+                options["fields"] = fields;
             }
 
             return

@@ -48,10 +48,10 @@ namespace BizwebSharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<Article> GetAsync(long articleId, string fields = null)
         {
-            dynamic option = null;
+            var option = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                option = new { fields };
+                option["fields"] = fields;
             }
 
             return await MakeRequestAsync<Article>($"articles/{articleId}.json", HttpMethod.Get, "article", option);
@@ -65,10 +65,10 @@ namespace BizwebSharp
         /// <param name="fields">A comma-separated list of fields to return.</param>
         public virtual async Task<Article> GetAsync(long blogId, long articleId, string fields = null)
         {
-            dynamic option = null;
+            var option = new Dictionary<string, object>();
             if (!string.IsNullOrEmpty(fields))
             {
-                option = new { fields };
+                option["fields"] = fields;
             }
 
             return
