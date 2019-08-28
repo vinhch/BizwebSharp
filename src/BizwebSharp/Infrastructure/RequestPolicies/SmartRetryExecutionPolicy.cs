@@ -46,7 +46,9 @@ namespace BizwebSharp.Infrastructure
                     try
                     {
                         var fullResult = await executeRequestAsync(reqMsg);
-                        var (reportedFillLevel, reportedCapacity) = GetBucketState(fullResult.Response);
+                        var bucketState = GetBucketState(fullResult.Response);
+                        var reportedFillLevel = bucketState.Item1;
+                        var reportedCapacity = bucketState.Item2;
 
                         if (reportedFillLevel != null && reportedCapacity != null)
                         {
@@ -80,22 +82,25 @@ namespace BizwebSharp.Infrastructure
                 ?.FirstOrDefault();
         }
 
-        private static (int?, int?) GetBucketState(HttpResponseMessage responseMsg)
+        private static Tuple<int?, int?> GetBucketState(HttpResponseMessage responseMsg)
         {
-            var headers = responseMsg.Headers.FirstOrDefault(kvp => string.Equals(kvp.Key, ApiConst.HEADER_API_CALL_LIMIT,
-                StringComparison.CurrentCultureIgnoreCase));
+            var headers = responseMsg.Headers.FirstOrDefault(kvp =>
+                string.Equals(kvp.Key, ApiConst.HEADER_API_CALL_LIMIT, StringComparison.CurrentCultureIgnoreCase));
             var apiCallLimitHeaderValue = headers.Value?.FirstOrDefault();
-            if (apiCallLimitHeaderValue != null)
+            if (apiCallLimitHeaderValue == null)
             {
-                var split = apiCallLimitHeaderValue.Split('/');
-                if (split.Length == 2 &&
-                    int.TryParse(split[0], out int reportedFillLevel) &&
-                    int.TryParse(split[1], out int reportedCapacity))
-                {
-                    return (reportedFillLevel, reportedCapacity);
-                }
+                return Tuple.Create<int?, int?>(null, null);
             }
-            return (null, null);
+
+            var split = apiCallLimitHeaderValue.Split('/');
+            if (split.Length == 2 &&
+                int.TryParse(split[0], out var reportedFillLevel) &&
+                int.TryParse(split[1], out var reportedCapacity))
+            {
+                return Tuple.Create<int?, int?>(reportedFillLevel, reportedCapacity);
+            }
+
+            return Tuple.Create<int?, int?>(null, null);
         }
     }
 }
