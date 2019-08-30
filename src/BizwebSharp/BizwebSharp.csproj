@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard1.4;net45</TargetFrameworks>
     <AssemblyName>BizwebSharp</AssemblyName>
     <PackageId>BizwebSharp</PackageId>
     <RootNamespace>BizwebSharp</RootNamespace>
@@ -18,11 +17,15 @@
     <PackageTags>bizweb,sapo,ecommerce</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard1.4;net45;net451;net452;net46;net461;net462</TargetFrameworks>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' ">
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="1.1.1" />
   </ItemGroup>
 

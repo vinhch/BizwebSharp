@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 #if (NETSTANDARD2_0)
 using Microsoft.Extensions.DependencyInjection;
 #endif
@@ -7,6 +9,27 @@ namespace BizwebSharp.Helper
 {
     internal static class HttpUtils
     {
+#if (!NETSTANDARD1_4)
+        #region Beware of the .NET HttpClient https://nima-ara-blog.azurewebsites.net/beware-of-the-net-httpclient/
+        private const int MAX_CONNECTION_PER_SERVER = 20;
+        private static readonly TimeSpan ConnectionLifeTime = TimeSpan.FromMinutes(1);
+
+        static HttpUtils()
+        {
+            ConfigureServicePointManager();
+        }
+
+        private static void ConfigureServicePointManager()
+        {
+            // Default is 2 minutes, see https://msdn.microsoft.com/en-us/library/system.net.servicepointmanager.dnsrefreshtimeout(v=vs.110).aspx
+            System.Net.ServicePointManager.DnsRefreshTimeout = (int)ConnectionLifeTime.TotalMilliseconds;
+
+            // Increases the concurrent outbound connections
+            System.Net.ServicePointManager.DefaultConnectionLimit = MAX_CONNECTION_PER_SERVER;
+        }
+        #endregion
+#endif
+
 #if (NETSTANDARD2_0)
         private const string BIZWEB_NAMED_HTTPCLIENT_TYPE = "bizweb";
         private const string NO_REDIRECT_HTTPCLIENT_TYPE = "no-redirect";
@@ -55,5 +78,16 @@ namespace BizwebSharp.Helper
         private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_clientHandlerNoRedirect);
         internal static HttpClient CreateHttpClientNoRedirect() => _httpClientNoRedirect;
 #endif
+        // https://medium.com/@szntb/getting-burnt-with-httpclient-9c1712151039
+        // https://josefottosson.se/you-are-probably-still-using-httpclient-wrong-and-it-is-destabilizing-your-software/
+        internal static async Task<HttpResponseMessage> SendHttpRequestAsync(HttpRequestMessage request)
+        {
+            return await CreateHttpClient().SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        }
+
+        internal static async Task<HttpResponseMessage> SendHttpRequestNoRedirectAsync(HttpRequestMessage request)
+        {
+            return await CreateHttpClientNoRedirect().SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+        }
     }
 }

@@ -275,10 +275,7 @@ namespace BizwebSharp.Infrastructure
                 //because after that, HttpClient will dispose RequestMessage
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
-                //Make request
-                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
-
-                using (var response = await request)
+                using (var response = await HttpUtils.SendHttpRequestAsync(reqMsg))
                 {
                     //Check for and throw exception when necessary.
                     await CheckResponseExceptionsAsync(response, requestInfo);
@@ -309,10 +306,7 @@ namespace BizwebSharp.Infrastructure
                 //because after that, HttpClient will dispose RequestMessage
                 var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
 
-                //Make request
-                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
-
-                using (var response = await request)
+                using (var response = await HttpUtils.SendHttpRequestAsync(reqMsg))
                 {
                     //Check for and throw exception when necessary.
                     await CheckResponseExceptionsAsync(response, requestInfo);

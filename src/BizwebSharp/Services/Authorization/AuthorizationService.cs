@@ -12,7 +12,7 @@ using BizwebSharp.Enums;
 using BizwebSharp.Helper;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
-#if (NET45)
+#if (NET45 || NET451 || NET452 || NET46 || NET461 || NET462)
 using System.Collections.Specialized;
 #endif
 
@@ -388,7 +388,6 @@ namespace BizwebSharp
         public static async Task<bool> IsValidShopDomainAsync(string url)
         {
             var uri = RequestEngine.BuildUri(url, false);
-            var client = HttpUtils.CreateHttpClientNoRedirect();
 
             using (var msg = new HttpRequestMessage(HttpMethod.Head, uri))
             {
@@ -397,7 +396,7 @@ namespace BizwebSharp
                     $"BizwebSharp v{version} (https://github.com/vinhch/BizwebSharp)");
                 try
                 {
-                    using (var response = await client.SendAsync(msg))
+                    using (var response = await HttpUtils.SendHttpRequestNoRedirectAsync(msg))
                     {
                         return response.Headers
                             .Any(h => h.Key.Equals("X-StoreId", StringComparison.OrdinalIgnoreCase));
@@ -410,7 +409,7 @@ namespace BizwebSharp
             }
         }
 
-#if (NET45)
+#if (NET45 || NET451 || NET452 || NET46 || NET461 || NET462)
         #region method with NameValueCollection for .Net Framework
         /// <summary>
         /// Determines if an incoming request is authentic.
