@@ -303,15 +303,33 @@ namespace BizwebSharp.Infrastructure
         public static async Task<JToken> ExecuteRequestAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
-            var responseStr = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
-
-            // When using JToken make sure that dates are not stripped of any timezone information
-            // if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
-            using (var sr = new StringReader(string.IsNullOrEmpty(responseStr) ? "{}" : responseStr))
-            using (var jr = new JsonTextReader(sr) { DateParseHandling = DateParseHandling.None })
+            return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
-                return await JToken.ReadFromAsync(jr);
-            }
+                //Need to create a RequestInfo before send RequestMessage
+                //because after that, HttpClient will dispose RequestMessage
+                var requestInfo = await CreateRequestSimpleInfoAsync(reqMsg);
+
+                //Make request
+                var request = HttpUtils.CreateHttpClient().SendAsync(reqMsg);
+
+                using (var response = await request)
+                {
+                    //Check for and throw exception when necessary.
+                    await CheckResponseExceptionsAsync(response, requestInfo);
+
+                    // When using JToken make sure that dates are not stripped of any timezone information
+                    // if tokens are de-serialised into strings/DateTime/DateTimeZoneOffset
+                    using (var reader = new JsonTextReader(new StreamReader(await response.Content.ReadAsStreamAsync()))
+                    {
+                        DateParseHandling = DateParseHandling.None
+                    })
+                    {
+                        //Notice: deserialize can fails when response body null or empty
+                        var result = Deserialize(reader, reqMsg.RootElement);
+                        return new RequestResult<JToken>(response, result);
+                    }
+                }
+            });
         }
 
         /// <summary>
@@ -330,8 +348,7 @@ namespace BizwebSharp.Infrastructure
             IRequestExecutionPolicy execPolicy)
             where T : new()
         {
-            var rawResponse = await ExecuteRequestToStringAsync(requestMsg, execPolicy);
-            return Deserialize<T>(rawResponse, requestMsg.RootElement);
+            return (await ExecuteRequestAsync(requestMsg, execPolicy)).ToObject<T>();
         }
 
         /// <summary>
@@ -344,25 +361,18 @@ namespace BizwebSharp.Infrastructure
             return await ExecuteRequestAsync<T>(requestMsg, DefaultRequestExecutionPolicy.Default);
         }
 
-        private static T Deserialize<T>(string rawResponse, string rootElement = null)
+        private static JToken Deserialize(JsonTextReader reader, string rootElement = null)
         {
-            //Notice: deserialize can fails when response body null or empty
-            //Create a default T or null ?
-            var output = Activator.CreateInstance<T>();
+            JsonSerializer jsonSerializer = JsonSerializer.CreateDefault(Serializer.DeserializeSettings);
 
+            //Notice: deserialize can fails when response body null or empty
+            var data = jsonSerializer.Deserialize(reader) as JToken;
             if (string.IsNullOrEmpty(rootElement))
             {
-                output = JsonConvert.DeserializeObject<T>(rawResponse, Serializer.DeserializeSettings);
-            }
-            else
-            {
-                var data = JsonConvert.DeserializeObject(rawResponse, Serializer.DeserializeSettings) as JToken;
-
-                if (data[rootElement] != null)
-                    output = data[rootElement].ToObject<T>();
+                return data;
             }
 
-            return output;
+            return data[rootElement];
         }
     }
 }
