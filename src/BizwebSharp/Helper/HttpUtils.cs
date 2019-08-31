@@ -26,6 +26,12 @@ namespace BizwebSharp.Helper
 
             // Increases the concurrent outbound connections
             System.Net.ServicePointManager.DefaultConnectionLimit = MAX_CONNECTION_PER_SERVER;
+
+#if (NET45 || NET451 || NET452 || NET46 || NET461 || NET462)
+            // With .NET Framework 4.5 -> 4.6.2, it's necessary to manually enable support for TLS 1.2 to make sure.
+            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls11
+                | System.Net.SecurityProtocolType.Tls12;
+#endif
         }
         #endregion
 #endif
@@ -78,6 +84,7 @@ namespace BizwebSharp.Helper
         private static readonly HttpClient _httpClientNoRedirect = new HttpClient(_clientHandlerNoRedirect);
         internal static HttpClient CreateHttpClientNoRedirect() => _httpClientNoRedirect;
 #endif
+
         // https://medium.com/@szntb/getting-burnt-with-httpclient-9c1712151039
         // https://josefottosson.se/you-are-probably-still-using-httpclient-wrong-and-it-is-destabilizing-your-software/
         internal static async Task<HttpResponseMessage> SendHttpRequestAsync(HttpRequestMessage request)

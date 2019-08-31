@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AA588B91-76DE-441C-822A-168270211EDE}"
 EndProject
@@ -19,6 +19,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizwebSharp.Tests.xUnit", "test\BizwebSharp.Tests.xUnit\BizwebSharp.Tests.xUnit.csproj", "{6D67105D-9C20-4780-9178-E139B714BC16}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BizwebSharp.ConsoleTests", "test\BizwebSharp.ConsoleTests\BizwebSharp.ConsoleTests.csproj", "{043BFF7B-40E9-4B94-8F1E-9EB89AF56E3B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{1D1EB821-948F-4C34-9B45-586BFD7090C2}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\build.ps1 = scripts\build.ps1
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
