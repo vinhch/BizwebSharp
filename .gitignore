@@ -379,3 +379,6 @@ __pycache__/
 *.xsd.cs
 
 # End of https://www.gitignore.io/api/node,visualstudio,visualstudiocode,xamarinstudio
+
+# Ignore signing keys
+*.snk

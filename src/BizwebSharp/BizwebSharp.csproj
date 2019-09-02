@@ -4,7 +4,6 @@
     <AssemblyName>BizwebSharp</AssemblyName>
     <PackageId>BizwebSharp</PackageId>
     <RootNamespace>BizwebSharp</RootNamespace>
-    <VersionPrefix>2.0.0-beta3</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -19,10 +18,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.4;net45;net451;net452;net46;net461;net462</TargetFrameworks>
+    <VersionPrefix>2.0.0-beta3</VersionPrefix>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>strongnamekey.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' Or '$(TargetFramework)' == 'net451' Or '$(TargetFramework)' == 'net452' Or '$(TargetFramework)' == 'net46' Or '$(TargetFramework)' == 'net461' Or '$(TargetFramework)' == 'net462' ">
