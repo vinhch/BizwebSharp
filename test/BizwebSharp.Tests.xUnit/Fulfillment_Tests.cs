@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
@@ -167,6 +168,8 @@ namespace BizwebSharp.Tests.xUnit
 
         public List<Fulfillment> Created { get; } = new List<Fulfillment>();
 
+        public List<Customer> CreatedCustomers { get; } = new List<Customer>();
+
         public async Task InitializeAsync()
         {
             // Create an order and fulfillment for count, list, get, etc. tests.
@@ -176,6 +179,11 @@ namespace BizwebSharp.Tests.xUnit
 
         public async Task DisposeAsync()
         {
+            await CleanUpOrdersSetup();
+        }
+
+        private async Task CleanUpOrdersSetup()
+        {
             foreach (var obj in CreatedOrders)
             {
                 try
@@ -184,7 +192,26 @@ namespace BizwebSharp.Tests.xUnit
                 }
                 catch (BizwebSharpException ex)
                 {
-                    Console.WriteLine($"Failed to delete order with id {obj.Id.Value}. {ex.Message}");
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Order with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+
+            var customerService = new CustomerService(Utils.AuthState);
+            foreach (var obj in CreatedCustomers)
+            {
+                try
+                {
+                    await customerService.DeleteAsync(obj.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Customer with id {obj.Id.Value}. {ex.Message}");
+                    }
                 }
             }
         }
@@ -237,6 +264,7 @@ namespace BizwebSharp.Tests.xUnit
             });
 
             CreatedOrders.Add(obj);
+            CreatedCustomers.Add(obj.Customer);
 
             return obj;
         }

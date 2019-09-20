@@ -175,7 +175,14 @@ namespace BizwebSharp.Tests.xUnit
     {
         public string Note => "This order was created while testing BizwebSharp!";
 
+        public List<Customer> CreatedCustomers { get; } = new List<Customer>();
+
         public override async Task DisposeAsync()
+        {
+            await CleanUpOrdersSetup();
+        }
+
+        private async Task CleanUpOrdersSetup()
         {
             foreach (var obj in Created)
             {
@@ -188,6 +195,22 @@ namespace BizwebSharp.Tests.xUnit
                     if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                     {
                         Console.WriteLine($"Failed to delete created Order with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+
+            var customerService = new CustomerService(Utils.AuthState);
+            foreach (var obj in CreatedCustomers)
+            {
+                try
+                {
+                    await customerService.DeleteAsync(obj.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Customer with id {obj.Id.Value}. {ex.Message}");
                     }
                 }
             }
@@ -232,13 +255,14 @@ namespace BizwebSharp.Tests.xUnit
                 },
                 FinancialStatus = OrderFinancialStatus.Paid,
                 TotalPrice = 5.00m,
-                Email = Guid.NewGuid().ToString() + "@example.com",
+                Email = Guid.NewGuid() + "@example.com",
                 Note = Note,
             });
 
             if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
+                CreatedCustomers.Add(obj.Customer);
             }
 
             return obj;

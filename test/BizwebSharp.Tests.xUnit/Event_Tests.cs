@@ -76,20 +76,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public async Task DisposeAsync()
         {
-            foreach (var order in CreatedOrders)
-            {
-                try
-                {
-                    await OrderService.DeleteAsync(order.Id.Value);
-                }
-                catch (BizwebSharpException ex)
-                {
-                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
-                    {
-                        Console.WriteLine($"Failed to delete Order with id {order.Id.Value}. {ex.Message}");
-                    }
-                }
-            }
+            await CleanUpOrdersSetup();
         }
 
         private async Task CleanUpOrdersSetup()

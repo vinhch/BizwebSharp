@@ -113,6 +113,8 @@ namespace BizwebSharp.Tests.xUnit
 
         public List<Order> CreatedOrders { get; } = new List<Order>();
 
+        public List<Customer> CreatedCustomers { get; } = new List<Customer>();
+
         public decimal Amount => 10.00m;
 
         public string Currency => "VND";
@@ -132,6 +134,11 @@ namespace BizwebSharp.Tests.xUnit
 
         public async Task DisposeAsync()
         {
+            await CleanUpOrdersSetup();
+        }
+
+        private async Task CleanUpOrdersSetup()
+        {
             foreach (var obj in CreatedOrders)
             {
                 try
@@ -143,6 +150,22 @@ namespace BizwebSharp.Tests.xUnit
                     if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                     {
                         Console.WriteLine($"Failed to delete created Order with id {obj.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
+
+            var customerService = new CustomerService(Utils.AuthState);
+            foreach (var obj in CreatedCustomers)
+            {
+                try
+                {
+                    await customerService.DeleteAsync(obj.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete created Customer with id {obj.Id.Value}. {ex.Message}");
                     }
                 }
             }
@@ -205,6 +228,7 @@ namespace BizwebSharp.Tests.xUnit
             });
 
             CreatedOrders.Add(obj);
+            CreatedCustomers.Add(obj.Customer);
 
             return obj;
         }
