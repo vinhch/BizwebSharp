@@ -122,6 +122,9 @@ namespace BizwebSharp.Tests.xUnit
             // Create at least one blog for article tests.
             var blog = await CreateABlog();
             BlogId = blog.Id;
+
+            // Create at least one article for article tests.
+            await Create();
         }
 
         public async Task DisposeAsync()
