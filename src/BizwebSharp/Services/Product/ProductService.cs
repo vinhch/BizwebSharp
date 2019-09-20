@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 
@@ -38,12 +39,13 @@ namespace BizwebSharp
 
         private async Task<Product> PublishProductAsync(long id, bool isPublish = true)
         {
+            var publishedOn = isPublish ? DateTimeOffset.UtcNow : (DateTimeOffset?) null;
             var productBody = new
             {
                 product = new
                 {
                     id,
-                    published = isPublish
+                    published_on = publishedOn
                 }
             };
 
