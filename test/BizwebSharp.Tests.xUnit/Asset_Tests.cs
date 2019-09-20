@@ -74,6 +74,8 @@ namespace BizwebSharp.Tests.xUnit
                 SourceKey = original.Key,
             });
 
+            Fixture.Created.Add(asset);
+
             Assert.NotNull(asset);
             Assert.Equal(asset.Key, key);
             Assert.Equal(asset.Value, original.Value);
@@ -117,7 +119,7 @@ namespace BizwebSharp.Tests.xUnit
             var themeService = new ThemeService(Utils.AuthState);
             var themes = await themeService.ListAsync();
 
-            ThemeId = themes.First().Id.Value;
+            ThemeId = themes.First(s => s.Role == Enums.ThemeRole.Main).Id.Value;
         }
 
         public async Task DisposeAsync()
