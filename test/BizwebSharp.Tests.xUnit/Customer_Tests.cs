@@ -38,21 +38,10 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Delete Customers")]
         public async Task Deletes_Customers()
         {
-            var created = await Fixture.Create();
-            var threw = false;
+            var created = await Fixture.Create(true);
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(created.Id.Value));
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Customers)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "Get Customers")]
@@ -158,20 +147,9 @@ namespace BizwebSharp.Tests.xUnit
             // It takes anywhere between 3 seconds to 30 seconds for Shopify to index new customers for searches.
             // Rather than putting a 20 second Thread.Sleep in the test, we'll just assume it's successful if the
             // test doesn't throw an exception.
-            bool threw = false;
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.SearchAsync("John"));
 
-            try
-            {
-                var search = await Fixture.Service.SearchAsync("John");
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Searches_For_Customers)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
     }
 

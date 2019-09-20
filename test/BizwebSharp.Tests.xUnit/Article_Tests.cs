@@ -73,20 +73,11 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Deletes_Articles()
         {
             var article = await Fixture.Create(true);
-            var threw = false;
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(Fixture.BlogId.Value, article.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Articles)} threw exception. {ex.Message}");
+            var exception =
+                await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(Fixture.BlogId.Value, article.Id.Value));
 
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "List Authors")]

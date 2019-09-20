@@ -53,20 +53,10 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Deletes_Orders()
         {
             var created = await Fixture.Create(true);
-            bool threw = false;
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Orders)} failed. {ex.Message}");
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(created.Id.Value));
 
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "Get Orders")]
@@ -130,20 +120,10 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Cancels_Orders()
         {
             var order = await Fixture.Create();
-            bool threw = false;
 
-            try
-            {
-                await Fixture.Service.CancelAsync(order.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Cancels_Orders)} failed. {ex.Message}");
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.CancelAsync(order.Id.Value));
 
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "Cancel Orders With Options",
@@ -151,23 +131,14 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Cancels_Orders_With_Options()
         {
             var order = await Fixture.Create();
-            bool threw = false;
 
-            try
-            {
-                await Fixture.Service.CancelAsync(order.Id.Value, new OrderCancelOption
+            var exception = await Record.ExceptionAsync(() =>
+                Fixture.Service.CancelAsync(order.Id.Value, new OrderCancelOption
                 {
                     Reason = "customer"
-                });
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Cancels_Orders_With_Options)} failed. {ex.Message}");
+                }));
 
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
     }
 

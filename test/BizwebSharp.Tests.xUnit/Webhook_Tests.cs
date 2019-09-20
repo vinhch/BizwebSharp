@@ -39,20 +39,9 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Deletes_Webhooks()
         {
             var created = await Fixture.Create(true);
-            var threw = false;
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(created.Id.Value));
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Webhooks)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "Get Webhooks")]

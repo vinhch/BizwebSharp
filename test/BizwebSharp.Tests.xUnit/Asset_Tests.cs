@@ -92,22 +92,13 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Delete Assets")]
         public async Task Deletes_Assets()
         {
-            var threw = false;
             const string key = "snippets/delete-test.bwt";
             var created = await Fixture.Create(key, true);
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(Fixture.ThemeId, key);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_Assets)} threw exception. {ex.Message}");
+            var exception =
+                await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(Fixture.ThemeId, key));
 
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
     }
 

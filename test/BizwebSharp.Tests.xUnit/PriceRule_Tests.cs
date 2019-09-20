@@ -65,20 +65,9 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Deletes_PriceRules()
         {
             var created = await Fixture.Create(true);
-            bool threw = false;
+            var exception = await Record.ExceptionAsync(() => Fixture.Service.DeleteAsync(created.Id.Value));
 
-            try
-            {
-                await Fixture.Service.DeleteAsync(created.Id.Value);
-            }
-            catch (BizwebSharpException ex)
-            {
-                Console.WriteLine($"{nameof(Deletes_PriceRules)} failed. {ex.Message}");
-
-                threw = true;
-            }
-
-            Assert.False(threw);
+            Assert.Null(exception);
         }
 
         [Fact(DisplayName = "Update PriceRules", Skip = "Not fully implemented yet.")]
