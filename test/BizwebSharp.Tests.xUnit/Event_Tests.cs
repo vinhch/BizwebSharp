@@ -169,8 +169,8 @@ namespace BizwebSharp.Tests.xUnit
             if (!skipAddToCreatedList)
             {
                 CreatedOrders.Add(obj);
-                CreatedCustomers.Add(obj.Customer);
             }
+            CreatedCustomers.Add(obj.Customer);
 
             return obj;
         }
