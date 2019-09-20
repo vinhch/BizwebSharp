@@ -18,7 +18,7 @@ namespace BizwebSharp.Tests.xUnit
             this.Fixture = fixture;
         }
 
-        [Fact(DisplayName = "Count Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "Count Themes", Skip = "Bizweb not support this API.")]
         public async Task Counts_Themes()
         {
             var count = await Fixture.Service.CountAsync();
@@ -26,7 +26,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.True(count > 0);
         }
 
-        [Fact(DisplayName = "List Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "List Themes")]
         public async Task Lists_Themes()
         {
             var list = await Fixture.Service.ListAsync();
@@ -34,7 +34,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.True(list.Count() > 0);
         }
 
-        [Fact(DisplayName = "Delete Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "Delete Themes")]
         public async Task Deletes_Themes()
         {
             var created = await Fixture.Create(true);
@@ -54,7 +54,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.False(threw);
         }
 
-        [Fact(DisplayName = "Delete Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "Delete Themes")]
         public async Task Gets_Themes()
         {
             var created = await Fixture.Create();
@@ -66,7 +66,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Equal(Fixture.Role, obj.Role);
         }
 
-        [Fact(DisplayName = "Create Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "Create Themes")]
         public async Task Creates_Themes()
         {
             var obj = await Fixture.Create();
@@ -77,7 +77,7 @@ namespace BizwebSharp.Tests.xUnit
             Assert.Equal(Fixture.Role, obj.Role);
         }
 
-        [Fact(DisplayName = "Update Themes", Skip = "Often fails during CI tests because stores can only have 8 themes.")]
+        [Fact(DisplayName = "Update Themes")]
         public async Task Updates_Themes()
         {
             string newValue = ("BizwebSharp Updated Theme_" + Guid.NewGuid()).Substring(0, 50);
@@ -104,12 +104,13 @@ namespace BizwebSharp.Tests.xUnit
 
         public override async Task<Theme> Create(bool skipAddToCreatedList = false)
         {
-            var theme = new Theme()
+            var uploadResponse = await Utils.UploadToFileIoAsync("theme_bizweb.zip");
+            var theme = new Theme
             {
                 Name = (NamePrefix + Guid.NewGuid()).Substring(0, 50),
                 Role = Role,
             };
-            var obj = await Service.CreateAsync(theme);
+            var obj = await Service.CreateAsync(theme, uploadResponse.Link);
 
             if (!skipAddToCreatedList)
             {
