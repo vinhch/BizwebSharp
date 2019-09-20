@@ -135,7 +135,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public static async Task<FileIoResponse> UploadToFileIoAsync(string filePath)
         {
-            var response = await UploadAsync("https://file.io/?expires=1d", filePath);
+            var response = await UploadAsync("https://file.io/?expires=1d", filePath, boundary: "----BizwebSharpTest");
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<FileIoResponse>(json);
         }

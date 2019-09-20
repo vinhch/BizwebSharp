@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if (!NETSTANDARD1_4)
+using System;
+#endif
 using System.Net.Http;
 using System.Threading.Tasks;
 #if (NETSTANDARD2_0)

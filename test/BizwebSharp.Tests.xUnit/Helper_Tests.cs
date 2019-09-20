@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
