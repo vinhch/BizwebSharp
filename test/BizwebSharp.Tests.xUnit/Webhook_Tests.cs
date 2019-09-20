@@ -80,7 +80,7 @@ namespace BizwebSharp.Tests.xUnit
         [Fact(DisplayName = "Update Webhooks")]
         public async Task Updates_Webhooks()
         {
-            var newValue = "https://requestb.in/" + Guid.NewGuid();
+            var newValue = "http://mockbin.com/request?" + Guid.NewGuid();
             var created = await Fixture.Create();
             var id = created.Id.Value;
 
@@ -98,7 +98,7 @@ namespace BizwebSharp.Tests.xUnit
 
     public class Webhook_Tests_Fixture : AsyncLifetimeBizwebSharpTest<WebhookService, Webhook>
     {
-        public string UrlPrefix => "https://requestb.in/";
+        public string UrlPrefix => "http://mockbin.com/request";
 
         //public string Format => "json";
 

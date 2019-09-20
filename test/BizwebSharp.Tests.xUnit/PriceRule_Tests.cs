@@ -119,6 +119,7 @@ namespace BizwebSharp.Tests.xUnit
 
         public override async Task<PriceRule> Create(bool skipAddToCreatedList = false)
         {
+            return null;
             var obj = await Service.CreateAsync(new PriceRule
             {
                 Title = this.TitlePrefix + Guid.NewGuid().ToString(),
