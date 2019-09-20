@@ -46,21 +46,27 @@ namespace BizwebSharp.Helper
 
         private static IHttpClientFactory CreateHttpClientFactory()
         {
-            if (_currentServiceProvider == null)
+            if (_currentServiceProvider == null || _currentHttpClientFactory == null)
             {
-                _currentServiceCollection.AddHttpClient(BIZWEB_NAMED_HTTPCLIENT_TYPE);
-                _currentServiceCollection.AddHttpClient(NO_REDIRECT_HTTPCLIENT_TYPE)
-                    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                lock (_currentServiceCollection)
+                {
+                    if (_currentServiceProvider == null)
                     {
-                        AllowAutoRedirect = false
-                    });
+                        _currentServiceCollection.AddHttpClient(BIZWEB_NAMED_HTTPCLIENT_TYPE);
+                        _currentServiceCollection.AddHttpClient(NO_REDIRECT_HTTPCLIENT_TYPE)
+                            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+                            {
+                                AllowAutoRedirect = false
+                            });
 
-                _currentServiceProvider = _currentServiceCollection.BuildServiceProvider();
-            }
+                        _currentServiceProvider = _currentServiceCollection.BuildServiceProvider();
+                    }
 
-            if (_currentHttpClientFactory == null)
-            {
-                _currentHttpClientFactory = _currentServiceProvider.GetService<IHttpClientFactory>();
+                    if (_currentHttpClientFactory == null)
+                    {
+                        _currentHttpClientFactory = _currentServiceProvider.GetService<IHttpClientFactory>();
+                    }
+                }
             }
 
             return _currentHttpClientFactory;
