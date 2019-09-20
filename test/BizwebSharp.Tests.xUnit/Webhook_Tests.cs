@@ -18,7 +18,8 @@ namespace BizwebSharp.Tests.xUnit
             this.Fixture = fixture;
         }
 
-        [Fact(DisplayName = "Count Webhooks")]
+        [Fact(DisplayName = "Count Webhooks",
+            Skip = "Always return 0. Wrong documentation or bizweb bug? https://support.sapo.vn/sapo-webhook#count")]
         public async Task Counts_Webhooks()
         {
             var count = await Fixture.Service.CountAsync();
