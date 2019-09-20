@@ -104,8 +104,8 @@ namespace BizwebSharp.Infrastructure
                 return;
             }
 
-            var rawResponse = await response.Content.ReadAsStringAsync();
-            var contentType = response.Content.Headers.GetValues("Content-Type").FirstOrDefault() ?? string.Empty;
+            var rawResponse = response.Content != null ? await response.Content.ReadAsStringAsync() : null;
+            var contentType = response.Content?.Headers.GetValues("Content-Type").FirstOrDefault() ?? string.Empty;
             var message = $"Response did not indicate success. Status: {statusCode} {response.ReasonPhrase}."; ;
             Dictionary<string, IEnumerable<string>> errors;
 

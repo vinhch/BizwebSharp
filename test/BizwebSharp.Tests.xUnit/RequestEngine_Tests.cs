@@ -70,7 +70,7 @@ namespace BizwebSharp.Tests.xUnit
 
             var ex = (ApiRateLimitException) exception;
             ex.HttpStatusCode.Should().Be((System.Net.HttpStatusCode)429);
-            ex.Message.Should().Contain("Too Many Requests");
+            ex.Message.Should().Contain("Exceeded 2 calls per second for api client. Reduce request rates to resume uninterrupted service.");
         }
     }
 }
