@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -78,7 +79,7 @@ namespace BizwebSharp.Tests.xUnit
         {
             var created = await Fixture.Create();
             // API seems to refuse to set a position higher than 5.
-            int position = created.Position >= 5 ? 4 : created.Position.Value + 1;
+            int position = created.Position >= 5 ? 4 : created.Position.Value - 1;
             long id = created.Id.Value;
 
             created.Position = position;
@@ -101,13 +102,12 @@ namespace BizwebSharp.Tests.xUnit
 
         public long ProductId { get; set; }
 
+        public List<Product> CreatedProducts { get; } = new List<Product>();
+
         public override async Task InitializeAsync()
         {
             // Get a product id to use with these tests.
-            ProductId = (await new ProductService(Utils.AuthState).ListAsync(new Options.ProductOption()
-            {
-                Limit = 1
-            })).First().Id.Value;
+            ProductId = (await CreateAProduct()).Id.Value;
 
             await base.InitializeAsync();
         }
@@ -128,6 +128,21 @@ namespace BizwebSharp.Tests.xUnit
                     }
                 }
             }
+
+            foreach (var item in CreatedProducts)
+            {
+                try
+                {
+                    await ProductService.DeleteAsync(item.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete product with id {item.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
         }
 
         public override async Task<ProductImage> Create(bool skipAddToCreatedList = false)
@@ -141,6 +156,32 @@ namespace BizwebSharp.Tests.xUnit
             if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
+            }
+
+            return obj;
+        }
+
+        public async Task<Product> CreateAProduct(bool skipAddToCreateList = false, ProductCreateOption options = null)
+        {
+            var obj = await ProductService.CreateAsync(new Product
+            {
+                Name = $"BizwebSharp Test Product #{Guid.NewGuid()}",
+                Vendor = "Auntie Dot",
+                Content = "<strong>This product was created while testing BizwebSharp!</strong>",
+                ProductType = "Foobars",
+                Alias = Guid.NewGuid().ToString(),
+                Images = new List<ProductImage>
+                {
+                    new ProductImage
+                    {
+                        Base64 = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                    }
+                },
+            }, options);
+
+            if (!skipAddToCreateList)
+            {
+                CreatedProducts.Add(obj);
             }
 
             return obj;

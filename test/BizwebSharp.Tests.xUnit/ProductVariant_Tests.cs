@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BizwebSharp.Infrastructure;
 using Xunit;
@@ -99,15 +100,14 @@ namespace BizwebSharp.Tests.xUnit
     {
         public decimal Price => 123.45m;
 
+        public List<Product> CreatedProducts { get; } = new List<Product>();
+
         public long ProductId { get; set; }
 
         public override async Task InitializeAsync()
         {
             // Get a product id to use with these tests.
-            ProductId = (await new ProductService(Utils.AuthState).ListAsync(new Options.ProductOption()
-            {
-                Limit = 1
-            })).First().Id.Value;
+            ProductId = (await CreateAProduct()).Id.Value;
 
             await base.InitializeAsync();
         }
@@ -133,6 +133,22 @@ namespace BizwebSharp.Tests.xUnit
                     }
                 }
             }
+
+            var productService = new ProductService(Utils.AuthState);
+            foreach (var item in CreatedProducts)
+            {
+                try
+                {
+                    await productService.DeleteAsync(item.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete product with id {item.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
         }
 
         public override async Task<ProductVariant> Create(bool skipAddToCreatedList = false)
@@ -146,6 +162,33 @@ namespace BizwebSharp.Tests.xUnit
             if (!skipAddToCreatedList)
             {
                 Created.Add(obj);
+            }
+
+            return obj;
+        }
+
+        public async Task<Product> CreateAProduct(bool skipAddToCreateList = false, ProductCreateOption options = null)
+        {
+            var productService = new ProductService(Utils.AuthState);
+            var obj = await productService.CreateAsync(new Product
+            {
+                Name = $"BizwebSharp Test Product #{Guid.NewGuid()}",
+                Vendor = "Auntie Dot",
+                Content = "<strong>This product was created while testing BizwebSharp!</strong>",
+                ProductType = "Foobars",
+                Alias = Guid.NewGuid().ToString(),
+                Images = new List<ProductImage>
+                {
+                    new ProductImage
+                    {
+                        Base64 = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+                    }
+                },
+            }, options);
+
+            if (!skipAddToCreateList)
+            {
+                CreatedProducts.Add(obj);
             }
 
             return obj;

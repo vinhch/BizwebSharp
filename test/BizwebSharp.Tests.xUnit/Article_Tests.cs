@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Xunit;
 using System.Linq;
 using System.Net;
+using BizwebSharp.Enums;
 using BizwebSharp.Infrastructure;
 using FluentAssertions;
 
@@ -118,10 +119,9 @@ namespace BizwebSharp.Tests.xUnit
     {
         public async Task InitializeAsync()
         {
-            var blogService = new BlogService(Utils.AuthState);
-            var blogs = await blogService.ListAsync();
-
-            BlogId = blogs.First().Id;
+            // Create at least one blog for article tests.
+            var blog = await CreateABlog();
+            BlogId = blog.Id;
         }
 
         public async Task DisposeAsync()
@@ -140,7 +140,25 @@ namespace BizwebSharp.Tests.xUnit
                     }
                 }
             }
+
+            var blogService = new BlogService(Utils.AuthState);
+            foreach (var blog in CreatedBlogs)
+            {
+                try
+                {
+                    await blogService.DeleteAsync(blog.Id.Value);
+                }
+                catch (BizwebSharpException ex)
+                {
+                    if (ex.HttpStatusCode != HttpStatusCode.NotFound)
+                    {
+                        Console.WriteLine($"Failed to delete blog with id {blog.Id.Value}. {ex.Message}");
+                    }
+                }
+            }
         }
+
+        public List<Blog> CreatedBlogs { get; } = new List<Blog>();
 
         public long? BlogId { get; set; }
 
@@ -155,6 +173,19 @@ namespace BizwebSharp.Tests.xUnit
         public string Tags => "This Post, Has Been Tagged";
 
         public string Content => "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>";
+
+        public async Task<Blog> CreateABlog()
+        {
+            var blogService = new BlogService(Utils.AuthState);
+            var blog = await blogService.CreateAsync(new Blog
+            {
+                Name = $"BizwebSharp Test Blog #{Guid.NewGuid()}",
+                Commentable = BlogCommentable.Moderate,
+            });
+            CreatedBlogs.Add(blog);
+
+            return blog;
+        }
 
         public async Task<Article> Create(bool skipAddToDeleteList = false)
         {
