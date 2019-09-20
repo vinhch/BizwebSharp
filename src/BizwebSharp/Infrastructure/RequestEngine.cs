@@ -269,6 +269,12 @@ namespace BizwebSharp.Infrastructure
         public static async Task<string> ExecuteRequestToStringAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
+            if (requestMsg.Content != null)
+            {
+                //necessary to buffer content for multiple reads
+                await requestMsg.Content.LoadIntoBufferAsync();
+            }
+
             return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
                 //Need to create a RequestInfo before send RequestMessage
@@ -300,6 +306,12 @@ namespace BizwebSharp.Infrastructure
         public static async Task<JToken> ExecuteRequestAsync(BizwebRequestMessage requestMsg,
             IRequestExecutionPolicy execPolicy)
         {
+            if (requestMsg.Content != null)
+            {
+                //necessary to buffer content for multiple reads
+                await requestMsg.Content.LoadIntoBufferAsync();
+            }
+
             return await execPolicy.Run(requestMsg, async (reqMsg) =>
             {
                 //Need to create a RequestInfo before send RequestMessage
