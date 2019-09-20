@@ -10,8 +10,9 @@ namespace BizwebSharp.Infrastructure
             return (await executeRequestAsync(requestMsg)).Result;
         }
 
-        private static IRequestExecutionPolicy _default = new LimitRetryExecutionPolicy();
+        private static IRequestExecutionPolicy _default = new SmartRetryExecutionPolicy();
         //public static IRequestExecutionPolicy Default { get; set; } = new DefaultRequestExecutionPolicy();
+
         public static IRequestExecutionPolicy Default
         {
             get => _default ?? (_default = new LimitRetryExecutionPolicy());
