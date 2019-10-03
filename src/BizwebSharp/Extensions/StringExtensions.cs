@@ -5,7 +5,7 @@ namespace BizwebSharp
     /// <summary>
     /// String extension methods
     /// </summary>
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         /// <summary>
         /// Convert PascalCase or camelCase to snack_case

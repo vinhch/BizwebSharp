@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BizwebSharp.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using BizwebSharp.Infrastructure;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
@@ -54,7 +54,7 @@ namespace BizwebSharp.Tests.xUnit
         public async Task Gets_Assets()
         {
             const string key = "snippets/test-get-assets.bwt";
-            var created = await Fixture.Create(key);
+            _ = await Fixture.Create(key);
 
             var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
 

@@ -8,7 +8,7 @@ namespace BizwebSharp.Infrastructure
 {
     public partial class SmartRetryExecutionPolicy
     {
-        private class LeakyBucket
+        private class LeakyBucket : IDisposable
         {
             private const int MAX_LIFE_SPAN = 1800; // = 30 minutes
 
@@ -27,7 +27,7 @@ namespace BizwebSharp.Infrastructure
             private static Timer _tryCleanAllBucketsTimer
                 = new Timer(_ => TryCleanAllBuckets(), null, MAX_LIFE_SPAN * 1000, 300000);
 
-            private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(DEFAULT_BUCKET_CAPACITY, 1000);
+            private SemaphoreSlim _semaphore = new SemaphoreSlim(DEFAULT_BUCKET_CAPACITY, 1000);
 
             private DateTimeOffset LastUsedAt { get; set; }
 
@@ -40,12 +40,16 @@ namespace BizwebSharp.Infrastructure
 
             public Task GrantAsync()
             {
+                CheckDispose();
+
                 LastUsedAt = DateTimeOffset.UtcNow;
                 return _semaphore.WaitAsync();
             }
 
             public void SetBucketState(int reportedFillLevel, int reportedCapacity)
             {
+                CheckDispose();
+
                 LastUsedAt = DateTimeOffset.UtcNow;
 
                 //Shopify Plus customers have a bucket that is twice the size (80) so we resize the bucket capacity accordingly
@@ -89,6 +93,8 @@ namespace BizwebSharp.Infrastructure
 
             private void AdaptiveDrip()
             {
+                CheckDispose();
+
                 if (_semaphore.CurrentCount < _capacity)
                 {
                     int freeSlots = _capacity - _semaphore.CurrentCount;
@@ -107,6 +113,7 @@ namespace BizwebSharp.Infrastructure
 
             private bool IsEndOfLife()
             {
+                CheckDispose();
                 return (DateTimeOffset.UtcNow - LastUsedAt).TotalSeconds >= MAX_LIFE_SPAN;
             }
 
@@ -115,7 +122,37 @@ namespace BizwebSharp.Infrastructure
                 foreach (var bucketKVP in _shopAccessTokenToLeakyBucket.Where(s => s.Value.IsEndOfLife()))
                 {
                     _shopAccessTokenToLeakyBucket.TryRemove(bucketKVP.Key, out var bucket);
+                    bucket.Dispose();
                     bucket = null;
+                }
+            }
+
+            public void Dispose()
+            {
+                CheckDispose();
+                Dispose(true);
+                GC.SuppressFinalize(this);
+            }
+
+            /// <summary>
+            /// Releases the unmanaged resources used by this object,
+            /// and optionally releases the managed resources.
+            /// </summary>
+            /// <param name="disposing">true to release both managed and unmanaged resources;
+            /// false to release only unmanaged resources.</param>
+            protected virtual void Dispose(bool disposing)
+            {
+                if (disposing) { }
+
+                _semaphore.Dispose();
+                _semaphore = null;
+            }
+
+            private void CheckDispose()
+            {
+                if (_semaphore == null)
+                {
+                    throw new ObjectDisposedException(null);
                 }
             }
         }

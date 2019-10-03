@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using BizwebSharp.Enums;
+﻿using BizwebSharp.Enums;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BizwebSharp.Tests.xUnit
@@ -52,6 +53,15 @@ namespace BizwebSharp.Tests.xUnit
 
             bool isValid = AuthorizationService.IsAuthenticProxyRequest(qs, Utils.BwSetting.ApiSecretKey);
 
+            Assert.True(isValid);
+        }
+
+        [Fact(Skip = "TODO: Generate a real query string with the shop and secret key used by the build server, which contains an ids[] parameter")]
+        public void Validates_Web_Requests_WithArrayParameter()
+        {
+            var query = "hmac=123....";
+            var qs = QueryHelpers.ParseQuery(query);
+            bool isValid = AuthorizationService.IsAuthenticRequest(qs, Utils.BwSetting.ApiSecretKey);
             Assert.True(isValid);
         }
 

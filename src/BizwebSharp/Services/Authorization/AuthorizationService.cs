@@ -1,4 +1,8 @@
-﻿using System;
+﻿using BizwebSharp.Enums;
+using BizwebSharp.Helper;
+using BizwebSharp.Infrastructure;
+using Microsoft.Extensions.Primitives;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,10 +12,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using BizwebSharp.Enums;
-using BizwebSharp.Helper;
-using BizwebSharp.Infrastructure;
-using Microsoft.Extensions.Primitives;
 #if (NET45 || NET451 || NET452 || NET46 || NET461 || NET462)
 using System.Collections.Specialized;
 #endif
@@ -49,13 +49,26 @@ namespace BizwebSharp
             return paramaters;
         }
 
-        private static Func<string, bool, string> EncodeQuery { get; } = (s, isKey) =>
+        private static Func<StringValues, bool, string> EncodeQuery { get; } = (values, isKey) =>
         {
+            //array parameters are handled differently:
+            //see https://community.shopify.com/c/Shopify-APIs-SDKs/HMAC-calculation-vs-ids-arrays/td-p/261154
+            string s = values.Count <= 1 ?
+                            values.FirstOrDefault() :
+                            '[' + string.Join(", ", values.Select(v => '"' + v + '"')) + ']';
+
+            if (string.IsNullOrEmpty(s))
+            {
+                return "";
+            }
+
             //Important: Replace % before replacing &. Else second replace will replace those %25s.
-            var output = s?.Replace("%", "%25").Replace("&", "%26") ?? "";
+            var output = s.Replace("%", "%25").Replace("&", "%26") ?? "";
 
             if (isKey)
+            {
                 output = output.Replace("=", "%3D");
+            }
 
             return output;
         };
@@ -68,7 +81,10 @@ namespace BizwebSharp
                 var key = kvp.Key;
                 var value = kvp.Value;
 
-                if (!QueryKeyForHash.Contains(key)) continue;
+                if (!QueryKeyForHash.Contains(key))
+                {
+                    continue;
+                }
 
                 queryDictionary[EncodeQuery(key, true)] = EncodeQuery(value, false);
             }
@@ -98,7 +114,9 @@ namespace BizwebSharp
         {
             var hmac = querystring.FirstOrDefault(kvp => kvp.Key.ToLower() == "hmac").Value;
             if (string.IsNullOrEmpty(hmac))
+            {
                 return false;
+            }
 
             var kvps = PrepareQuerystring(querystring, "&");
             var timestampInString = querystring.First(s => s.Key.ToLower() == "timestamp").Value;
@@ -177,7 +195,9 @@ namespace BizwebSharp
             var signature = querystring.FirstOrDefault(kvp => kvp.Key.ToLower() == "signature").Value;
 
             if (string.IsNullOrEmpty(signature))
+            {
                 return false;
+            }
 
             // To calculate signature, order all querystring parameters by alphabetical (exclude the
             // signature itself). Then, hash it with the secret key.
