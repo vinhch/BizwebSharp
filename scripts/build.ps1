@@ -11,6 +11,10 @@ function Join-Paths {
     return $output
 }
 
+function Write-SeparateLine([string]$msg) {
+    Write-Host "`n------------------------------ $msg ------------------------------`n"
+}
+
 $rootFolder = Join-Paths $PSScriptRoot ".."
 $projectFile = Join-Paths $rootFolder "src" "BizwebSharp" "BizwebSharp.csproj"
 $artifactFolder = Join-Paths $rootFolder "artifact"
@@ -18,13 +22,18 @@ $artifactFolder = Join-Paths $rootFolder "artifact"
 if (Test-Path $artifactFolder -PathType Container) {
     Remove-Item $artifactFolder -Recurse
 }
-New-Item -ItemType Directory -Force -Path $artifactFolder
+$null = New-Item -ItemType Directory -Force -Path $artifactFolder
 
 # build configuration {Debug|Release}
 $buildConfig = "Release"
 
-dotnet clean -c $buildConfig $projectFile
+Write-SeparateLine "Clean projects"
+$null = dotnet clean -c $buildConfig $projectFile
+
+Write-SeparateLine "Restore dependencies"
 dotnet restore $projectFile
+
+Write-SeparateLine "Build and pack"
 dotnet build -c $buildConfig $projectFile
 dotnet pack --no-build -c Release -o $artifactFolder $projectFile
 
