@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using BizwebSharp.Helper;
+using BizwebSharp.Helpers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

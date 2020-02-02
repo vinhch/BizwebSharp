@@ -1,5 +1,5 @@
 ﻿using BizwebSharp.Enums;
-using BizwebSharp.Helper;
+using BizwebSharp.Helpers;
 using BizwebSharp.Infrastructure;
 using Microsoft.Extensions.Primitives;
 using System;
